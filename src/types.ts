@@ -84,7 +84,7 @@ export interface IGetStarknetWallet {
 
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,
-     * or `undefined` if disconnected
+     * or default wrapper if disconnected
      */
-    getStarknet(): IStarknetWindowObject | undefined;
+    getStarknet(): IStarknetWindowObject;
 }
