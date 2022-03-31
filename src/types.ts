@@ -2,7 +2,11 @@ import { IStarknetWindowObject } from "./wallet/types";
 
 declare global {
     interface Window {
-        starknet_wallets: IStarknetWindowObject[];
+        starknet_wallets: IStarknetWindowObject[] | undefined;
+        /**
+         *  @deprecated legacy starknet wallet object
+         */
+        starknet: IStarknetWindowObject | undefined;
     }
 }
 

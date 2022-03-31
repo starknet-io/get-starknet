@@ -1,5 +1,5 @@
 import { IGetStarknetWallet } from "./types";
-import { EventHandler, EventType, IStarknetWindowObject } from "./wallet/types";
+import { IStarknetWindowObject } from "./wallet/types";
 import discovery from "./discovery";
 import defaultWallet from "./configs/defaultWallet";
 import show from "./modal";
@@ -24,6 +24,17 @@ class GetStarknetWallet implements IGetStarknetWallet {
             console.log("discovery wallets", discoveryWallets);
 
             let installedWallets = [...(window.starknet_wallets ?? [])];
+
+            const legacyWallet = window.starknet;
+            if (
+                legacyWallet &&
+                !installedWallets.includes(legacyWallet) &&
+                (!legacyWallet.id ||
+                    !installedWallets.some(w => w.id === legacyWallet.id))
+            ) {
+                installedWallets.push(legacyWallet);
+            }
+
             console.log("pre options available wallets", installedWallets);
 
             if (options?.include?.length) {
@@ -120,16 +131,13 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 }
 
                 isPreauthorized = async () => false;
-
-                off(event: EventType, handleEvent: EventHandler): void {}
-
-                on(event: EventType, handleEvent: EventHandler): void {
+                off = () => {};
+                on = () => {
                     throw new Error("can't register event on disconnected wallet");
-                }
-
-                request(call: any): Promise<void> {
+                };
+                request = () => {
                     throw new Error("can't request a disconnected wallet");
-                }
+                };
             })()
         );
     }
@@ -144,6 +152,5 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 }
 
-window.starknet_wallets = [];
 const gsw = new GetStarknetWallet();
 export default gsw;
