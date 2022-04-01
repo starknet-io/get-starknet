@@ -1,4 +1,4 @@
-## get-starknet-wallet<br/>StarkNet wallet <-> dApp bridge
+# get-starknet-wallet<br/>StarkNet wallet <-> dApp bridge
 
 ## Proposal - WIP
 
