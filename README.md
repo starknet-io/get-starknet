@@ -10,7 +10,7 @@
 
 ## Usage for dApp developers
 
-As simple as replacing just one import line!
+If you were using getStarknet() before, simply replace the import line as below and use `gsw.getStarknet()` instead of `getStarknet()`.
 
 before -
 ```js
