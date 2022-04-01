@@ -1,5 +1,7 @@
 ## get-starknet-wallet<br/>StarkNet wallet <-> dApp bridge
 
+## Proposal - WIP
+
 ## Goals
 
 - Allow dApps to seamlessly connect to any wallet on StarkNet
