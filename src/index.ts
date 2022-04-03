@@ -1,102 +1,49 @@
-import { IGetStarknetWallet } from "./types";
-import { IStarknetWindowObject } from "./wallet/types";
-import discovery from "./discovery";
+import type { GetStarknetWalletOptions, IGetStarknetWallet } from "./types";
+import type { IStarknetWindowObject } from "./wallet/types";
 import defaultWallet from "./configs/defaultWallet";
+import lastWallet from "./configs/lastConnected";
 import show from "./modal";
 import { filterPreAuthorized, shuffle } from "./utils";
 import { defaultProvider } from "starknet";
 import packageInfo from "../package.json";
 
 class GetStarknetWallet implements IGetStarknetWallet {
-    walletObjRef: { current?: IStarknetWindowObject } = {};
+    #walletObjRef: { current?: IStarknetWindowObject } = {};
 
-    async connect(options?: {
-        order?: string[] | "community" | "random";
-        include?: string[];
-        exclude?: string[];
-        showList?: boolean;
-    }): Promise<IStarknetWindowObject | undefined> {
+    async connect(
+        options?: GetStarknetWalletOptions
+    ): Promise<IStarknetWindowObject | undefined> {
         try {
-            const isConnected = this.#isConnected();
-            console.log("connect", { isConnected, options });
+            const connected = this.#isConnected();
+            console.log("connect", { connected });
 
-            const discoveryWallets = [...discovery];
-            console.log("discovery wallets", discoveryWallets);
+            const installedWallets = await this.#getInstalledWallets(options);
 
-            let installedWallets = [...(window.starknet_wallets ?? [])];
-
-            const legacyWallet = window.starknet;
-            if (
-                legacyWallet &&
-                !installedWallets.includes(legacyWallet) &&
-                (!legacyWallet.id ||
-                    !installedWallets.some(w => w.id === legacyWallet.id))
-            ) {
-                installedWallets.push(legacyWallet);
-            }
-
-            console.log("pre options available wallets", installedWallets);
-
-            if (options?.include?.length) {
-                const included = new Set<string>(options.include);
-                installedWallets = installedWallets.filter(w => included.has(w.id));
-            }
-
-            if (options?.exclude?.length) {
-                const excluded = new Set<string>(options.exclude);
-                installedWallets = installedWallets.filter(w => !excluded.has(w.id));
-            }
-
-            if (!options?.order || options.order === "random") {
-                shuffle(installedWallets);
-            } else if (Array.isArray(options.order)) {
-                // sort by order
-                const order = [...options.order];
-                installedWallets.sort(
-                    (a, b) => order.indexOf(a.id) - order.indexOf(b.id)
+            // force showing the popup if
+            // 1. we are called while connected
+            // 2. we were explicitly told to show it
+            // 3. user never selected from the popup
+            const forcePopup = connected || options?.showList || !lastWallet.get();
+            if (!forcePopup) {
+                // return user-set default wallet if available
+                const defaultWalletId = defaultWallet.get();
+                const defaultWalletObj = installedWallets.find(
+                    w => w.id === defaultWalletId
                 );
+                if (defaultWalletObj) {
+                    return this.#setCurrentWallet(defaultWalletObj);
+                } else {
+                    // remove prev-default wallet if not available anymore
+                    defaultWallet.delete();
+                }
 
-                const orderScope = installedWallets.length - order.length;
-                installedWallets = [
-                    ...installedWallets.slice(orderScope),
-                    // shuffle wallets which are outside `order` scope
-                    ...shuffle(installedWallets.slice(0, orderScope)),
-                ];
-            } else if (options.order === "community") {
-                // "community" order is the natural order of the wallets array,
-                // see discovery/index.ts
+                // no default but only one wallet - return that wallet
+                if (installedWallets.length === 1) {
+                    return this.#setCurrentWallet(installedWallets[0]);
+                }
             }
 
-            console.log("post options available wallets", installedWallets);
-
-            // force showing the popup if we are called while connected,
-            // or when we were explicitly told to show it
-            if (isConnected || options?.showList) {
-                const preAuthorized = await filterPreAuthorized(installedWallets);
-                const wallet = await show(
-                    installedWallets,
-                    discoveryWallets,
-                    preAuthorized
-                );
-                return this.#setCurrentWallet(wallet);
-            }
-
-            const defaultWalletId = defaultWallet.get();
-            const defaultWalletObj = installedWallets.find(w => w.id === defaultWalletId);
-            if (defaultWalletObj) {
-                return this.#setCurrentWallet(defaultWalletObj);
-            }
-
-            const preAuthorizedWallets = await filterPreAuthorized(installedWallets);
-            if (preAuthorizedWallets.length === 1) {
-                return preAuthorizedWallets[0];
-            }
-
-            const wallet = await show(
-                installedWallets,
-                discoveryWallets,
-                preAuthorizedWallets
-            );
+            const wallet = await show(installedWallets);
             return this.#setCurrentWallet(wallet);
         } catch (err) {
             console.error(err);
@@ -105,17 +52,17 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 
     disconnect(): boolean {
-        const isConnected = this.#isConnected();
-        this.walletObjRef.current = undefined;
+        const connected = this.#isConnected();
+        this.#walletObjRef.current = undefined;
         // disconnected successfully if was connected before
-        return isConnected;
+        return connected;
     }
 
     getStarknet(): IStarknetWindowObject {
         const self = this;
 
         return (
-            this.walletObjRef.current ??
+            this.#walletObjRef.current ??
             new (class implements IStarknetWindowObject {
                 id = "disconnected";
                 name = "Disconnected";
@@ -143,12 +90,99 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 
     #isConnected(): boolean {
-        return !!this.walletObjRef.current;
+        return !!this.#walletObjRef.current;
     }
 
     #setCurrentWallet(wallet: IStarknetWindowObject | undefined) {
-        this.walletObjRef.current = wallet;
+        this.#walletObjRef.current = wallet;
         return wallet;
+    }
+
+    async #getInstalledWallets(options?: Omit<GetStarknetWalletOptions, "showList">) {
+        console.log("getInstalledWallets -> options", options);
+
+        let installed = [...(window.starknet_wallets ?? [])];
+
+        const legacyWallet = window.starknet;
+        if (
+            legacyWallet &&
+            !installed.includes(legacyWallet) &&
+            (!legacyWallet.id || !installed.some(w => w.id === legacyWallet.id))
+        ) {
+            installed.push(legacyWallet);
+        }
+
+        console.log("pre options available wallets", installed);
+
+        if (options?.include?.length) {
+            const included = new Set<string>(options.include);
+            installed = installed.filter(w => included.has(w.id));
+        }
+
+        if (options?.exclude?.length) {
+            const excluded = new Set<string>(options.exclude);
+            installed = installed.filter(w => !excluded.has(w.id));
+        }
+
+        if (options && Array.isArray(options.order)) {
+            // skip default/preAuthorized priorities,
+            // sort by client-specific order
+            const order = [...options.order];
+            installed.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+
+            const orderScope = installed.length - order.length;
+            installed = [
+                ...installed.slice(orderScope),
+                // shuffle wallets which are outside `order` scope
+                ...shuffle(installed.slice(0, orderScope)),
+            ];
+        } else {
+            if (options?.order === "random") {
+                shuffle(installed);
+            } else if (options?.order === "community") {
+                // "community" order is the natural order of the wallets array,
+                // see discovery/index.ts
+            }
+
+            // if we have more than a single installed wallet we'll
+            // need to prioritize default & preAuthorized wallets
+            if (installed.length > 1) {
+                // fetch & shuffle all preAuthorized
+                const preAuthorized = shuffle(await filterPreAuthorized(installed));
+
+                // remove preAuthorized wallets from installed wallets list
+                const preAuthorizedIds = new Set<string>(preAuthorized.map(pa => pa.id));
+                installed = installed.filter(w => preAuthorizedIds.has(w.id));
+
+                // put preAuthorized wallets first
+                installed = [...preAuthorized, installed];
+
+                // lookup default wallet
+                const defaultWalletId = defaultWallet.get();
+                if (defaultWalletId) {
+                    // pop defaultWalletObj from installed
+                    let defaultWalletObj: IStarknetWindowObject | undefined = undefined;
+                    installed = installed.filter(w => {
+                        if (w.id === defaultWalletId) {
+                            defaultWalletObj = w;
+                            return false;
+                        }
+                        return true;
+                    });
+
+                    // and push it at the top
+                    if (defaultWalletObj) {
+                        installed.unshift(defaultWalletObj);
+                    } else {
+                        // remove prev-default wallet if not available anymore
+                        defaultWallet.delete();
+                    }
+                }
+            }
+        }
+
+        console.log("post options available wallets", installed);
+        return installed;
     }
 }
 
