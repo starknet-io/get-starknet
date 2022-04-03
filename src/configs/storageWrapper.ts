@@ -5,26 +5,28 @@ import { generateUID } from "../utils";
  * todo improve/test concept
  */
 export class StorageWrapper {
-    readonly #key: string;
-    value: string | null = null;
+    #key: string | undefined = undefined;
+    #prefix: string;
+    value: string | null | undefined = undefined;
 
     constructor(key: string) {
-        this.#key = `${key}-${generateUID()}`;
+        this.#prefix = key;
 
-        const prevKey = Object.keys(localStorage).find(sk => sk.startsWith(key));
-        if (prevKey) {
-            const prevValue = localStorage.getItem(prevKey);
-            localStorage.removeItem(prevKey);
-
-            if (prevValue) {
-                this.set(prevValue);
-            }
+        // init with prev key/value
+        this.#key = Object.keys(localStorage).find(sk => sk.startsWith(key));
+        if (this.#key) {
+            this.set(localStorage.getItem(this.#key));
         }
     }
 
-    set(value: string) {
+    set(value: string | null | undefined) {
+        this.delete(); // clear current key
+
         this.value = value;
-        localStorage.setItem(this.#key, value);
+        if (value) {
+            this.#key = `${this.#prefix}-${generateUID()}`;
+            localStorage.setItem(this.#key, value);
+        }
     }
 
     get() {
@@ -34,7 +36,7 @@ export class StorageWrapper {
 
     delete() {
         this.value = null;
-        localStorage.removeItem(this.#key);
+        if (this.#key) localStorage.removeItem(this.#key);
     }
 
     #validateValue() {
