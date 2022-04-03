@@ -1,8 +1,14 @@
 const path = require("path");
 
 module.exports = (env, argv) => {
+    const isDev = argv.mode === "development";
+
     return {
         entry: "./src/index.ts",
+        stats: {
+            all: isDev,
+            errors: true,
+        },
         devtool: "inline-source-map",
         externals: ["starknet"],
         module: {
@@ -16,9 +22,6 @@ module.exports = (env, argv) => {
         },
         resolve: {
             extensions: [".ts", ".js"],
-        },
-        optimization: {
-            minimize: false,
         },
         output: {
             filename: "index.js",
