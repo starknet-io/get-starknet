@@ -4,7 +4,7 @@ import discovery from "./discovery";
 import defaultWallet from "./configs/defaultWallet";
 import show from "./modal";
 import { filterPreAuthorized, shuffle } from "./utils";
-import { defaultProvider } from "starknet";
+import { Account, defaultProvider } from "starknet";
 import packageInfo from "../package.json";
 
 class GetStarknetWallet implements IGetStarknetWallet {
@@ -123,7 +123,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 selectedAddress = undefined;
                 provider = defaultProvider;
                 isConnected = false;
-                account = undefined;
+                account = new Account(defaultProvider, "", null);
                 version = packageInfo.version;
 
                 enable(options: { showModal?: boolean } | undefined): Promise<string[]> {

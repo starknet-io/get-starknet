@@ -1,8 +1,5 @@
 import { AccountInterface, Provider, SignerInterface } from "starknet";
-export declare enum EventType {
-    AccountsChanged = "accountsChanged",
-    NetworkChanged = "networkChanged"
-}
+export declare type EventType = "accountsChanged" | "networkChanged";
 export declare type EventHandler = (data: any) => void;
 export interface IStarknetWindowObject {
     request: (call: any) => Promise<void>;
@@ -17,11 +14,11 @@ export interface IStarknetWindowObject {
     version: string;
     icon: string;
     provider: Provider;
+    account: AccountInterface;
     isConnected: boolean;
     /**
      * @deprecated use `account` instead
      */
     signer?: SignerInterface;
-    account?: AccountInterface;
     selectedAddress?: string;
 }
