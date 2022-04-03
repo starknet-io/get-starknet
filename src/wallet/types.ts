@@ -1,4 +1,4 @@
-import { AccountInterface, Provider, SignerInterface } from "starknet";
+import type { AccountInterface, Provider, SignerInterface } from "starknet";
 
 export enum EventType {
     AccountsChanged = "accountsChanged",

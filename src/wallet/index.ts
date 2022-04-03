@@ -1,4 +1,4 @@
-import { IStarknetWindowObject } from "./types";
+import type { IStarknetWindowObject } from "./types";
 
 export default function register(wallet: IStarknetWindowObject) {
     if (!window.starknet_wallets) {

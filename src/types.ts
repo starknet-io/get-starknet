@@ -1,4 +1,4 @@
-import { IStarknetWindowObject } from "./wallet/types";
+import type { IStarknetWindowObject } from "./wallet/types";
 
 declare global {
     interface Window {
