@@ -97,6 +97,9 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
     #setCurrentWallet(wallet: IStarknetWindowObject | undefined) {
         this.#walletObjRef.current = wallet;
+        if (wallet) {
+            lastWallet.set(wallet.id);
+        }
         return wallet;
     }
 
