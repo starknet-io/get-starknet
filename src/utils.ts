@@ -1,8 +1,8 @@
+import type { IStarknetWindowObject } from "./types";
+
 /**
  * @see https://github.com/GoogleChrome/web-vitals/blob/main/src/lib/generateUniqueID.ts
  */
-import { IStarknetWindowObject } from "./wallet/types";
-
 export const generateUID = () =>
     `${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
 

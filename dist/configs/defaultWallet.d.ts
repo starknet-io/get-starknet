@@ -1,4 +1,3 @@
 import { StorageWrapper } from "./storageWrapper";
-
-const defaultWallet = new StorageWrapper("gsw-default");
+declare const defaultWallet: StorageWrapper;
 export default defaultWallet;

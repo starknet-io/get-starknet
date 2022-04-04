@@ -4,9 +4,9 @@
  */
 export declare class StorageWrapper {
     #private;
-    value: string | null;
+    value: string | null | undefined;
     constructor(key: string);
-    set(value: string): void;
-    get(): string | null;
+    set(value: string | null | undefined): void;
+    get(): string | null | undefined;
     delete(): void;
 }
