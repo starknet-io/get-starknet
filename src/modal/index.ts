@@ -22,10 +22,13 @@ export default async function show(
     });
 
     return new Promise(resolve => {
-        new Modal({
+        const modal = new Modal({
             target: document.body,
             props: {
-                callback: resolve,
+                callback: (value: any) => {
+                    modal.$destroy();
+                    resolve(value);
+                },
                 installed,
                 discovery,
             },
