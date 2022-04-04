@@ -15,7 +15,16 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+        "@typescript-eslint",
+        "svelte3"
+    ],
+    "overrides": [
+        {
+            "files": ["*.svelte"],
+            "processor": "svelte3/svelte3"
+        }
+    ],
     "rules": {
         "import/no-cycle": 2,
         "@typescript-eslint/no-empty-function": 0,

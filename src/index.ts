@@ -1,11 +1,13 @@
-import type { GetStarknetWalletOptions, IGetStarknetWallet } from "./types";
-import type { IStarknetWindowObject } from "./wallet/types";
+import type {
+    GetStarknetWalletOptions,
+    IGetStarknetWallet,
+    IStarknetWindowObject,
+} from "./types";
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
 import show from "./modal";
 import { filterPreAuthorized, shuffle } from "./utils";
-import { defaultProvider } from "starknet";
-import packageInfo from "../package.json";
+import { Account, defaultProvider, KeyPair } from "starknet";
 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
@@ -70,8 +72,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 selectedAddress = undefined;
                 provider = defaultProvider;
                 isConnected = false;
-                account = undefined;
-                version = packageInfo.version;
+                account = new Account(defaultProvider, "", {} as KeyPair);
+                version = "";
 
                 enable(options: { showModal?: boolean } | undefined): Promise<string[]> {
                     return self.connect().then(wallet => wallet?.enable(options) ?? []);
@@ -101,16 +103,15 @@ class GetStarknetWallet implements IGetStarknetWallet {
     async #getInstalledWallets(options?: Omit<GetStarknetWalletOptions, "showList">) {
         console.log("getInstalledWallets -> options", options);
 
-        let installed = [...(window.starknet_wallets ?? [])];
-
-        const legacyWallet = window.starknet;
-        if (
-            legacyWallet &&
-            !installed.includes(legacyWallet) &&
-            (!legacyWallet.id || !installed.some(w => w.id === legacyWallet.id))
-        ) {
-            installed.push(legacyWallet);
-        }
+        let installed = Object.keys(window).reduce<IStarknetWindowObject[]>(
+            (wallets, key) => {
+                if (key.startsWith("starknet")) {
+                    wallets.push((window as { [key: string]: any })[key]);
+                }
+                return wallets;
+            },
+            []
+        );
 
         console.log("pre options available wallets", installed);
 
@@ -137,7 +138,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 ...shuffle(installed.slice(0, orderScope)),
             ];
         } else {
-            if (options?.order === "random") {
+            if (!options?.order || options.order === "random") {
                 shuffle(installed);
             } else if (options?.order === "community") {
                 // "community" order is the natural order of the wallets array,
@@ -152,10 +153,11 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
                 // remove preAuthorized wallets from installed wallets list
                 const preAuthorizedIds = new Set<string>(preAuthorized.map(pa => pa.id));
-                installed = installed.filter(w => preAuthorizedIds.has(w.id));
+                console.log("preAuthorizedIds", preAuthorizedIds);
+                installed = installed.filter(w => !preAuthorizedIds.has(w.id));
 
                 // put preAuthorized wallets first
-                installed = [...preAuthorized, installed];
+                installed = [...preAuthorized, ...installed];
 
                 // lookup default wallet
                 const defaultWalletId = defaultWallet.get();
@@ -186,5 +188,5 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 }
 
-const gsw = new GetStarknetWallet();
-export default gsw;
+export const gsw = new GetStarknetWallet();
+export * from "./types";

@@ -1,15 +1,3 @@
-import type { IStarknetWindowObject } from "./wallet/types";
-
-declare global {
-    interface Window {
-        starknet_wallets: IStarknetWindowObject[] | undefined;
-        /**
-         *  @deprecated legacy starknet wallet object
-         */
-        starknet: IStarknetWindowObject | undefined;
-    }
-}
-
 export type GetStarknetWalletOptions = {
     /**
      * control wallets order for both "connect to a wallet" and
@@ -92,3 +80,39 @@ export interface IGetStarknetWallet {
      */
     getStarknet(): IStarknetWindowObject;
 }
+
+import type { AccountInterface, Provider, SignerInterface } from "starknet";
+
+export type EventType = "accountsChanged" | "networkChanged";
+
+export type EventHandler = (data: any) => void;
+
+export interface IStarknetWindowObject {
+    request: (call: any) => Promise<void>;
+    enable: (options?: { showModal?: boolean }) => Promise<string[]>;
+    isPreauthorized: () => Promise<boolean>;
+    on: (event: EventType, handleEvent: EventHandler) => void;
+    off: (event: EventType, handleEvent: EventHandler) => void;
+
+    id: string;
+    name: string;
+    version: string;
+    icon: string;
+    provider: Provider;
+    isConnected: boolean;
+    /**
+     * @deprecated use `account` instead
+     */
+    signer?: SignerInterface;
+    account: AccountInterface;
+    selectedAddress?: string;
+}
+
+export type WalletProvider = {
+    id: string;
+    name: string;
+    icon: string;
+    downloads:
+        | { chrome?: `https://chrome.google.com/webstore/detail/${string}` }
+        | { firefox?: `https://addons.mozilla.org/en-US/firefox/addon/${string}` };
+};
