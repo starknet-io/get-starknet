@@ -8,6 +8,7 @@ import lastWallet from "./configs/lastConnected";
 import show from "./modal";
 import { filterPreAuthorized, shuffle } from "./utils";
 import { Account, defaultProvider, KeyPair } from "starknet";
+import discovery from "./discovery";
 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
@@ -115,7 +116,25 @@ class GetStarknetWallet implements IGetStarknetWallet {
         let installed = Object.keys(window).reduce<IStarknetWindowObject[]>(
             (wallets, key) => {
                 if (key.startsWith("starknet")) {
-                    wallets.push((window as { [key: string]: any })[key]);
+                    const wallet = (window as { [key: string]: any })[key];
+                    try {
+                        if (
+                            key === "starknet" &&
+                            (!wallet.id || !wallet.name || !wallet.icon)
+                        ) {
+                            // attempt to add missing metadata to legacy wallet
+                            // object (enriched from wallets-discovery list)
+                            const argentDiscovery = discovery.find(
+                                dw => dw.id === "argentX"
+                            );
+                            if (argentDiscovery) {
+                                wallet.id = argentDiscovery.id;
+                                wallet.name = argentDiscovery.name;
+                                wallet.icon = argentDiscovery.icon;
+                            }
+                        }
+                    } catch (err) {}
+                    wallets.push(wallet);
                 }
                 return wallets;
             },

@@ -7,19 +7,8 @@ export default async function show(
     installed: IStarknetWindowObject[]
 ): Promise<IStarknetWindowObject | undefined> {
     const installedWalletIds = new Set(installed.map(w => w.id));
-    const discovery = discoveryWallets.filter(dw => {
-        // remove installed wallets from discovery when -
-        return (
-            // 1. the wallet is installed
-            !installedWalletIds.has(dw.id) &&
-            // 2. the wallet is of a legacy installation -
-            // @ts-ignore in case of a legacy wallet installation,
-            // one of installedWalletIds will be `undefined`
-            // (since a legacy wallet won't have an `id`)
-            installedWalletIds.has(undefined) &&
-            dw.id !== "argentX"
-        );
-    });
+    // remove installed wallets from discovery
+    const discovery = discoveryWallets.filter(dw => !installedWalletIds.has(dw.id));
 
     return new Promise(resolve => {
         const modal = new Modal({
