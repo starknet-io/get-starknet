@@ -53,6 +53,12 @@ class GetStarknetWallet implements IGetStarknetWallet {
         return undefined;
     }
 
+    constructor() {
+        this.disconnect = this.disconnect.bind(this);
+        this.connect = this.connect.bind(this);
+        this.getStarknet = this.getStarknet.bind(this);
+    }
+
     disconnect(): boolean {
         const connected = this.#isConnected();
         this.#walletObjRef.current = undefined;
