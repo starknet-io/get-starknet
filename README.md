@@ -21,7 +21,7 @@ getStarknet({ showModal: true|false }).enable()
 ```
 now -
 ```js
-import gsw from "get-starknet-wallet"
+import { gsw } from "get-starknet-wallet"
 gsw.getStarknet({ showModal: true|false }).enable()
 ```
 - Optional - customize the CSS of get-starknet-wallet to match your look&amp;feel
@@ -33,7 +33,7 @@ gsw.getStarknet({ showModal: true|false }).enable()
 
 - Once a dApp wants to connect to a wallet, it calls `gsw.getStarknet()` (or optionally use the new `connect` API to control the order, included/excluded, etc.)
 
-- In the first call to `gsw.getStarknet()` the package will look for all injected extensions under the designated window&#39;s `starknet_wallet` array
+- In the first call to `gsw.getStarknet()` the package will look for all injected extensions in the window which were added using a key starting with `starknet-*`, i.e. `starknet-walletname`
 
 
 - There are three cases
@@ -51,7 +51,7 @@ gsw.getStarknet({ showModal: true|false }).enable()
 ### Wallet Developers
 
 - Create a wallet complying to the required APIs (based on the starknet.js APIs + 3 new fields: `name`, `icon` and `id`, for the &quot;choose a wallet&quot; popup (e.g. installed wallets list))
-- The wallet's page-script object should be added to `window.starknet_wallets` array via `wallet#register`
+- The wallet's page-script object should be added to `window` using a key starting with `starknet`, i.e. `starknet-walletname`
 - Optional - for the wallet to be included in the discovery list - the wallet developer will issue a pull request to `get-starknet-wallet`, comprising of the following:
   - Name and icon
   - Formalized links object with links to to download page over chrome, firefox and other extension stores
