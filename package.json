@@ -7,8 +7,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "rollup -c",
-        "dev": "rollup -c -w",
-        "check": "svelte-check --tsconfig ./tsconfig.json"
+        "dev": "rollup -c -w"
     },
     "keywords": [
         "starknet",
