@@ -1,9 +1,5 @@
-import type { GetStarknetWalletOptions, IGetStarknetWallet, IStarknetWindowObject } from "./types";
-declare class GetStarknetWallet implements IGetStarknetWallet {
-    #private;
-    connect(options?: GetStarknetWalletOptions): Promise<IStarknetWindowObject | undefined>;
-    disconnect(): boolean;
-    getStarknet(): IStarknetWindowObject;
-}
-export declare const gsw: GetStarknetWallet;
+import type { GetStarknetWalletOptions, IStarknetWindowObject } from "./types";
+export declare const getStarknet: () => IStarknetWindowObject;
+export declare const connect: (options?: GetStarknetWalletOptions | undefined) => Promise<IStarknetWindowObject | undefined>;
+export declare const disconnect: () => boolean;
 export * from "./types";

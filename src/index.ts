@@ -191,5 +191,9 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 }
 
-export const gsw = new GetStarknetWallet();
+const gsw = new GetStarknetWallet();
+export const getStarknet = gsw.getStarknet;
+export const connect = gsw.connect;
+export const disconnect = gsw.disconnect;
+
 export * from "./types";
