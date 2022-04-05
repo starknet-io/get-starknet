@@ -17,12 +17,10 @@ If you were using getStarknet() before, simply replace the import line as below 
 before -
 ```js
 import { getStarknet } from "@argent/get-starknet"
-getStarknet({ showModal: true|false }).enable()
 ```
 now -
 ```js
-import { gsw } from "get-starknet-wallet"
-gsw.getStarknet({ showModal: true|false }).enable()
+import { getStarknet } from "get-starknet-wallet"
 ```
 - Optional - customize the CSS of get-starknet-wallet to match your look&amp;feel
 - Optional - integrate with new API functions (e.g.: modify wallet list using custom sort/include/exclude, etc.)
