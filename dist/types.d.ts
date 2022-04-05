@@ -109,3 +109,8 @@ export declare type WalletProvider = {
         firefox?: `https://addons.mozilla.org/en-US/firefox/addon/${string}`;
     };
 };
+declare global {
+    interface Window {
+        gsw: boolean;
+    }
+}

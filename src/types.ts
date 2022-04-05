@@ -116,3 +116,9 @@ export type WalletProvider = {
         | { chrome?: `https://chrome.google.com/webstore/detail/${string}` }
         | { firefox?: `https://addons.mozilla.org/en-US/firefox/addon/${string}` };
 };
+
+declare global {
+    interface Window {
+        gsw: boolean;
+    }
+}

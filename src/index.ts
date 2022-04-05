@@ -55,6 +55,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 
     constructor() {
+        window.gsw = true;
         this.disconnect = this.disconnect.bind(this);
         this.connect = this.connect.bind(this);
         this.getStarknet = this.getStarknet.bind(this);
