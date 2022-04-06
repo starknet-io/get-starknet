@@ -6,9 +6,8 @@ import type {
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
 import show from "./modal";
-import { filterPreAuthorized, shuffle } from "./utils";
+import { filterPreAuthorized, isWalletObj, shuffle } from "./utils";
 import { Account, defaultProvider, KeyPair } from "starknet";
-import discovery from "./discovery";
 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
@@ -118,24 +117,9 @@ class GetStarknetWallet implements IGetStarknetWallet {
             (wallets, key) => {
                 if (key.startsWith("starknet")) {
                     const wallet = (window as { [key: string]: any })[key];
-                    try {
-                        if (
-                            key === "starknet" &&
-                            (!wallet.id || !wallet.name || !wallet.icon)
-                        ) {
-                            // attempt to add missing metadata to legacy wallet
-                            // object (enriched from wallets-discovery list)
-                            const argentDiscovery = discovery.find(
-                                dw => dw.id === "argentX"
-                            );
-                            if (argentDiscovery) {
-                                wallet.id = argentDiscovery.id;
-                                wallet.name = argentDiscovery.name;
-                                wallet.icon = argentDiscovery.icon;
-                            }
-                        }
-                    } catch (err) {}
-                    wallets.push(wallet);
+                    if (isWalletObj(key, wallet)) {
+                        wallets.push(wallet);
+                    }
                 }
                 return wallets;
             },
