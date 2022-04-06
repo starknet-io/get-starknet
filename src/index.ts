@@ -113,17 +113,18 @@ class GetStarknetWallet implements IGetStarknetWallet {
     async #getInstalledWallets(options?: Omit<GetStarknetWalletOptions, "showList">) {
         console.log("getInstalledWallets -> options", options);
 
-        let installed = Object.keys(window).reduce<IStarknetWindowObject[]>(
-            (wallets, key) => {
+        let installed = Object.values(
+            Object.keys(window).reduce<{
+                [key: string]: IStarknetWindowObject;
+            }>((wallets, key) => {
                 if (key.startsWith("starknet")) {
                     const wallet = (window as { [key: string]: any })[key];
-                    if (isWalletObj(key, wallet)) {
-                        wallets.push(wallet);
+                    if (isWalletObj(key, wallet) && !wallets[wallet.id]) {
+                        wallets[wallet.id] = wallet;
                     }
                 }
                 return wallets;
-            },
-            []
+            }, {})
         );
 
         console.log("pre options available wallets", installed);
