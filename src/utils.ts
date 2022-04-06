@@ -1,4 +1,5 @@
 import type { IStarknetWindowObject } from "./types";
+import discovery from "./discovery";
 
 /**
  * @see https://github.com/GoogleChrome/web-vitals/blob/main/src/lib/generateUniqueID.ts
@@ -29,3 +30,42 @@ export const filterPreAuthorized = (
                 .catch(() => undefined)
         )
     ).then(result => result.filter(res => !!res) as IStarknetWindowObject[]);
+
+export const isWalletObj = (key: string, wallet: any): boolean => {
+    try {
+        if (
+            wallet &&
+            [
+                // wallet's must have methods/members, see IStarknetWindowObject
+                "request",
+                "isConnected",
+                "provider",
+                "enable",
+                "isPreauthorized",
+                "on",
+                "off",
+                "version",
+            ].every(key => key in wallet)
+        ) {
+            if (key === "starknet" && (!wallet.id || !wallet.name || !wallet.icon)) {
+                try {
+                    // attempt to add missing metadata to legacy wallet
+                    // object (enriched from wallets-discovery list)
+                    const argentDiscovery = discovery.find(dw => dw.id === "argentX");
+                    if (argentDiscovery) {
+                        wallet.id = argentDiscovery.id;
+                        wallet.name = argentDiscovery.name;
+                        wallet.icon = argentDiscovery.icon;
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            // test for new fields only after attempting
+            // to enrich the legacy wallet ->
+            return ["id", "name", "icon"].every(key => key in wallet);
+        }
+    } catch (err) {}
+    return false;
+};

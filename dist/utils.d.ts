@@ -9,3 +9,4 @@ export declare const shuffle: (arr: any[]) => any[];
  * @param wallets
  */
 export declare const filterPreAuthorized: (wallets: IStarknetWindowObject[]) => Promise<IStarknetWindowObject[]>;
+export declare const isWalletObj: (key: string, wallet: any) => boolean;
