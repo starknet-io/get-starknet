@@ -22,7 +22,11 @@ export default {
         del({ targets: "dist/*" }),
 
         svelte({
-            preprocess: sveltePreprocess(),
+            preprocess: sveltePreprocess({
+                scss: {
+                    includePaths: ["theme"],
+                },
+            }),
             emitCss: false,
             compilerOptions: {
                 dev: isDev,
