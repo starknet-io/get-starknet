@@ -1,4 +1,6 @@
 import type {
+    EventHandler,
+    EventType,
     GetStarknetWalletOptions,
     IGetStarknetWallet,
     IStarknetWindowObject,
@@ -7,7 +9,13 @@ import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
 import show from "./modal";
 import { filterPreAuthorized, isWalletObj, shuffle } from "./utils";
-import { Account, defaultProvider, KeyPair } from "starknet";
+import {
+    Account,
+    AccountInterface,
+    defaultProvider,
+    KeyPair,
+    SignerInterface,
+} from "starknet";
 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
@@ -72,28 +80,113 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
         return (
             this.#walletObjRef.current ??
+            // create a wrapper
             new (class implements IStarknetWindowObject {
+                // default values
                 id = "disconnected";
                 name = "Disconnected";
                 icon = "";
-                selectedAddress = undefined;
+                selectedAddress?: string = undefined;
                 provider = defaultProvider;
                 isConnected = false;
-                account = new Account(defaultProvider, "", {} as KeyPair);
+                account: AccountInterface = new Account(
+                    defaultProvider,
+                    "",
+                    {} as KeyPair
+                );
                 version = "";
+                signer?: SignerInterface = undefined;
 
-                enable(options: { showModal?: boolean } | undefined): Promise<string[]> {
-                    return self.connect().then(wallet => wallet?.enable(options) ?? []);
-                }
+                /**
+                 * stores pre-enabled wallet `on` calls' listeners
+                 * @private
+                 */
+                #callbacks: { [key: string]: EventHandler[] } = {};
 
-                isPreauthorized = async () => false;
-                off = () => {};
-                on = () => {
-                    throw new Error("can't register event on disconnected wallet");
+                /**
+                 * attempt to read a chosen wallet before calling `connect`
+                 * ourselves; a valid chosen wallet will be presented when
+                 * the user holds a reference to getStarknet()'s returned
+                 * wallet-wrapper object, and keep accessing it even after
+                 * connecting a wallet successfully
+                 * @param options
+                 */
+                enable = (
+                    options: { showModal?: boolean } | undefined
+                ): Promise<string[]> =>
+                    this.#connect().then(wallet => wallet?.enable(options) ?? []);
+
+                /**
+                 * @return true when there is at least 1 pre-authorized wallet
+                 */
+                isPreauthorized = async () =>
+                    self
+                        .#getInstalledWallets()
+                        .then(installed => filterPreAuthorized(installed))
+                        .then(preAuthorized => !!preAuthorized.length);
+
+                off = (event: EventType, handleEvent: EventHandler) => {
+                    if (this.#callbacks[event]) {
+                        this.#callbacks[event] = this.#callbacks[event].filter(
+                            callback => callback !== handleEvent
+                        );
+                    }
                 };
-                request = () => {
-                    throw new Error("can't request a disconnected wallet");
+
+                on = (event: EventType, handleEvent: EventHandler) => {
+                    const listeners =
+                        this.#callbacks[event] ?? (this.#callbacks[event] = []);
+                    if (!listeners.includes(handleEvent)) {
+                        listeners.push(handleEvent);
+                    }
                 };
+
+                /**
+                 * request on chosen-wallet, in case the user still uses the
+                 * wrapping object returned from getStarknet();
+                 * see `enable` comment for understanding when this could happen
+                 *
+                 * we shouldn't "connect" implicitly for a non-`enable`-called
+                 * wallet (e.g. wallet won't let you `request` before you called
+                 * `enable`)
+                 * @param call
+                 */
+                request = async (call: any) => {
+                    if (!self.#isConnected()) {
+                        throw new Error("can't request a disconnected wallet");
+                    }
+                    return self.#walletObjRef.current?.request(call);
+                };
+
+                #connect = () =>
+                    (self.#walletObjRef.current
+                        ? Promise.resolve(self.#walletObjRef.current)
+                        : self.connect()
+                    ).then(wallet => {
+                        if (wallet) {
+                            // assign wallet data to the wallet-wrapper instance
+                            // in case the user holds it and call it directly
+                            // instead of getting a fresh reference each time
+                            // via gsw.getStarknet()
+                            this.id = wallet.id;
+                            this.name = wallet.name;
+                            this.icon = wallet.icon;
+                            this.selectedAddress = wallet.selectedAddress;
+                            this.provider = wallet.provider;
+                            this.isConnected = wallet.isConnected;
+                            this.account = wallet.account;
+                            this.version = wallet.version;
+                            this.signer = wallet.signer;
+
+                            // register pre-connect callbacks on target wallet
+                            Object.entries(this.#callbacks).forEach(([event, handlers]) =>
+                                handlers.forEach(h => wallet.on(event as EventType, h))
+                            );
+                            // then clear callbacks
+                            this.#callbacks = {};
+                        }
+                        return wallet;
+                    });
             })()
         );
     }
