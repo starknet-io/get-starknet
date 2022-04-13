@@ -120,24 +120,36 @@ class GetStarknetWallet implements IGetStarknetWallet {
                  * @return true when there is at least 1 pre-authorized wallet
                  */
                 isPreauthorized = async () =>
-                    self
-                        .#getInstalledWallets()
-                        .then(installed => filterPreAuthorized(installed))
-                        .then(preAuthorized => !!preAuthorized.length);
+                    self.#isConnected()
+                        ? (
+                              self.#walletObjRef.current as IStarknetWindowObject
+                          ).isPreauthorized()
+                        : self
+                              .#getInstalledWallets()
+                              .then(installed => filterPreAuthorized(installed))
+                              .then(preAuthorized => !!preAuthorized.length);
 
                 off = (event: EventType, handleEvent: EventHandler) => {
-                    if (this.#callbacks[event]) {
-                        this.#callbacks[event] = this.#callbacks[event].filter(
-                            callback => callback !== handleEvent
-                        );
+                    if (self.#isConnected()) {
+                        self.#walletObjRef.current?.on(event, handleEvent);
+                    } else {
+                        if (this.#callbacks[event]) {
+                            this.#callbacks[event] = this.#callbacks[event].filter(
+                                callback => callback !== handleEvent
+                            );
+                        }
                     }
                 };
 
                 on = (event: EventType, handleEvent: EventHandler) => {
-                    const listeners =
-                        this.#callbacks[event] ?? (this.#callbacks[event] = []);
-                    if (!listeners.includes(handleEvent)) {
-                        listeners.push(handleEvent);
+                    if (self.#isConnected()) {
+                        self.#walletObjRef.current?.off(event, handleEvent);
+                    } else {
+                        const listeners =
+                            this.#callbacks[event] ?? (this.#callbacks[event] = []);
+                        if (!listeners.includes(handleEvent)) {
+                            listeners.push(handleEvent);
+                        }
                     }
                 };
 
