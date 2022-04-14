@@ -4,6 +4,7 @@ import type {
     GetStarknetWalletOptions,
     IGetStarknetWallet,
     IStarknetWindowObject,
+    IStorageWrapper,
 } from "./types";
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
@@ -36,23 +37,31 @@ class GetStarknetWallet implements IGetStarknetWallet {
             const forcePopup = connected || options?.showList || !lastWallet.get();
             if (!forcePopup) {
                 // return user-set default wallet if available
-                const defaultWalletId = defaultWallet.get();
-                const defaultWalletObj = installedWallets.find(
-                    w => w.id === defaultWalletId
-                );
-                if (defaultWalletObj) {
-                    return this.#setCurrentWallet(defaultWalletObj);
-                } else {
-                    // remove prev-default wallet if not available anymore
-                    defaultWallet.delete();
+                for (const state of [
+                    // 1st priority is user-set-default wallet
+                    defaultWallet,
+                    // 2nd priority is user-last-selected wallet
+                    lastWallet,
+                ] as IStorageWrapper[]) {
+                    const stateWalletId = state.get();
+                    const stateWalletObj = installedWallets.find(
+                        w => w.id === stateWalletId
+                    );
+                    if (stateWalletObj) {
+                        return this.#setCurrentWallet(stateWalletObj);
+                    } else {
+                        // remove state-set wallet if it isn't available anymore
+                        state.delete();
+                    }
                 }
 
-                // no default but only one wallet - return that wallet
+                // no state-wallet but only one wallet - returning that wallet
                 if (installedWallets.length === 1) {
                     return this.#setCurrentWallet(installedWallets[0]);
                 }
             }
 
+            // show popup
             const wallet = await show(installedWallets, options?.modalOptions);
             return this.#setCurrentWallet(wallet);
         } catch (err) {
