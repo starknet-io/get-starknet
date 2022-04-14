@@ -131,7 +131,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
                 off = (event: EventType, handleEvent: EventHandler) => {
                     if (self.#isConnected()) {
-                        self.#walletObjRef.current?.on(event, handleEvent);
+                        self.#walletObjRef.current?.off(event, handleEvent);
                     } else {
                         if (this.#callbacks[event]) {
                             this.#callbacks[event] = this.#callbacks[event].filter(
@@ -143,7 +143,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
                 on = (event: EventType, handleEvent: EventHandler) => {
                     if (self.#isConnected()) {
-                        self.#walletObjRef.current?.off(event, handleEvent);
+                        self.#walletObjRef.current?.on(event, handleEvent);
                     } else {
                         const listeners =
                             this.#callbacks[event] ?? (this.#callbacks[event] = []);
