@@ -1,3 +1,8 @@
+export interface IStorageWrapper {
+    set(value: string | null | undefined): void;
+    get(): string | null | undefined;
+    delete(): void;
+}
 export declare type ModalOptions = {
     theme?: "light" | "dark";
 };

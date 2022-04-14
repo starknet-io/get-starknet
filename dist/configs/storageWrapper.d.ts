@@ -1,8 +1,5 @@
-/**
- * attempt to make default-overriding hard
- * todo improve/test concept
- */
-export declare class StorageWrapper {
+import type { IStorageWrapper } from "../types";
+export declare class StorageWrapper implements IStorageWrapper {
     #private;
     value: string | null | undefined;
     constructor(key: string);
