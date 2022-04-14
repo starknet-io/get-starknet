@@ -1,6 +1,6 @@
 # get-starknet-wallet<br/>StarkNet wallet <-> dApp bridge
 
-## Proposal - WIP
+## Alpha version
 
 ## Goals
 
@@ -9,10 +9,18 @@
 - An open source wallet/dApp API controlled by the community
 - An open source StarkNet wallet discovery list moderated by the community
 
+## Installation
+```
+# using npm
+npm install get-starknet-wallet
+
+# using yarn
+yarn add get-starknet-wallet
+```
 
 ## Usage for dApp developers
 
-If you were using getStarknet() before, simply replace the import line as below and use `gsw.getStarknet()` instead of `getStarknet()`.
+If you were using getStarknet() before, simply replace the import line as below.
 
 before -
 ```js
@@ -29,9 +37,9 @@ import { getStarknet } from "get-starknet-wallet"
 
 ### Flow
 
-- Once a dApp wants to connect to a wallet, it calls `gsw.getStarknet()` (or optionally use the new `connect` API to control the order, included/excluded, etc.)
+- Once a dApp wants to connect to a wallet, it calls `getStarknet()` (or optionally use the new `connect` API to control the order, included/excluded, etc.)
 
-- In the first call to `gsw.getStarknet()` the package will look for all injected extensions in the window which were added using a key starting with `starknet-*`, i.e. `starknet-walletname`
+- In the first call to `getStarknet()` the package will look for all injected extensions in the window which were added using a key starting with `starknet-*`, i.e. `starknet-walletname`
 
 
 - There are three cases
