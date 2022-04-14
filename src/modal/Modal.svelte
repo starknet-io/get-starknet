@@ -55,7 +55,7 @@
     <div class="app">
         <MaterialApp {theme}>
             <Dialog bind:active>
-                <Card style="min-width: 30vw">
+                <Card>
                     <CardTitle
                         style="
                     display: flex;
@@ -66,12 +66,16 @@
                         <img
                             alt="Close"
                             style="cursor: pointer;"
-                            on:click={() => (active = false)}
+                            on:click={() => {
+                                callback(undefined);
+                                active = false;
+                            }}
                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iIzAwMDAwMCI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDYuNDFMMTcuNTkgNSAxMiAxMC41OSA2LjQxIDUgNSA2LjQxIDEwLjU5IDEyIDUgMTcuNTkgNi40MSAxOSAxMiAxMy40MSAxNy41OSAxOSAxOSAxNy41OSAxMy40MSAxMiAxOSA2LjQxeiIvPjwvc3ZnPg==" />
                     </CardTitle>
 
                     {#if unifiedWallets.length}
-                        <List style="margin-inline-start: 24px; margin-inline-end: 24px">
+                        <List
+                            style="margin-inline-start: 24px; margin-inline-end: 24px; min-width: 25vw">
                             {#each unifiedWallets as wallet, idx}
                                 <!--suppress CssUnresolvedCustomProperty -->
                                 <ListItem
