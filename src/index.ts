@@ -53,7 +53,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 }
             }
 
-            const wallet = await show(installedWallets);
+            const wallet = await show(installedWallets, options?.modalOptions);
             return this.#setCurrentWallet(wallet);
         } catch (err) {
             console.error(err);

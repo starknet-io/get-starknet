@@ -1,10 +1,11 @@
-import type { IStarknetWindowObject } from "../types";
+import type { IStarknetWindowObject, ModalOptions } from "../types";
 import discoveryWallets from "../discovery";
 import "svelte";
 import Modal from "./Modal.svelte";
 
 export default async function show(
-    installed: IStarknetWindowObject[]
+    installed: IStarknetWindowObject[],
+    options?: ModalOptions
 ): Promise<IStarknetWindowObject | undefined> {
     const installedWalletIds = new Set(installed.map(w => w.id));
     // remove installed wallets from discovery
@@ -20,6 +21,7 @@ export default async function show(
                 },
                 installed,
                 discovery,
+                options,
             },
         });
     });

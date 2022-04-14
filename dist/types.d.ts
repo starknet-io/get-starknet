@@ -1,3 +1,6 @@
+export declare type ModalOptions = {
+    theme?: "light" | "dark";
+};
 export declare type GetStarknetWalletOptions = {
     /**
      * control wallets order for both "connect to a wallet" and
@@ -31,6 +34,7 @@ export declare type GetStarknetWalletOptions = {
      * and `true` when already connected to a wallet.
      */
     showList?: boolean;
+    modalOptions?: ModalOptions;
 };
 export interface IGetStarknetWallet {
     /**

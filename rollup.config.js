@@ -3,8 +3,9 @@ import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import svelte from "rollup-plugin-svelte";
 import { terser } from "rollup-plugin-terser";
-import sveltePreprocess from "svelte-preprocess";
 import del from "rollup-plugin-delete";
+
+const { preprocess } = require("./svelte.config");
 
 const isDev = process.env.ROLLUP_WATCH;
 
@@ -22,11 +23,7 @@ export default {
         del({ targets: "dist/*" }),
 
         svelte({
-            preprocess: sveltePreprocess({
-                scss: {
-                    includePaths: ["theme"],
-                },
-            }),
+            preprocess,
             emitCss: false,
             compilerOptions: {
                 dev: isDev,
