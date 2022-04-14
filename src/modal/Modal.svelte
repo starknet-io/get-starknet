@@ -74,8 +74,7 @@
                     </CardTitle>
 
                     {#if unifiedWallets.length}
-                        <List
-                            style="margin-inline-start: 24px; margin-inline-end: 24px; min-width: 25vw">
+                        <List style="margin-inline-start: 24px; margin-inline-end: 24px">
                             {#each unifiedWallets as wallet, idx}
                                 <!--suppress CssUnresolvedCustomProperty -->
                                 <ListItem
