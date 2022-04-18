@@ -3,9 +3,12 @@
         Dialog,
         Card,
         CardTitle,
+        CardText,
+        CardActions,
         MaterialApp,
         List,
         ListItem,
+        Button,
     } from "svelte-materialify";
 
     import type { IStarknetWindowObject, ModalOptions, WalletProvider } from "../types";
@@ -46,57 +49,110 @@
           ]
         : installed;
 
+    const closeImgSrc =
+        "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iIzAwMDAwMCI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDYuNDFMMTcuNTkgNSAxMiAxMC41OSA2LjQxIDUgNSA2LjQxIDEwLjU5IDEyIDUgMTcuNTkgNi40MSAxOSAxMiAxMy40MSAxNy41OSAxOSAxOSAxNy41OSAxMy40MSAxMiAxOSA2LjQxeiIvPjwvc3ZnPg==";
+
     console.log("modal", { unifiedWallets, browser, installed, discovery });
 
     let active = true;
+    let newWallet: WalletProvider | undefined = undefined;
 </script>
 
 {#if active}
     <div class="app">
         <MaterialApp {theme}>
-            <Dialog bind:active>
+            <Dialog bind:active persistent>
                 <Card>
-                    <CardTitle
-                        style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    ">
-                        {title}
-                        <img
-                            alt="Close"
-                            style="cursor: pointer;"
-                            on:click={() => {
-                                callback(undefined);
-                                active = false;
-                            }}
-                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iIzAwMDAwMCI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDYuNDFMMTcuNTkgNSAxMiAxMC41OSA2LjQxIDUgNSA2LjQxIDEwLjU5IDEyIDUgMTcuNTkgNi40MSAxOSAxMiAxMy40MSAxNy41OSAxOSAxOSAxNy41OSAxMy40MSAxMiAxOSA2LjQxeiIvPjwvc3ZnPg==" />
-                    </CardTitle>
+                    {#if !!newWallet}
+                        <CardTitle
+                            style="
+                               display: flex;
+                               justify-content: flex-start;
+                               align-items: center;
+                            ">
+                            <img
+                                alt="Back"
+                                style="cursor: pointer;"
+                                on:click={() => (newWallet = undefined)}
+                                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDExSDcuODNsNS41OS01LjU5TDEyIDRsLTggOCA4IDggMS40MS0xLjQxTDcuODMgMTNIMjB2LTJ6Ii8+PC9zdmc+" />
+                            <img
+                                style="margin-inline-start: 10px"
+                                width="24px"
+                                src={newWallet.icon}
+                                alt="{newWallet.name} logo" />
+                            <div style="flex-grow: 1; margin-inline-start: 4px">
+                                {newWallet.name}
+                            </div>
 
-                    {#if unifiedWallets.length}
+                            <img
+                                alt="Close"
+                                style="cursor: pointer;"
+                                on:click={() => {
+                                    callback(newWallet);
+                                    active = false;
+                                }}
+                                src={closeImgSrc} />
+                        </CardTitle>
+                    {:else}
+                        <CardTitle
+                            style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                            ">
+                            {title}
+                            <img
+                                alt="Close"
+                                style="cursor: pointer;"
+                                on:click={() => {
+                                    callback(undefined);
+                                    active = false;
+                                }}
+                                src={closeImgSrc} />
+                        </CardTitle>
+                    {/if}
+
+                    {#if !!newWallet}
+                        <CardText style="margin-top: 12px; font-size: 0.92rem">
+                            Click the REFRESH button after installing and setting up the
+                            new wallet.
+                        </CardText>
+                        <CardActions
+                            style="justify-content: flex-end; margin-inline-end: 16px">
+                            <Button
+                                style="margin-bottom: 12px"
+                                outlined
+                                on:click={() => {
+                                    callback(newWallet);
+                                    active = false;
+                                    window.location.reload();
+                                }}>Refresh</Button>
+                        </CardActions>
+                    {:else if unifiedWallets.length}
                         <List style="margin-inline-start: 24px; margin-inline-end: 24px">
                             {#each unifiedWallets as wallet, idx}
                                 <!--suppress CssUnresolvedCustomProperty -->
                                 <ListItem
                                     style="
-                                border: 1px solid lightgrey;
-                                /* use same border-radius as dialog's */
-                                border-radius: var(--mdc-shape-medium, 4px);
-                                height: 58px;
-                                background: #edeef2;
-                                margin-bottom: 10px;
-                                "
+                                        border: 1px solid lightgrey;
+                                        /* use same border-radius as dialog's */
+                                        border-radius: var(--mdc-shape-medium, 4px);
+                                        height: 58px;
+                                        background: #edeef2;
+                                        margin-bottom: 10px;
+                                    "
                                     on:click={() => {
                                         if (idx < installed.length) {
                                             callback(wallet);
+                                            active = false;
                                         } else {
                                             window.open(
                                                 wallet.downloads[browser],
                                                 "_blank"
                                             );
-                                            callback(undefined);
+                                            // noinspection JSValidateTypes
+                                            newWallet = unifiedWallets[idx];
                                         }
-                                        active = false;
                                     }}>
                                     {idx >= installed.length
                                         ? "Install "
