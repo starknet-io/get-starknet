@@ -1,7 +1,7 @@
 {
     "name": "get-starknet-wallet",
     "description": "StarkNet wallet <-> dApp bridge",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "repository": "https://github.com/myBraavos/get-starknet-wallet",
     "private": false,
     "main": "dist/index.js",
