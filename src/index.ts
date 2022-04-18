@@ -225,6 +225,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
     }
 
     async #getInstalledWallets(options?: Omit<GetStarknetWalletOptions, "showList">) {
+        await this.#waitForDocumentReady();
+
         console.log("getInstalledWallets -> options", options);
 
         let installed = Object.values(
@@ -313,6 +315,28 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
         console.log("post options available wallets", installed);
         return installed;
+    }
+
+    #waitForDocumentReady() {
+        console.log("#waitForDocumentReady called");
+        const isReady = () => {
+            const readyState = document.readyState;
+            console.log("waitForDocumentReady readyState", readyState);
+            return readyState === "complete";
+        };
+
+        return new Promise<void>(resolve => {
+            if (isReady()) {
+                resolve();
+            } else {
+                const id = setInterval(() => {
+                    if (isReady()) {
+                        clearInterval(id);
+                        resolve();
+                    }
+                }, 50);
+            }
+        });
     }
 }
 
