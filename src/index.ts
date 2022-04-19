@@ -21,10 +21,12 @@ import {
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
 
-    async connect(
+    connect = async (
         options?: GetStarknetWalletOptions
-    ): Promise<IStarknetWindowObject | undefined> {
+    ): Promise<IStarknetWindowObject | undefined> => {
         try {
+            this.#declare();
+
             const connected = this.#isConnected();
             console.log("connect", { connected });
 
@@ -68,23 +70,23 @@ class GetStarknetWallet implements IGetStarknetWallet {
             console.error(err);
         }
         return undefined;
-    }
+    };
 
     constructor() {
-        window.gsw = true;
-        this.disconnect = this.disconnect.bind(this);
-        this.connect = this.connect.bind(this);
-        this.getStarknet = this.getStarknet.bind(this);
+        this.#declare();
     }
 
-    disconnect(): boolean {
+    disconnect = (): boolean => {
+        this.#declare();
+
         const connected = this.#isConnected();
         this.#walletObjRef.current = undefined;
         // disconnected successfully if was connected before
         return connected;
-    }
+    };
 
-    getStarknet(): IStarknetWindowObject {
+    getStarknet = (): IStarknetWindowObject => {
+        this.#declare();
         const self = this;
 
         return (
@@ -210,21 +212,23 @@ class GetStarknetWallet implements IGetStarknetWallet {
                     });
             })()
         );
-    }
+    };
 
     #isConnected(): boolean {
         return !!this.#walletObjRef.current;
     }
 
-    #setCurrentWallet(wallet: IStarknetWindowObject | undefined) {
+    #setCurrentWallet = (wallet: IStarknetWindowObject | undefined) => {
         this.#walletObjRef.current = wallet;
         if (wallet) {
             lastWallet.set(wallet.id);
         }
         return wallet;
-    }
+    };
 
-    async #getInstalledWallets(options?: Omit<GetStarknetWalletOptions, "showList">) {
+    #getInstalledWallets = async (
+        options?: Omit<GetStarknetWalletOptions, "showList">
+    ) => {
         await this.#waitForDocumentReady();
 
         console.log("getInstalledWallets -> options", options);
@@ -315,9 +319,9 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
         console.log("post options available wallets", installed);
         return installed;
-    }
+    };
 
-    #waitForDocumentReady() {
+    #waitForDocumentReady = () => {
         console.log("#waitForDocumentReady called");
         const isReady = () => {
             const readyState = document.readyState;
@@ -337,7 +341,13 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 }, 50);
             }
         });
-    }
+    };
+
+    #declare = () => {
+        if (typeof window !== "undefined") {
+            window.gsw = true;
+        }
+    };
 }
 
 const gsw = new GetStarknetWallet();
