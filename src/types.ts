@@ -1,7 +1,7 @@
 export interface IStorageWrapper {
-    set(value: string | null | undefined): void;
+    set(value: string | null | undefined): boolean;
     get(): string | null | undefined;
-    delete(): void;
+    delete(): boolean;
 }
 
 export type ModalOptions = {
