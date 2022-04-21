@@ -80,9 +80,10 @@ export interface IGetStarknetWallet {
      */
     connect(options?: GetStarknetWalletOptions): Promise<IStarknetWindowObject | undefined>;
     /**
-     * disconnect from a wallet
+     * disconnect from a wallet.
+     * If `resetLastWallet` is true, the wallet will no longer auto-connect.
      */
-    disconnect(): boolean;
+    disconnect(resetLastWallet?: boolean): boolean;
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,
      * or default wrapper if disconnected
