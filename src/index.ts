@@ -63,6 +63,9 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 }
             }
 
+            if (!options?.showList && options?.onlyAutoconnect)
+                return undefined;
+
             // show popup
             const wallet = await show(installedWallets, options?.modalOptions);
             return this.#setCurrentWallet(wallet);
@@ -76,11 +79,13 @@ class GetStarknetWallet implements IGetStarknetWallet {
         this.#declare();
     }
 
-    disconnect = (): boolean => {
+    disconnect = (resetLastWallet?: boolean): boolean => {
         this.#declare();
 
         const connected = this.#isConnected();
         this.#walletObjRef.current = undefined;
+        if (resetLastWallet)
+            lastWallet.delete();
         // disconnected successfully if was connected before
         return connected;
     };

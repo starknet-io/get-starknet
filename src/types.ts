@@ -41,6 +41,11 @@ export type GetStarknetWalletOptions = {
      * and `true` when already connected to a wallet.
      */
     showList?: boolean;
+    /**
+     * return undefined instead of showing the list of wallets in case
+     * auto-connect is not possible.
+     */
+    onlyAutoconnect?: boolean;
     modalOptions?: ModalOptions;
 };
 
@@ -81,9 +86,10 @@ export interface IGetStarknetWallet {
     ): Promise<IStarknetWindowObject | undefined>;
 
     /**
-     * disconnect from a wallet
+     * disconnect from a wallet.
+     * If `resetLastWallet` is true, the wallet will no longer auto-connect.
      */
-    disconnect(): boolean;
+    disconnect(resetLastWallet?: boolean): boolean;
 
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,

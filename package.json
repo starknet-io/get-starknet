@@ -52,6 +52,8 @@
         "typescript": "^4.6.3"
     },
     "dependencies": {
-        "bowser": "^2.11.0"
+        "@rollup/plugin-json": "^4.1.0",
+        "bowser": "^2.11.0",
+        "yarn": "^1.22.18"
     }
 }
