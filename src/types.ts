@@ -41,6 +41,11 @@ export type GetStarknetWalletOptions = {
      * and `true` when already connected to a wallet.
      */
     showList?: boolean;
+    /**
+     * return undefined instead of showing the list of wallets in case
+     * auto-connect is not possible.
+     */
+    onlyAutoconnect?: boolean;
     modalOptions?: ModalOptions;
 };
 

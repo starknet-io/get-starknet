@@ -63,6 +63,9 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 }
             }
 
+            if (!options?.showList && options?.onlyAutoconnect)
+                return undefined;
+
             // show popup
             const wallet = await show(installedWallets, options?.modalOptions);
             return this.#setCurrentWallet(wallet);
