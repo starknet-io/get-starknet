@@ -4,7 +4,6 @@ import type {
     GetStarknetWalletOptions,
     IGetStarknetWallet,
     IStarknetWindowObject,
-    IStorageWrapper,
 } from "./types";
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
@@ -30,30 +29,44 @@ class GetStarknetWallet implements IGetStarknetWallet {
             const connected = this.#isConnected();
             console.log("connect", { connected });
 
-            const installedWallets = await this.#getInstalledWallets(options);
+            const {
+                installed: installedWallets,
+                preAuthorized,
+                defaultWallet,
+                lastWallet,
+            } = await this.#getInstalledWallets(options);
+
+            // explicitly attempting to connect without showing the list,
+            // return first preAuthorized wallet (if any);
+            // note: preAuthorized wallets - at this point - are already
+            // ordered by -
+            // 0. defaultWallet
+            // 1. lastWallet
+            // 2-n. others (shuffled)
+            if (options?.showList === false) {
+                const wallet = preAuthorized[0];
+                // do not override `lastWallet` state if its associated wallet
+                // is not preAuthorized (i.e. user could choose a wallet, but
+                // not necessarily approve it for connection)
+                console.log(`silent connect requested -> wallet: ${wallet?.id}`);
+                return wallet ? this.#setCurrentWallet(wallet) : undefined;
+            }
 
             // force showing the popup if
             // 1. we are called while connected
             // 2. we were explicitly told to show it
             // 3. user never selected from the popup
-            const forcePopup = connected || options?.showList || !lastWallet.get();
+            const forcePopup = connected || options?.showList || !lastWallet;
             if (!forcePopup) {
                 // return user-set default wallet if available
-                for (const state of [
+                for (const stateWallet of [
                     // 1st priority is user-set-default wallet
                     defaultWallet,
                     // 2nd priority is user-last-selected wallet
                     lastWallet,
-                ] as IStorageWrapper[]) {
-                    const stateWalletId = state.get();
-                    const stateWalletObj = installedWallets.find(
-                        w => w.id === stateWalletId
-                    );
-                    if (stateWalletObj) {
-                        return this.#setCurrentWallet(stateWalletObj);
-                    } else {
-                        // remove state-set wallet if it isn't available anymore
-                        state.delete();
+                ] as IStarknetWindowObject[]) {
+                    if (stateWallet) {
+                        return this.#setCurrentWallet(stateWallet);
                     }
                 }
 
@@ -137,8 +150,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
                           ).isPreauthorized()
                         : self
                               .#getInstalledWallets()
-                              .then(installed => filterPreAuthorized(installed))
-                              .then(preAuthorized => !!preAuthorized.length);
+                              .then(result => !!result.preAuthorized.length);
 
                 off = (event: EventType, handleEvent: EventHandler) => {
                     if (self.#isConnected()) {
@@ -233,7 +245,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
         console.log("getInstalledWallets -> options", options);
 
-        let installed = Object.values(
+        // lookup installed wallets
+        const installed = Object.values(
             Object.keys(window).reduce<{
                 [key: string]: IStarknetWindowObject;
             }>((wallets, key) => {
@@ -247,78 +260,88 @@ class GetStarknetWallet implements IGetStarknetWallet {
             }, {})
         );
 
-        console.log("pre options available wallets", installed);
+        // 1. lookup state wallets
+        // 2. remove state-set wallets if they aren't available anymore
+        const defaultWalletObj = installed.find(w => w.id === defaultWallet.get());
+        if (!defaultWalletObj) defaultWallet.delete();
+        const lastWalletObj = installed.find(w => w.id === lastWallet.get());
+        if (!lastWalletObj) lastWallet.delete();
+
+        // fetch & shuffle all preAuthorized
+        const preAuthorized: IStarknetWindowObject[] = shuffle(
+            await filterPreAuthorized(installed)
+        );
+
+        /**
+         * prioritize states wallets at given arr
+         */
+        const prioritizeStateWallets = (arr: IStarknetWindowObject[]) => {
+            // iterate last->first priorities since we push state-wallet at top
+            [lastWalletObj, defaultWalletObj].forEach(stateWallet => {
+                if (stateWallet) {
+                    const filtered = arr.filter(w => w.id !== stateWallet.id);
+                    const stateWalletPopped = filtered.length !== arr.length;
+                    if (stateWalletPopped) {
+                        arr = [stateWallet, ...filtered];
+                    }
+                }
+            });
+            return arr;
+        };
+
+        const result = {
+            installed: prioritizeStateWallets(installed),
+            preAuthorized: prioritizeStateWallets(preAuthorized),
+            defaultWallet: defaultWalletObj,
+            lastWallet: lastWalletObj,
+        };
+
+        console.log("pre options available wallets", result);
 
         if (options?.include?.length) {
             const included = new Set<string>(options.include);
-            installed = installed.filter(w => included.has(w.id));
+            result.installed = result.installed.filter(w => included.has(w.id));
         }
 
         if (options?.exclude?.length) {
             const excluded = new Set<string>(options.exclude);
-            installed = installed.filter(w => !excluded.has(w.id));
+            result.installed = result.installed.filter(w => !excluded.has(w.id));
         }
 
         if (options && Array.isArray(options.order)) {
             // skip default/preAuthorized priorities,
             // sort by client-specific order
             const order = [...options.order];
-            installed.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+            result.installed.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
 
-            const orderScope = installed.length - order.length;
-            installed = [
-                ...installed.slice(orderScope),
+            const orderScope = result.installed.length - order.length;
+            result.installed = [
+                ...result.installed.slice(orderScope),
                 // shuffle wallets which are outside `order` scope
-                ...shuffle(installed.slice(0, orderScope)),
+                ...shuffle(result.installed.slice(0, orderScope)),
             ];
         } else {
             if (!options?.order || options.order === "random") {
-                shuffle(installed);
+                shuffle(result.installed);
             } else if (options?.order === "community") {
                 // "community" order is the natural order of the wallets array,
                 // see discovery/index.ts
             }
 
-            // if we have more than a single installed wallet we'll
-            // need to prioritize default & preAuthorized wallets
-            if (installed.length > 1) {
-                // fetch & shuffle all preAuthorized
-                const preAuthorized = shuffle(await filterPreAuthorized(installed));
+            // 1. prioritize preAuthorized wallets:
+            // remove preAuthorized wallets from installed wallets list
+            const preAuthorizedIds = new Set<string>(preAuthorized.map(pa => pa.id));
+            console.log("preAuthorizedIds", preAuthorizedIds);
+            result.installed = result.installed.filter(w => !preAuthorizedIds.has(w.id));
+            // put preAuthorized wallets first
+            result.installed = [...preAuthorized, ...result.installed];
 
-                // remove preAuthorized wallets from installed wallets list
-                const preAuthorizedIds = new Set<string>(preAuthorized.map(pa => pa.id));
-                console.log("preAuthorizedIds", preAuthorizedIds);
-                installed = installed.filter(w => !preAuthorizedIds.has(w.id));
-
-                // put preAuthorized wallets first
-                installed = [...preAuthorized, ...installed];
-
-                // lookup default wallet
-                const defaultWalletId = defaultWallet.get();
-                if (defaultWalletId) {
-                    // pop defaultWalletObj from installed
-                    let defaultWalletObj: IStarknetWindowObject | undefined = undefined;
-                    installed = installed.filter(w => {
-                        if (w.id === defaultWalletId) {
-                            defaultWalletObj = w;
-                            return false;
-                        }
-                        return true;
-                    });
-
-                    // and push it at the top
-                    if (defaultWalletObj) {
-                        installed.unshift(defaultWalletObj);
-                    } else {
-                        // remove prev-default wallet if not available anymore
-                        defaultWallet.delete();
-                    }
-                }
-            }
+            // 2. prioritize states wallets:
+            result.installed = prioritizeStateWallets(result.installed);
         }
 
-        console.log("post options available wallets", installed);
-        return installed;
+        console.log("post options available wallets", result);
+        return result;
     };
 
     #waitForDocumentReady = () => {
