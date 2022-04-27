@@ -1,4 +1,4 @@
-# get-starknet-wallet<br/>StarkNet wallet <-> dApp bridge
+# get-starknet<br/>StarkNet wallet <-> dApp bridge
 
 ## Alpha version
 
@@ -12,10 +12,10 @@
 ## Installation
 ```
 # using npm
-npm install get-starknet-wallet
+npm install get-starknet
 
 # using yarn
-yarn add get-starknet-wallet
+yarn add get-starknet
 ```
 
 ## Usage for dApp developers
@@ -28,9 +28,9 @@ import { getStarknet } from "@argent/get-starknet"
 ```
 now -
 ```js
-import { getStarknet } from "get-starknet-wallet"
+import { getStarknet } from "get-starknet"
 ```
-- Optional - customize the CSS of get-starknet-wallet to match your look&amp;feel
+- Optional - customize the CSS of get-starknet to match your look&amp;feel
 - Optional - integrate with new API functions (e.g.: modify wallet list using custom sort/include/exclude, etc.)
 
 ## Deatils
@@ -58,7 +58,7 @@ import { getStarknet } from "get-starknet-wallet"
 
 - Create a wallet complying to the required APIs (based on the starknet.js APIs + 3 new fields: `name`, `icon` and `id`, for the &quot;choose a wallet&quot; popup (e.g. installed wallets list))
 - The wallet's page-script object should be added to `window` using a key starting with `starknet`, i.e. `starknet-walletname`
-- Optional - for the wallet to be included in the discovery list - the wallet developer will issue a pull request to `get-starknet-wallet`, comprising of the following:
+- Optional - for the wallet to be included in the discovery list - the wallet developer will issue a pull request to `get-starknet`, comprising of the following:
   - Name and icon
   - Formalized links object with links to to download page over chrome, firefox and other extension stores
 
