@@ -55,8 +55,11 @@ class GetStarknetWallet implements IGetStarknetWallet {
             // force showing the popup if
             // 1. we are called while connected
             // 2. we were explicitly told to show it
-            // 3. user never selected from the popup
-            const forcePopup = connected || options?.showList || !lastWallet;
+            // 3. user never selected from the popup AND has more than one wallet
+            const forcePopup =
+                connected ||
+                options?.showList ||
+                (!lastWallet && installedWallets.length > 1);
             if (!forcePopup) {
                 // return user-set default wallet if available
                 for (const stateWallet of [
