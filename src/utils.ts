@@ -1,12 +1,6 @@
 import type { IStarknetWindowObject } from "./types";
 import discovery from "./discovery";
 
-/**
- * @see https://github.com/GoogleChrome/web-vitals/blob/main/src/lib/generateUniqueID.ts
- */
-export const generateUID = () =>
-    `${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
-
 export const shuffle = (arr: any[]) => {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

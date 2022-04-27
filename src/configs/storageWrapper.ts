@@ -1,21 +1,19 @@
-import { generateUID } from "../utils";
 import type { IStorageWrapper } from "../types";
 
 export class StorageWrapper implements IStorageWrapper {
     #initialized = false;
-    #key: string | undefined = undefined;
-    #prefix: string;
+    #key: string;
     value: string | null | undefined = undefined;
 
     constructor(key: string) {
-        this.#prefix = key;
+        this.#key = key;
         console.log(`StorageWrapper ${key}`, "constructor");
 
         this.#init();
     }
 
     set(value: string | null | undefined) {
-        console.log(`StorageWrapper ${this.#key || this.#prefix}`, "set", value);
+        console.log(`StorageWrapper ${this.#key || this.#key}`, "set", value);
 
         if (!this.#initialized && !this.#init()) {
             return false;
@@ -25,7 +23,6 @@ export class StorageWrapper implements IStorageWrapper {
 
         this.value = value;
         if (value) {
-            this.#key = `${this.#prefix}-${generateUID()}`;
             console.log(`StorageWrapper ${this.#key}`, "set - new key", this.#key);
             localStorage.setItem(this.#key, value);
         }
@@ -36,7 +33,7 @@ export class StorageWrapper implements IStorageWrapper {
     get() {
         this.#validateValue();
         console.log(
-            `StorageWrapper ${this.#key || this.#prefix}`,
+            `StorageWrapper ${this.#key || this.#key}`,
             "get",
             "value",
             this.value
@@ -45,7 +42,7 @@ export class StorageWrapper implements IStorageWrapper {
     }
 
     delete() {
-        console.log(`StorageWrapper ${this.#key || this.#prefix}`, "delete");
+        console.log(`StorageWrapper ${this.#key || this.#key}`, "delete");
 
         if (!this.#initialized && !this.#init()) {
             return false;
@@ -59,7 +56,7 @@ export class StorageWrapper implements IStorageWrapper {
 
     #validateValue() {
         console.log(
-            `StorageWrapper ${this.#key || this.#prefix}`,
+            `StorageWrapper ${this.#key || this.#key}`,
             "validateValue",
             "value",
             this.value
@@ -72,18 +69,15 @@ export class StorageWrapper implements IStorageWrapper {
     #init() {
         try {
             if (!this.#initialized && typeof window !== "undefined") {
-                // init with prev key/value
-                this.#key = Object.keys(localStorage).find(sk =>
-                    sk.startsWith(this.#prefix)
-                );
-                console.log(`StorageWrapper ${this.#prefix}`, "init", this.#key);
+                const value = localStorage.getItem(this.#key);
+                console.log(`StorageWrapper ${this.#key}`, "init", this.#key, value);
 
                 // set initialized as soon as we managed to extract data
                 // from localStorage, so the `set` call below won't result
                 // in a endless-recursive loop
                 this.#initialized = true;
-                if (this.#key) {
-                    this.set(localStorage.getItem(this.#key));
+                if (value) {
+                    this.set(value);
                 }
             }
         } catch (err) {
