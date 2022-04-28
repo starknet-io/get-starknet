@@ -1,6 +1,6 @@
 # get-starknet<br/>StarkNet wallet <-> dApp bridge
 
-[![npm](https://img.shields.io/npm/v/get-starknet-wallet.svg)](https://www.npmjs.com/package/get-starknet-wallet)
+[![npm](https://img.shields.io/npm/v/get-starknet.svg)](https://www.npmjs.com/package/get-starknet)
 
 ## Alpha version
 
