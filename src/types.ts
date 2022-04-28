@@ -82,8 +82,9 @@ export interface IGetStarknetWallet {
 
     /**
      * disconnect from a wallet
+     * @param resetAuthorizations - if true, delete pre-authorized/preferred wallets.
      */
-    disconnect(): boolean;
+    disconnect(resetAuthorizations?: boolean): boolean;
 
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,

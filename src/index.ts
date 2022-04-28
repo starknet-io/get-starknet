@@ -89,11 +89,18 @@ class GetStarknetWallet implements IGetStarknetWallet {
         this.#declare();
     }
 
-    disconnect = (): boolean => {
+    disconnect = (resetAuthorizations?: boolean): boolean => {
         this.#declare();
 
         const connected = this.#isConnected();
         this.#walletObjRef.current = undefined;
+
+        if (resetAuthorizations)
+        {
+            defaultWallet.delete();
+            lastWallet.delete();
+        }
+
         // disconnected successfully if was connected before
         return connected;
     };
