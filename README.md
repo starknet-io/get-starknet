@@ -22,14 +22,11 @@ yarn add get-starknet
 
 If you were using getStarknet() before, simply replace the import line as below.
 
-before -
-```js
-import { getStarknet } from "@argent/get-starknet"
+```diff
+-import { getStarknet } from "@argent/get-starknet"
++import { getStarknet } from "get-starknet"
 ```
-now -
-```js
-import { getStarknet } from "get-starknet"
-```
+
 - Optional - customize the CSS of get-starknet to match your look&amp;feel
 - Optional - integrate with new API functions (e.g.: modify wallet list using custom sort/include/exclude, etc.)
 
