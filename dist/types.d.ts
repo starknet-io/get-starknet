@@ -76,8 +76,9 @@ export interface IGetStarknetWallet {
     connect(options?: GetStarknetWalletOptions): Promise<IStarknetWindowObject | undefined>;
     /**
      * disconnect from a wallet
+     * @param resetAuthorizations - if true, delete pre-authorized/preferred wallets.
      */
-    disconnect(): boolean;
+    disconnect(resetAuthorizations?: boolean): boolean;
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,
      * or default wrapper if disconnected
