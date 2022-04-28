@@ -105,7 +105,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
         return connected;
     };
 
-    getStarknet = (resetAuthorizations?: boolean): IStarknetWindowObject => {
+    getStarknet = (): IStarknetWindowObject => {
         this.#declare();
         const self = this;
 
