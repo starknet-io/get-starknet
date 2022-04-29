@@ -141,8 +141,10 @@ class GetStarknetWallet implements IGetStarknetWallet {
                  * connecting a wallet successfully
                  * @param options
                  */
-                enable = (options?: { showModal?: boolean }): Promise<string[]> =>
-                    this.#connect({ showList: options?.showModal }).then(
+                enable = (
+                    options?: { showModal?: boolean } & GetStarknetWalletOptions
+                ): Promise<string[]> =>
+                    this.#connect({ showList: options?.showModal, ...options }).then(
                         wallet => wallet?.enable() ?? []
                     );
 
