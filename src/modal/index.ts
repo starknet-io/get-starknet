@@ -16,8 +16,12 @@ export default async function show(
     // remove installed wallets from discovery
     let discovery = discoveryWallets.filter(dw => !installedWalletIds.has(dw.id));
 
-    // remove excluded wallets from discovery
-    if (options?.exclude?.length) {
+    if (options?.include?.length) {
+        // just show included wallets from discovery
+        const include = new Set<string>(options.include);
+        discovery = discovery.filter(dw => include.has(dw.id));
+    } else if (options?.exclude?.length) {
+        // remove excluded wallets from discovery
         const excluded = new Set<string>(options.exclude);
         discovery = discovery.filter(w => !excluded.has(w.id));
     }
