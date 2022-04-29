@@ -9,7 +9,7 @@ import type {
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
 import show from "./modal";
-import { filterPreAuthorized, isWalletObj, shuffle, sortBy } from "./utils";
+import { filterBy, filterPreAuthorized, isWalletObj, shuffle, sortBy } from "./utils";
 import {
     Account,
     AccountInterface,
@@ -303,20 +303,13 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
         console.log("pre options available wallets", result);
 
-        if (options?.include?.length) {
-            const included = new Set<string>(options.include);
-            result.installed = result.installed.filter(w => included.has(w.id));
-        }
-
-        if (options?.exclude?.length) {
-            const excluded = new Set<string>(options.exclude);
-            result.installed = result.installed.filter(w => !excluded.has(w.id));
-        }
+        result.installed = filterBy<IStarknetWindowObject>(result.installed, options);
 
         result.installed = sortBy<IStarknetWindowObject>(
             result.installed,
             options?.order
         );
+
         const isFixedOrder = options && Array.isArray(options.order);
         if (!isFixedOrder) {
             // 1. prioritize preAuthorized wallets:
