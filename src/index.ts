@@ -139,6 +139,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
                  * the user holds a reference to getStarknet()'s returned
                  * wallet-wrapper object, and keep accessing it even after
                  * connecting a wallet successfully
+                 *
+                 * @deprecated please use `connect` which is exported from the module directly
                  * @param options
                  */
                 enable = (
