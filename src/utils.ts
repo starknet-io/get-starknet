@@ -1,4 +1,4 @@
-import type { IStarknetWindowObject } from "./types";
+import type { IStarknetWindowObject, Order, WalletProvider } from "./types";
 import discovery from "./discovery";
 
 /**
@@ -7,7 +7,7 @@ import discovery from "./discovery";
 export const generateUID = () =>
     `${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
 
-export const shuffle = (arr: any[]) => {
+export const shuffle = <T extends any[]>(arr: T): T => {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -68,4 +68,30 @@ export const isWalletObj = (key: string, wallet: any): boolean => {
         }
     } catch (err) {}
     return false;
+};
+
+export const sortBy = <T extends IStarknetWindowObject | WalletProvider>(
+    wallets: T[],
+    order: Order
+): T[] => {
+    if (order && Array.isArray(order)) {
+        // skip default/preAuthorized priorities,
+        // sort by client-specific order
+        wallets.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+
+        const orderScope = wallets.length - order.length;
+        return [
+            ...wallets.slice(orderScope),
+            // shuffle wallets which are outside `order` scope
+            ...shuffle(wallets.slice(0, orderScope)),
+        ];
+    } else {
+        if (!order || order === "random") {
+            return shuffle(wallets);
+        } else if (order === "community") {
+            // "community" order is the natural order of the wallets array,
+            // see discovery/index.ts
+        }
+        return wallets;
+    }
 };

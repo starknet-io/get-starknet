@@ -8,6 +8,8 @@ export type ModalOptions = {
     theme?: "light" | "dark";
 };
 
+export type Order = string[] | "community" | "random" | null | undefined;
+
 export type GetStarknetWalletOptions = {
     /**
      * control wallets order for both "connect to a wallet" and
@@ -23,7 +25,7 @@ export type GetStarknetWalletOptions = {
      *
      * default is "random"
      */
-    order?: string[] | "community" | "random";
+    order?: Order;
     /**
      * list of wallets to include on both "connect to a wallet" and "install a wallet" lists,
      * default is to include all wallets

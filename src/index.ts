@@ -8,7 +8,7 @@ import type {
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
 import show from "./modal";
-import { filterPreAuthorized, isWalletObj, shuffle } from "./utils";
+import { filterPreAuthorized, isWalletObj, shuffle, sortBy } from "./utils";
 import {
     Account,
     AccountInterface,
@@ -77,7 +77,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
             }
 
             // show popup
-            const wallet = await show(installedWallets, options?.modalOptions);
+            const wallet = await show(installedWallets, options);
             return this.#setCurrentWallet(wallet);
         } catch (err) {
             console.error(err);
@@ -314,26 +314,12 @@ class GetStarknetWallet implements IGetStarknetWallet {
             result.installed = result.installed.filter(w => !excluded.has(w.id));
         }
 
-        if (options && Array.isArray(options.order)) {
-            // skip default/preAuthorized priorities,
-            // sort by client-specific order
-            const order = [...options.order];
-            result.installed.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
-
-            const orderScope = result.installed.length - order.length;
-            result.installed = [
-                ...result.installed.slice(orderScope),
-                // shuffle wallets which are outside `order` scope
-                ...shuffle(result.installed.slice(0, orderScope)),
-            ];
-        } else {
-            if (!options?.order || options.order === "random") {
-                shuffle(result.installed);
-            } else if (options?.order === "community") {
-                // "community" order is the natural order of the wallets array,
-                // see discovery/index.ts
-            }
-
+        result.installed = sortBy<IStarknetWindowObject>(
+            result.installed,
+            options?.order
+        );
+        const isFixedOrder = options && Array.isArray(options.order);
+        if (!isFixedOrder) {
             // 1. prioritize preAuthorized wallets:
             // remove preAuthorized wallets from installed wallets list
             const preAuthorizedIds = new Set<string>(preAuthorized.map(pa => pa.id));
