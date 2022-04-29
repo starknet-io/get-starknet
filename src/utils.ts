@@ -7,7 +7,7 @@ import discovery from "./discovery";
 export const generateUID = () =>
     `${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
 
-export const shuffle = (arr: any[]): any[] => {
+export const shuffle = <T extends any[]>(arr: T): T => {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
