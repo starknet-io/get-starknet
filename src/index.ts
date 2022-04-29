@@ -95,8 +95,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
         const connected = this.#isConnected();
         this.#walletObjRef.current = undefined;
 
-        if (resetAuthorizations)
-        {
+        if (resetAuthorizations) {
             defaultWallet.delete();
             lastWallet.delete();
         }
@@ -142,10 +141,12 @@ class GetStarknetWallet implements IGetStarknetWallet {
                  * connecting a wallet successfully
                  * @param options
                  */
-                enable = (
-                    options: { showModal?: boolean } | undefined
-                ): Promise<string[]> =>
-                    this.#connect().then(wallet => wallet?.enable(options) ?? []);
+                enable = ({ showModal }: { showModal?: boolean } = {}): Promise<
+                    string[]
+                > =>
+                    this.#connect({ showList: showModal }).then(
+                        wallet => wallet?.enable() ?? []
+                    );
 
                 /**
                  * @return true when there is at least 1 pre-authorized wallet
@@ -200,10 +201,10 @@ class GetStarknetWallet implements IGetStarknetWallet {
                     return self.#walletObjRef.current?.request(call);
                 };
 
-                #connect = () =>
+                #connect = (options?: GetStarknetWalletOptions) =>
                     (self.#walletObjRef.current
                         ? Promise.resolve(self.#walletObjRef.current)
-                        : self.connect()
+                        : self.connect(options)
                     ).then(wallet => {
                         if (wallet) {
                             // assign wallet data to the wallet-wrapper instance
