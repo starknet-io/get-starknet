@@ -1,4 +1,5 @@
 import type {
+    DisconnectOptions,
     EventHandler,
     EventType,
     GetStarknetWalletOptions,
@@ -89,16 +90,14 @@ class GetStarknetWallet implements IGetStarknetWallet {
         this.#declare();
     }
 
-    disconnect = (resetAuthorizations?: boolean): boolean => {
+    disconnect = (options?: DisconnectOptions): boolean => {
         this.#declare();
 
         const connected = this.#isConnected();
         this.#walletObjRef.current = undefined;
 
-        if (resetAuthorizations) {
-            defaultWallet.delete();
-            lastWallet.delete();
-        }
+        if (options?.clearLastWallet) lastWallet.delete();
+        if (options?.clearDefaultWallet) defaultWallet.delete();
 
         // disconnected successfully if was connected before
         return connected;

@@ -8,6 +8,17 @@ export type ModalOptions = {
     theme?: "light" | "dark";
 };
 
+export type DisconnectOptions = {
+    /**
+     * if true - will reset last-wallet state
+     */
+    clearLastWallet?: boolean;
+    /**
+     * if true = will reset default-wallet state
+     */
+    clearDefaultWallet?: boolean;
+};
+
 export type Order = string[] | "community" | "random" | null | undefined;
 
 export type GetStarknetWalletOptions = {
@@ -84,9 +95,9 @@ export interface IGetStarknetWallet {
 
     /**
      * disconnect from a wallet
-     * @param resetAuthorizations - if true, delete pre-authorized/preferred wallets.
+     * @param options
      */
-    disconnect(resetAuthorizations?: boolean): boolean;
+    disconnect(options?: DisconnectOptions): boolean;
 
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,
