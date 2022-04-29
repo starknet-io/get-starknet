@@ -6,7 +6,7 @@ import type {
 import discoveryWallets from "../discovery";
 import "svelte";
 import Modal from "./Modal.svelte";
-import { sortBy } from "../utils";
+import { filterBy, sortBy } from "../utils";
 
 export default async function show(
     installed: IStarknetWindowObject[],
@@ -26,6 +26,7 @@ export default async function show(
         discovery = discovery.filter(w => !excluded.has(w.id));
     }
 
+    discovery = filterBy<WalletProvider>(discovery, options);
     discovery = sortBy<WalletProvider>(discovery, options?.order);
 
     return new Promise(resolve => {

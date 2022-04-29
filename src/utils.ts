@@ -1,4 +1,9 @@
-import type { IStarknetWindowObject, Order, WalletProvider } from "./types";
+import type {
+    GetStarknetWalletOptions,
+    IStarknetWindowObject,
+    Order,
+    WalletProvider,
+} from "./types";
 import discovery from "./discovery";
 
 /**
@@ -95,3 +100,20 @@ export const sortBy = <T extends IStarknetWindowObject | WalletProvider>(
         return wallets;
     }
 };
+
+export function filterBy<T extends IStarknetWindowObject | WalletProvider>(
+    installed: T[],
+    options?: Omit<GetStarknetWalletOptions, "showList">
+): T[] {
+    if (options?.include?.length) {
+        const included = new Set<string>(options.include);
+        return installed.filter(w => included.has(w.id));
+    }
+
+    if (options?.exclude?.length) {
+        const excluded = new Set<string>(options.exclude);
+        return installed.filter(w => !excluded.has(w.id));
+    }
+
+    return installed;
+}
