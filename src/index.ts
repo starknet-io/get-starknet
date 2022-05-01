@@ -140,15 +140,26 @@ class GetStarknetWallet implements IGetStarknetWallet {
                  * connecting a wallet successfully
                  * @param options
                  */
-                enable = (options?: { showModal?: boolean }): Promise<string[]> =>
-                    this.#connect({ showList: options?.showModal }).then(
-                        wallet => wallet?.enable() ?? []
-                    );
+                enable = async (options?: { showModal?: boolean }): Promise<string[]> => {
+                    try {
+                        const wallet = await this.#connect({
+                            showList: options?.showModal,
+                        });
+                        if (wallet) {
+                            const result = await wallet.enable();
+                            this.#refreshWalletProperties(wallet);
+                            return result;
+                        }
+                    } catch (err) {
+                        console.error(err);
+                    }
+                    return [];
+                };
 
                 /**
                  * @return true when there is at least 1 pre-authorized wallet
                  */
-                isPreauthorized = async () =>
+                isPreauthorized = () =>
                     self.#isConnected()
                         ? (
                               self.#walletObjRef.current as IStarknetWindowObject
@@ -211,12 +222,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
                             this.id = wallet.id;
                             this.name = wallet.name;
                             this.icon = wallet.icon;
-                            this.selectedAddress = wallet.selectedAddress;
-                            this.provider = wallet.provider;
-                            this.isConnected = wallet.isConnected;
-                            this.account = wallet.account;
                             this.version = wallet.version;
-                            this.signer = wallet.signer;
+                            this.#refreshWalletProperties(wallet);
 
                             // register pre-connect callbacks on target wallet
                             Object.entries(this.#callbacks).forEach(([event, handlers]) =>
@@ -227,6 +234,17 @@ class GetStarknetWallet implements IGetStarknetWallet {
                         }
                         return wallet;
                     });
+
+                #refreshWalletProperties = (
+                    wallet: IStarknetWindowObject | undefined
+                ) => {
+                    if (!wallet) return;
+                    this.selectedAddress = wallet.selectedAddress;
+                    this.provider = wallet.provider;
+                    this.isConnected = wallet.isConnected;
+                    this.account = wallet.account;
+                    this.signer = wallet.signer;
+                };
             })()
         );
     };
