@@ -6,17 +6,12 @@ import type {
     IGetStarknetWallet,
     IStarknetWindowObject,
 } from "./types";
+import type { AccountInterface, SignerInterface } from "starknet";
 import defaultWallet from "./configs/defaultWallet";
 import lastWallet from "./configs/lastConnected";
 import show from "./modal";
 import { filterBy, filterPreAuthorized, isWalletObj, shuffle, sortBy } from "./utils";
-import {
-    Account,
-    AccountInterface,
-    defaultProvider,
-    KeyPair,
-    SignerInterface,
-} from "starknet";
+import { Account, defaultProvider, KeyPair } from "starknet";
 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
@@ -253,7 +248,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
         return !!this.#walletObjRef.current;
     }
 
-    #setCurrentWallet = (wallet: IStarknetWindowObject | undefined) => {
+    #setCurrentWallet = async (wallet: IStarknetWindowObject | undefined) => {
+        await wallet?.enable();
         this.#walletObjRef.current = wallet;
         if (wallet) {
             lastWallet.set(wallet.id);
