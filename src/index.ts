@@ -206,7 +206,8 @@ class GetStarknetWallet implements IGetStarknetWallet {
                     if (!self.#isConnected()) {
                         throw new Error("can't request a disconnected wallet");
                     }
-                    return self.#walletObjRef.current?.request(call);
+                    return (self.#walletObjRef.current as IStarknetWindowObject) // save to say current is defined, as that's check in `self.#isConnected()`
+                        .request(call);
                 };
 
                 #connect = (options?: GetStarknetWalletOptions) =>
