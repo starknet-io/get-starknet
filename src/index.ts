@@ -203,10 +203,11 @@ class GetStarknetWallet implements IGetStarknetWallet {
                  * @param call
                  */
                 request = async (call: any) => {
-                    if (!self.#isConnected()) {
+                    const currentWallet = self.#walletObjRef.current;
+                    if (!currentWallet) {
                         throw new Error("can't request a disconnected wallet");
                     }
-                    return self.#walletObjRef.current?.request(call);
+                    return currentWallet.request(call);
                 };
 
                 #connect = (options?: GetStarknetWalletOptions) =>

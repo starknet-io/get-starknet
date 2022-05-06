@@ -112,8 +112,33 @@ export type EventType = "accountsChanged" | "networkChanged";
 
 export type EventHandler = (data: any) => void;
 
+// EIP-747:
+// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-747.md
+interface WatchAssetParameters {
+    type: string; // The asset's interface, e.g. 'ERC20'
+    options: {
+        address: string; // The hexadecimal StarkNet address of the token contract
+        symbol?: string; // A ticker symbol or shorthand, up to 5 alphanumerical characters
+        decimals?: number; // The number of asset decimals
+        image?: string; // A string url of the token logo
+        name?: string; // The name of the token - not in spec
+    };
+}
+
+export type RpcMessage =
+    | {
+          type: "wallet_watchAsset";
+          params: WatchAssetParameters;
+          result: boolean;
+      }
+    | {
+          type: string;
+          params: unknown;
+          result: never;
+      };
+
 export interface IStarknetWindowObject {
-    request: (call: any) => Promise<void>;
+    request: <T extends RpcMessage>(call: Omit<T, "result">) => Promise<T["result"]>;
     enable: (options?: { showModal?: boolean }) => Promise<string[]>;
     isPreauthorized: () => Promise<boolean>;
     on: (event: EventType, handleEvent: EventHandler) => void;
