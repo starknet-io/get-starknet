@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.0.0...v1.1.0) (2022-05-06)
+
+
+### Features
+
+* add firefox discovery link ([3b6cc27](https://github.com/starknet-community-libs/get-starknet/commit/3b6cc27ff39abdf3f19892903a80686a349cab56))
+
 # 1.0.0 (2022-05-01)
 
 
