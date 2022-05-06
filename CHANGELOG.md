@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.1.0...v1.2.0) (2022-05-06)
+
+
+### Bug Fixes
+
+* review ([5353d9a](https://github.com/starknet-community-libs/get-starknet/commit/5353d9a9bc306698bbbfd2e6d3b7e587f3ed2a0b))
+
+
+### Features
+
+* add rpc typings ([f34e70f](https://github.com/starknet-community-libs/get-starknet/commit/f34e70f8c017be914af1603ff04c371a8d7c9107))
+
 # [1.1.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.0.0...v1.1.0) (2022-05-06)
 
 
