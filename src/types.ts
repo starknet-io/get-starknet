@@ -115,7 +115,7 @@ export type EventHandler = (data: any) => void;
 // EIP-747:
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-747.md
 interface WatchAssetParameters {
-    type: "ERC20"; // The asset's interface, e.g. 'ERC20'
+    type: string; // The asset's interface, e.g. 'ERC20'
     options: {
         address: string; // The hexadecimal StarkNet address of the token contract
         symbol?: string; // A ticker symbol or shorthand, up to 5 alphanumerical characters
