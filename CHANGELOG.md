@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.2.0...v1.3.0) (2022-05-09)
+
+
+### Features
+
+* firefox argent ([6cd1986](https://github.com/starknet-community-libs/get-starknet/commit/6cd1986edcceff65c2ac5429cc8a32e92d6f1cd6))
+
 # [1.2.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.1.0...v1.2.0) (2022-05-06)
 
 
