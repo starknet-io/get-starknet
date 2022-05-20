@@ -271,17 +271,15 @@ class GetStarknetWallet implements IGetStarknetWallet {
 
         // lookup installed wallets
         const installed = Object.values(
-            ["starknet", "starknet_braavos", ...Object.keys(window)].reduce<{
-                [key: string]: IStarknetWindowObject;
-            }>((wallets, key) => {
+            Object.getOwnPropertyNames(window).reduce((wallets, key) => {
                 if (key.startsWith("starknet")) {
-                    const wallet = (window as { [key: string]: any })[key];
+                    const wallet = (window as Record<string, any>)[key];
                     if (isWalletObj(key, wallet) && !wallets[wallet.id]) {
                         wallets[wallet.id] = wallet;
                     }
                 }
                 return wallets;
-            }, {})
+            }, {} as Record<string, IStarknetWindowObject>)
         );
 
         // 1. lookup state wallets
