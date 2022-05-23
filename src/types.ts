@@ -125,10 +125,44 @@ interface WatchAssetParameters {
     };
 }
 
+// EIP-3085
+// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-3085.md
+
+export interface AddStarknetChainParameters {
+    id: string;
+    chainId: string; // A 0x-prefixed hexadecimal string
+    chainName: string;
+    baseUrl: string;
+    rpcUrl?: string;
+    blockExplorerUrl?: string;
+    accountImplementation?: string;
+
+    nativeCurrency?: {
+        name: string;
+        symbol: string; // 2-6 characters long
+        decimals: 18;
+    }; // Currently ignored.
+    iconUrls?: string[]; // Currently ignored.
+}
+
+export interface SwitchStarknetChainParameter {
+    chainId: string; // A 0x-prefixed hexadecimal string
+}
+
 export type RpcMessage =
     | {
           type: "wallet_watchAsset";
           params: WatchAssetParameters;
+          result: boolean;
+      }
+    | {
+          type: "wallet_addStarknetChain";
+          params: AddStarknetChainParameters;
+          result: boolean;
+      }
+    | {
+          type: "wallet_switchStarknetChain";
+          params: SwitchStarknetChainParameter;
           result: boolean;
       }
     | {
@@ -156,6 +190,7 @@ export interface IStarknetWindowObject {
     signer?: SignerInterface;
     account: AccountInterface;
     selectedAddress?: string;
+    chainId?: string;
 }
 
 export type WalletProvider = {
