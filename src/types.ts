@@ -99,6 +99,10 @@ export interface IGetStarknetWallet {
      */
     disconnect(options?: DisconnectOptions): boolean;
 
+    getInstalledWallets(
+        options?: Omit<GetStarknetWalletOptions, "showList" | "modalOptions">
+    ): Promise<IStarknetWindowObject[]>;
+
     /**
      * return last-chosen wallet `IStarknetWindowObject` instance,
      * or default wrapper if disconnected

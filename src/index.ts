@@ -250,6 +250,12 @@ class GetStarknetWallet implements IGetStarknetWallet {
         );
     };
 
+    getInstalledWallets(
+        options?: Omit<GetStarknetWalletOptions, "showList" | "modalOptions">
+    ): Promise<IStarknetWindowObject[]> {
+        return this.#getInstalledWallets(options).then(res => res.installed);
+    }
+
     #isConnected(): boolean {
         return !!this.#walletObjRef.current;
     }
@@ -263,7 +269,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
     };
 
     #getInstalledWallets = async (
-        options?: Omit<GetStarknetWalletOptions, "showList">
+        options?: Omit<GetStarknetWalletOptions, "showList" | "modalOptions">
     ) => {
         await this.#waitForDocumentReady();
 
