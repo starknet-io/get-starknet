@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/starknet-community-libs/get-starknet/compare/v1.3.1...v1.3.2) (2022-05-24)
+
+
+### Bug Fixes
+
+* broken `yarn.lock` ([8e8e7d8](https://github.com/starknet-community-libs/get-starknet/commit/8e8e7d8dafcf8fee44b9ab5173580b601803b4f3))
+
 ## [1.3.1](https://github.com/starknet-community-libs/get-starknet/compare/v1.3.0...v1.3.1) (2022-05-10)
 
 
