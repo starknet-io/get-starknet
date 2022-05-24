@@ -43,10 +43,10 @@
     resolve-global "1.0.0"
     yargs "^17.0.0"
 
-"@commitlint/config-conventional@^16.2.1":
-  version "16.2.4"
-  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-16.2.4.tgz#56647108c89ed06fc5271242787550331988c0fb"
-  integrity sha512-av2UQJa3CuE5P0dzxj/o/B9XVALqYzEViHrMXtDrW9iuflrqCStWBAioijppj9URyz6ONpohJKAtSdgAOE0gkA==
+"@commitlint/config-conventional@^17.0.0":
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-17.0.0.tgz#7dc2ef3ac1a11ff62bcd333343cc8921edd1646a"
+  integrity sha512-jttJXBIq3AuQCvUVwxSctCwKfHxxbALE0IB9OIHYCu/eQdOzPxN72pugeZsWDo1VK/T9iFx+MZoPb6Rb1/ylsw==
   dependencies:
     conventional-changelog-conventionalcommits "^4.3.1"
 
@@ -650,13 +650,13 @@
     "@types/node" "*"
 
 "@typescript-eslint/eslint-plugin@^5.17.0":
-  version "5.25.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.25.0.tgz#e8ce050990e4d36cc200f2de71ca0d3eb5e77a31"
-  integrity sha512-icYrFnUzvm+LhW0QeJNKkezBu6tJs9p/53dpPLFH8zoM9w1tfaKzVurkPotEpAqQ8Vf8uaFyL5jHd0Vs6Z0ZQg==
+  version "5.26.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.26.0.tgz#c1f98ccba9d345e38992975d3ca56ed6260643c2"
+  integrity sha512-oGCmo0PqnRZZndr+KwvvAUvD3kNE4AfyoGCwOZpoCncSh4MVD06JTE8XQa2u9u+NX5CsyZMBTEc2C72zx38eYA==
   dependencies:
-    "@typescript-eslint/scope-manager" "5.25.0"
-    "@typescript-eslint/type-utils" "5.25.0"
-    "@typescript-eslint/utils" "5.25.0"
+    "@typescript-eslint/scope-manager" "5.26.0"
+    "@typescript-eslint/type-utils" "5.26.0"
+    "@typescript-eslint/utils" "5.26.0"
     debug "^4.3.4"
     functional-red-black-tree "^1.0.1"
     ignore "^5.2.0"
@@ -687,12 +687,12 @@
     "@typescript-eslint/types" "5.26.0"
     "@typescript-eslint/visitor-keys" "5.26.0"
 
-"@typescript-eslint/type-utils@5.25.0":
-  version "5.25.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/type-utils/-/type-utils-5.25.0.tgz#5750d26a5db4c4d68d511611e0ada04e56f613bc"
-  integrity sha512-B6nb3GK3Gv1Rsb2pqalebe/RyQoyG/WDy9yhj8EE0Ikds4Xa8RR28nHz+wlt4tMZk5bnAr0f3oC8TuDAd5CPrw==
+"@typescript-eslint/type-utils@5.26.0":
+  version "5.26.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/type-utils/-/type-utils-5.26.0.tgz#937dee97702361744a3815c58991acf078230013"
+  integrity sha512-7ccbUVWGLmcRDSA1+ADkDBl5fP87EJt0fnijsMFTVHXKGduYMgienC/i3QwoVhDADUAPoytgjbZbCOMj4TY55A==
   dependencies:
-    "@typescript-eslint/utils" "5.25.0"
+    "@typescript-eslint/utils" "5.26.0"
     debug "^4.3.4"
     tsutils "^3.21.0"
 
@@ -732,15 +732,15 @@
     semver "^7.3.7"
     tsutils "^3.21.0"
 
-"@typescript-eslint/utils@5.25.0":
-  version "5.25.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.25.0.tgz#272751fd737733294b4ab95e16c7f2d4a75c2049"
-  integrity sha512-qNC9bhnz/n9Kba3yI6HQgQdBLuxDoMgdjzdhSInZh6NaDnFpTUlwNGxplUFWfY260Ya0TRPvkg9dd57qxrJI9g==
+"@typescript-eslint/utils@5.26.0":
+  version "5.26.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.26.0.tgz#896b8480eb124096e99c8b240460bb4298afcfb4"
+  integrity sha512-PJFwcTq2Pt4AMOKfe3zQOdez6InIDOjUJJD3v3LyEtxHGVVRK3Vo7Dd923t/4M9hSH2q2CLvcTdxlLPjcIk3eg==
   dependencies:
     "@types/json-schema" "^7.0.9"
-    "@typescript-eslint/scope-manager" "5.25.0"
-    "@typescript-eslint/types" "5.25.0"
-    "@typescript-eslint/typescript-estree" "5.25.0"
+    "@typescript-eslint/scope-manager" "5.26.0"
+    "@typescript-eslint/types" "5.26.0"
+    "@typescript-eslint/typescript-estree" "5.26.0"
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
@@ -2031,10 +2031,10 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-husky@^7.0.4:
-  version "7.0.4"
-  resolved "https://registry.npmjs.org/husky/-/husky-7.0.4.tgz#242048245dc49c8fb1bf0cc7cfb98dd722531535"
-  integrity sha512-vbaCKN2QLtP/vD4yvs6iz6hBEo6wkSzs8HpRah1Z6aGmF2KW5PdYuAd7uX5a+OyBZHBhd+TFLqgjUgytQr4RvQ==
+husky@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.1.tgz#511cb3e57de3e3190514ae49ed50f6bc3f50b3e9"
+  integrity sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==
 
 iconv-lite@^0.6.2:
   version "0.6.3"
@@ -3708,9 +3708,9 @@ ssri@^9.0.0:
     minipass "^3.1.1"
 
 starknet@^3.10.2:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/starknet/-/starknet-3.11.0.tgz#fff6411692eab8f1660ad0515705a0e633c8e763"
-  integrity sha512-+Qc3xuVseV74iKHbmiUJZx0zqH0qXoSbJJn/ZdDh9Rx/qbh6sqbmwxVlWAnYd5wsrZrEMiWttUd0OW+3ICGV/w==
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/starknet/-/starknet-3.12.1.tgz#a7d898aea38e715a47c7bfd4104d3c178d083ff1"
+  integrity sha512-gKjd5RzSgP21Gx84FEOMfoOwPEqqddWwA0awXOAB/iwVCw4lj/u556xMqipflO9tA5fMla3UxO+LHN+zM5T1mQ==
   dependencies:
     "@ethersproject/bytes" "^5.6.1"
     axios "^0.23.0"
