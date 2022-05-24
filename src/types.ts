@@ -99,6 +99,10 @@ export interface IGetStarknetWallet {
      */
     disconnect(options?: DisconnectOptions): boolean;
 
+    /**
+     * returns a list of browser-installed wallets (as opposed to browser-available wallets)
+     * @param options see `connect` `options` for `order`, `include` & `exclude`
+     */
     getInstalledWallets(
         options?: Omit<GetStarknetWalletOptions, "showList" | "modalOptions">
     ): Promise<IStarknetWindowObject[]>;
