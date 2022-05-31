@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.3.2...v1.4.0) (2022-05-31)
+
+
+### Bug Fixes
+
+* missing docstring ([0f89105](https://github.com/starknet-community-libs/get-starknet/commit/0f89105e1f4383c87bd8b29266a302b56aa9dfb3))
+
+
+### Features
+
+* expose installed wallets list ([fa537da](https://github.com/starknet-community-libs/get-starknet/commit/fa537dad27f0d0e94eed19f6794458b7f860b902))
+
 ## [1.3.2](https://github.com/starknet-community-libs/get-starknet/compare/v1.3.1...v1.3.2) (2022-05-24)
 
 
