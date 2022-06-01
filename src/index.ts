@@ -386,5 +386,6 @@ const gsw = new GetStarknetWallet();
 export const getStarknet = gsw.getStarknet;
 export const connect = gsw.connect;
 export const disconnect = gsw.disconnect;
+export const getInstalledWallets = gsw.getInstalledWallets;
 
 export * from "./types";
