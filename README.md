@@ -32,7 +32,7 @@ If you were using getStarknet() before, simply replace the import line as below.
 - Optional - customize the CSS of get-starknet to match your look&amp;feel
 - Optional - integrate with new API functions (e.g.: modify wallet list using custom sort/include/exclude, etc.)
 
-## Deatils
+## Details
 
 ### Flow
 
