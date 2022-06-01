@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.0...v1.4.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* actually export getInstalledWallets type ([2826332](https://github.com/starknet-community-libs/get-starknet/commit/2826332ba812644aa322ff05bac70570bed9e785))
+
 # [1.4.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.3.2...v1.4.0) (2022-05-31)
 
 
