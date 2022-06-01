@@ -6,6 +6,15 @@ export interface IStorageWrapper {
 
 export type ModalOptions = {
     theme?: "light" | "dark";
+    customTheme?: {
+        bgColor: string;
+        bgSecondaryColor: string;
+        txtColor: string;
+        txtSecondaryColor: string;
+        overlayColor?: string;
+        overlayOpacity?: number;
+        imgFilter?: string;
+    };
 };
 
 export type DisconnectOptions = {

@@ -18,12 +18,24 @@
     export let discovery: WalletProvider[] = [];
     export let options: ModalOptions = {};
 
-    const theme = options?.theme || "light";
-    const bgColor = theme === "light" ? "#fff" : "#333";
-    const bgSecondaryColor = theme === "light" ? "#e9e9e9" : "#555";
-    const txtColor = theme === "light" ? "#000" : "#f7f7f7";
-    const txtSecondaryColor = theme === "light" ? "#99999950" : "#aaaaaa30";
-    const imgFilter = theme === "light" ? "unset" : "invert(1)";
+    const customTheme = options?.customTheme;
+    let bgColor, bgSecondaryColor, txtColor, txtSecondaryColor, imgFilter;
+    // Custom theme priority
+    if(customTheme){
+        bgColor = customTheme.bgColor;
+        bgSecondaryColor = customTheme.bgSecondaryColor;
+        txtColor = customTheme.txtColor;
+        txtSecondaryColor = customTheme.txtSecondaryColor;
+        txtSecondaryColor = customTheme.imgFilter || "unset";
+    }else{
+        const theme = options?.theme || "light";
+        bgColor = theme === "light" ? "#fff" : "#333";
+        bgSecondaryColor = theme === "light" ? "#e9e9e9" : "#555";
+        txtColor = theme === "light" ? "#000" : "#f7f7f7";
+        txtSecondaryColor = theme === "light" ? "#99999950" : "#aaaaaa30";
+        imgFilter = theme === "light" ? "unset" : "invert(1)";
+    }
+
 
     const title = "Connect a wallet";
 
@@ -62,7 +74,7 @@
     let newWallet: WalletProvider | undefined = undefined;
 </script>
 
-<Dialog bind:active persistent>
+<Dialog bind:active persistent overlay="{{color: customTheme.overlayColor, opacity: customTheme.overlayOpacity}}">
     <Card style="background: {bgColor}">
         {#if !!newWallet}
             <CardTitle
