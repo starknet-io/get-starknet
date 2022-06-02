@@ -14,6 +14,7 @@ export type ModalOptions = {
         overlayColor?: string;
         overlayOpacity?: number;
         imgFilter?: string;
+        modalPersistent?: boolean;
     };
 };
 

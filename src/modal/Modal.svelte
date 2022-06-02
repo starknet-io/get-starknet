@@ -19,7 +19,7 @@
     export let options: ModalOptions = {};
 
     const customTheme = options?.customTheme;
-    let bgColor, bgSecondaryColor, txtColor, txtSecondaryColor, imgFilter;
+    let bgColor, bgSecondaryColor, txtColor, txtSecondaryColor, imgFilter, modalPersistent;
     // Custom theme priority
     if(customTheme){
         bgColor = customTheme.bgColor;
@@ -27,6 +27,7 @@
         txtColor = customTheme.txtColor;
         txtSecondaryColor = customTheme.txtSecondaryColor;
         imgFilter = customTheme.imgFilter || "unset";
+        modalPersistent = customTheme.modalPersistent;
     }else{
         const theme = options?.theme || "light";
         bgColor = theme === "light" ? "#fff" : "#333";
@@ -34,6 +35,7 @@
         txtColor = theme === "light" ? "#000" : "#f7f7f7";
         txtSecondaryColor = theme === "light" ? "#99999950" : "#aaaaaa30";
         imgFilter = theme === "light" ? "unset" : "invert(1)";
+        modalPersistent = true;
     }
 
 
@@ -74,7 +76,7 @@
     let newWallet: WalletProvider | undefined = undefined;
 </script>
 
-<Dialog bind:active persistent overlay="{{color: customTheme.overlayColor, opacity: customTheme.overlayOpacity}}">
+<Dialog bind:active persistent="{modalPersistent}" overlay="{{color: customTheme.overlayColor, opacity: customTheme.overlayOpacity}}">
     <Card style="background: {bgColor}">
         {#if !!newWallet}
             <CardTitle
