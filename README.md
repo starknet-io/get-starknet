@@ -30,6 +30,24 @@ If you were using getStarknet() before, simply replace the import line as below.
 ```
 
 - Optional - customize the CSS of get-starknet to match your look&amp;feel
+```javascript
+// provide customTheme when connect
+
+const starknet = await connect({
+  modalOptions: {
+    customTheme: {
+      bgColor: "#000000",
+      bgSecondaryColor: "#000000",
+      txtColor: "#ffffff",
+      txtSecondaryColor: "#000000",
+      overlayColor: "#000000",          // Optional
+      overlayOpacity: 0.46,             // Optional
+      imgFilter: "invert(1)",           // Optional
+      modalPersistent: false,           // Optional
+    },
+  },
+});
+```
 - Optional - integrate with new API functions (e.g.: modify wallet list using custom sort/include/exclude, etc.)
 
 ## Deatils
