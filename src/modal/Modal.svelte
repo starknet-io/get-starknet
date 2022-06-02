@@ -26,7 +26,7 @@
         bgSecondaryColor = customTheme.bgSecondaryColor;
         txtColor = customTheme.txtColor;
         txtSecondaryColor = customTheme.txtSecondaryColor;
-        txtSecondaryColor = customTheme.imgFilter || "unset";
+        imgFilter = customTheme.imgFilter || "unset";
     }else{
         const theme = options?.theme || "light";
         bgColor = theme === "light" ? "#fff" : "#333";
