@@ -1,3 +1,11 @@
+## [1.4.2](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.1...v1.4.2) (2022-06-13)
+
+
+### Bug Fixes
+
+* updated braavos logo ([d88a272](https://github.com/starknet-community-libs/get-starknet/commit/d88a27267df7f0312c55a7fab777308a6715f8d3))
+* updated starknet ([a8eac55](https://github.com/starknet-community-libs/get-starknet/commit/a8eac5573b0e26b8307974ddad0822d3b8d57ef1))
+
 ## [1.4.1](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.0...v1.4.1) (2022-06-01)
 
 
