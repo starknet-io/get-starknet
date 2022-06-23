@@ -35,11 +35,13 @@
         case "chrome":
         case "chromium":
         case "electron":
-        case "microsoft edge":
             browser = "chrome";
             break;
         case "firefox":
             browser = "firefox";
+            break;
+        case "microsoft edge":
+            browser = "edge";
             break;
     }
 
