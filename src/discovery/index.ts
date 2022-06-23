@@ -8,6 +8,7 @@ const wallets: WalletProvider[] = [
         downloads: {
             chrome: "https://chrome.google.com/webstore/detail/braavos-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma",
             firefox: "https://addons.mozilla.org/en-US/firefox/addon/braavos-wallet",
+            edge: "https://microsoftedge.microsoft.com/addons/detail/braavos-wallet/hkkpjehhcnhgefhbdcgfkeegglpjchdc",
         },
     },
     {
