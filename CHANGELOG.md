@@ -1,3 +1,11 @@
+## [1.4.3](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.2...v1.4.3) (2022-08-02)
+
+
+### Bug Fixes
+
+* add support for ms edge discovery links ([3699697](https://github.com/starknet-community-libs/get-starknet/commit/3699697a9518ddab8823c4ad19947999dc5a000a))
+* fallback from edge to chrome ([d27bfc7](https://github.com/starknet-community-libs/get-starknet/commit/d27bfc7ba14a8df6da4dacdf43153daad0722bad))
+
 ## [1.4.2](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.1...v1.4.2) (2022-06-13)
 
 
