@@ -51,7 +51,11 @@
               ...installed,
               // discovery 2nd, and remove wallets with no support
               // for the current browser
-              ...discovery.filter(dw => !!dw.downloads[browser]),
+              ...discovery.filter(
+                  dw =>
+                      !!dw.downloads[browser] ||
+                      (browser === "edge" && !!dw.downloads["chrome"])
+              ),
           ]
         : installed;
 
@@ -140,7 +144,11 @@
                                 callback(wallet);
                                 active = false;
                             } else {
-                                window.open(wallet.downloads[browser], "_blank");
+                                const link =
+                                    wallet.downloads[browser] ||
+                                    (browser === "edge" && wallet.downloads["chrome"]);
+                                if (!link) return;
+                                window.open(link, "_blank");
                                 // noinspection JSValidateTypes
                                 newWallet = unifiedWallets[idx];
                             }
