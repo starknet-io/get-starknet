@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.3...v1.4.4) (2022-08-04)
+
+
+### Bug Fixes
+
+* getInstalledWallets now support using this keyword ([7b44fae](https://github.com/starknet-community-libs/get-starknet/commit/7b44faec82126e7b30d63caf469cdb020781bd73))
+
 ## [1.4.3](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.2...v1.4.3) (2022-08-02)
 
 

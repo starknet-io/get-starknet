@@ -1,7 +1,7 @@
 {
     "name": "get-starknet",
     "description": "StarkNet wallet <-> dApp bridge",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "repository": "https://github.com/starknet-community-libs/get-starknet",
     "private": false,
     "main": "dist/index.js",
