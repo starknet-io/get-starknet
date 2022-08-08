@@ -15,9 +15,11 @@ import {
     AccountInterface,
     defaultProvider,
     KeyPair,
+    ProviderInterface,
     SignerInterface,
 } from "starknet";
 
+import 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
 
@@ -116,7 +118,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 name = "Disconnected";
                 icon = "";
                 selectedAddress?: string = undefined;
-                provider = defaultProvider;
+                provider: ProviderInterface = defaultProvider;
                 isConnected = false;
                 account: AccountInterface = new Account(
                     defaultProvider,
@@ -254,7 +256,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
         options?: Omit<GetStarknetWalletOptions, "showList" | "modalOptions">
     ): Promise<IStarknetWindowObject[]> => {
         return this.#getInstalledWallets(options).then(res => res.installed);
-    }
+    };
 
     #isConnected(): boolean {
         return !!this.#walletObjRef.current;

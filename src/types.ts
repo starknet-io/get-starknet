@@ -114,7 +114,7 @@ export interface IGetStarknetWallet {
     getStarknet(): IStarknetWindowObject;
 }
 
-import type { AccountInterface, Provider, SignerInterface } from "starknet";
+import type { AccountInterface, ProviderInterface, SignerInterface } from "starknet";
 
 export type EventType = "accountsChanged" | "networkChanged";
 
@@ -156,7 +156,7 @@ export interface IStarknetWindowObject {
     name: string;
     version: string;
     icon: string;
-    provider: Provider;
+    provider: ProviderInterface;
     isConnected: boolean;
     /**
      * @deprecated use `account` instead
