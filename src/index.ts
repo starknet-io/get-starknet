@@ -19,7 +19,6 @@ import {
     SignerInterface,
 } from "starknet";
 
-import 
 class GetStarknetWallet implements IGetStarknetWallet {
     #walletObjRef: { current?: IStarknetWindowObject } = {};
 
