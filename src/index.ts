@@ -255,7 +255,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
         options?: Omit<GetStarknetWalletOptions, "showList" | "modalOptions">
     ): Promise<IStarknetWindowObject[]> => {
         return this.#getInstalledWallets(options).then(res => res.installed);
-    };
+    }
 
     #isConnected(): boolean {
         return !!this.#walletObjRef.current;
