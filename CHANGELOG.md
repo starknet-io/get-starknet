@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.4...v1.5.0) (2022-08-17)
+
+
+### Bug Fixes
+
+* remove ";" introduced by error ([77d1813](https://github.com/starknet-community-libs/get-starknet/commit/77d1813b383691a5e52e777a75f39001b56fa022))
+
+
+### Features
+
+* change Provider to ProviderInterface in IStarknetWindowObject ([148c2da](https://github.com/starknet-community-libs/get-starknet/commit/148c2dadce89cdd7332caaa7f5b5b8a44e27c17c))
+
 ## [1.4.4](https://github.com/starknet-community-libs/get-starknet/compare/v1.4.3...v1.4.4) (2022-08-04)
 
 
