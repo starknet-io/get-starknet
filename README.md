@@ -31,7 +31,9 @@ possible like this:
 ```tsx
 import { connect, disconnect } from "get-starknet"
 
-;<button onClick={() => connect()}>Connect wallet</button>
+return (
+  <button onClick={() => connect()}>Connect wallet</button>
+)
 ```
 
 ### Advanced usage
