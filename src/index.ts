@@ -15,6 +15,7 @@ import {
     AccountInterface,
     defaultProvider,
     KeyPair,
+    ProviderInterface,
     SignerInterface,
 } from "starknet";
 
@@ -116,7 +117,7 @@ class GetStarknetWallet implements IGetStarknetWallet {
                 name = "Disconnected";
                 icon = "";
                 selectedAddress?: string = undefined;
-                provider = defaultProvider;
+                provider: ProviderInterface = defaultProvider;
                 isConnected = false;
                 account: AccountInterface = new Account(
                     defaultProvider,
