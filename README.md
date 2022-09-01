@@ -31,9 +31,7 @@ possible like this:
 ```tsx
 import { connect, disconnect } from "get-starknet"
 
-return (
-  <button onClick={() => connect()}>Connect wallet</button>
-)
+return <button onClick={() => connect()}>Connect wallet</button>
 ```
 
 ### Advanced usage
@@ -54,7 +52,7 @@ import {
   getPreAuthorizedWallets,
 } from "get-starknet-core"
 
-interface SnWalletResult {
+interface GetStarknetResult {
   // Returns all wallets available in the window object
   getAvailableWallets: (
     options?: GetWalletOptions,

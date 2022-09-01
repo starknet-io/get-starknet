@@ -4,17 +4,24 @@ import sn, { type StarknetWindowObject } from "get-starknet-core"
 
 type StoreVersion = "chrome" | "firefox" | "edge"
 
-function getStoreVersionFromBrowser(): StoreVersion {
+function getStoreVersionFromBrowser(): StoreVersion | null {
   const browserName = Bowser.getParser(window.navigator.userAgent)
-    .getBrowser()
-    .name?.toLowerCase()
+    .getBrowserName()
+    ?.toLowerCase()
   switch (browserName) {
     case "firefox":
       return "firefox"
     case "microsoft edge":
       return "edge"
-    default:
+    case "android browser":
+    case "chrome":
+    case "chromium":
+    case "electron":
+    case "opera": // opera is chromium based
+    case "vivaldi": // vivaldi is chromium based
       return "chrome"
+    default:
+      return null
   }
 }
 

@@ -1,4 +1,4 @@
-import { getSnWallet } from "../main"
+import { getStarknet } from "../main"
 import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
@@ -14,7 +14,7 @@ function getWallet(
   window: any,
   storageFactoryImplementation = mockStorageFunction(),
 ) {
-  return getSnWallet({
+  return getStarknet({
     windowObject: window,
     isWalletObject: (wallet: any) => wallet.id !== "unknown",
     storageFactoryImplementation,

@@ -4,10 +4,6 @@ export type AccountChangeEventHandler = (accounts: string[]) => void
 
 export type NetworkChangeEventHandler = (network?: string) => void
 
-export type WalletEventHandlers =
-  | AccountChangeEventHandler
-  | NetworkChangeEventHandler
-
 export type WalletEvents =
   | {
       type: "accountsChanged"
@@ -39,14 +35,14 @@ export interface AddStarknetChainParameters {
   chainId: string // A 0x-prefixed hexadecimal string
   chainName: string
   baseUrl: string
-  rpcUrl?: string
-  blockExplorerUrl?: string
-  accountImplementation?: string
+  rpcUrls?: string[]
+  blockExplorerUrls?: string[]
 
   nativeCurrency?: {
+    address: string // Not part of the standard, but required by StarkNet as it can work with any ERC20 token as the fee token
     name: string
     symbol: string // 2-6 characters long
-    decimals: 18
+    decimals: number
   } // Currently ignored.
   iconUrls?: string[] // Currently ignored.
 }
@@ -119,5 +115,6 @@ export type StarknetWindowObject =
 declare global {
   interface Window {
     starknet?: StarknetWindowObject
+    [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }

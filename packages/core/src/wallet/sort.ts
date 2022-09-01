@@ -2,7 +2,7 @@ import { StarknetWindowObject } from "../StarknetWindowObject"
 import { WalletProvider } from "../discovery"
 import { shuffle } from "../utils"
 
-export type Sort = string[] | "community" | "random" | null | undefined
+export type Sort = string[] | "random" | null | undefined
 
 export const sortBy = <T extends StarknetWindowObject | WalletProvider>(
   wallets: T[],
@@ -20,12 +20,6 @@ export const sortBy = <T extends StarknetWindowObject | WalletProvider>(
       ...shuffle(wallets.slice(0, sortScope)),
     ]
   } else {
-    if (!sort || sort === "random") {
-      return shuffle(wallets)
-    } else if (sort === "community") {
-      // "community" sort is the natural sort of the wallets array,
-      // see discovery/index.ts
-    }
-    return wallets
+    return shuffle(wallets)
   }
 }

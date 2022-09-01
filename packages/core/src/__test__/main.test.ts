@@ -1,4 +1,4 @@
-import { getSnWallet } from "../main"
+import { getStarknet } from "../main"
 import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
@@ -13,7 +13,7 @@ function getWallet(
   window: any,
   storageFactoryImplementation = mockStorageFunction(),
 ) {
-  return getSnWallet({
+  return getStarknet({
     windowObject: window,
     isWalletObject: (wallet: any) => wallet.id !== "unknown",
     storageFactoryImplementation,
@@ -103,22 +103,6 @@ describe("getAvailableWallets()", () => {
     expect(availableWallets[0]).toEqual(UnknownWalletBMock)
     expect(availableWallets[1]).toEqual(UnknownWalletAMock)
   })
-  // run 10 times to make sure it was sorted and wasnt just luck
-  it.each(new Array(10).fill(0))(
-    "should not sort wallets when sort=community",
-    async () => {
-      const sn = getWallet({
-        "starknet-wallet-a": UnknownWalletAMock,
-        "starknet-wallet-b": UnknownWalletBMock,
-      })
-      const availableWallets = await sn.getAvailableWallets({
-        sort: "community",
-      })
-      expect(availableWallets.length).toBe(2)
-      expect(availableWallets[0]).toEqual(UnknownWalletAMock)
-      expect(availableWallets[1]).toEqual(UnknownWalletBMock)
-    },
-  )
 })
 
 describe("getPreAuthorizedWallets()", () => {

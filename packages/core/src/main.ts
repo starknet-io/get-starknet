@@ -18,19 +18,18 @@ export type {
   RpcMessage,
   StarknetWindowObject,
   SwitchStarknetChainParameter,
-  WalletEventHandlers,
   WalletEvents,
   WatchAssetParameters,
 } from "./StarknetWindowObject"
 export type { WalletProvider } from "./discovery"
 
-export interface SnWalletOptions {
+export interface GetStarknetOptions {
   windowObject: Record<string, any>
   isWalletObject: (wallet: any) => boolean
   storageFactoryImplementation: (name: string) => IStorageWrapper
 }
 
-const defaultOptions: SnWalletOptions = {
+const defaultOptions: GetStarknetOptions = {
   windowObject: window,
   isWalletObject: isWalletObj,
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
@@ -42,7 +41,7 @@ export interface GetWalletOptions {
   exclude?: FilterList
 }
 
-interface SnWalletResult {
+interface GetStarknetResult {
   getAvailableWallets: (
     options?: GetWalletOptions,
   ) => Promise<StarknetWindowObject[]> // Returns all wallets available in the window object
@@ -50,8 +49,8 @@ interface SnWalletResult {
     options?: GetWalletOptions,
   ) => Promise<StarknetWindowObject[]> // Returns only preauthorized wallets available in the window object
   getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]> // Returns all wallets in existence (from discovery file)
-  getLastConnectedWallet: () => Promise<StarknetWindowObject | null> // Returns the last wallet connected when it's still connected
-  getDefaultWallet: () => Promise<StarknetWindowObject | null> // Returns the default wallet
+  getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
+  getDefaultWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the default wallet
   enable: (
     wallet: StarknetWindowObject,
     options?: {
@@ -61,9 +60,9 @@ interface SnWalletResult {
   disconnect: (options?: { clearDefaultWallet?: boolean }) => Promise<void> // Disconnects from a wallet
 }
 
-export function getSnWallet(
-  options: Partial<SnWalletOptions> = {},
-): SnWalletResult {
+export function getStarknet(
+  options: Partial<GetStarknetOptions> = {},
+): GetStarknetResult {
   const { storageFactoryImplementation, windowObject, isWalletObject } = {
     ...defaultOptions,
     ...options,
@@ -109,7 +108,12 @@ export function getSnWallet(
         lastConnectedWallet ? [lastConnectedWallet] : [],
       )
 
-      return firstPreAuthorizedWallet ?? null
+      if (!firstPreAuthorizedWallet) {
+        lastConnectedStore.delete()
+        return null
+      }
+
+      return firstPreAuthorizedWallet
     },
     getDefaultWallet: async () => {
       const defaultWalletId = defaultWalletStore.get()
@@ -119,7 +123,12 @@ export function getSnWallet(
         defaultWallet ? [defaultWallet] : [],
       )
 
-      return firstPreAuthorizedWallet ?? null
+      if (!firstPreAuthorizedWallet) {
+        defaultWalletStore.delete()
+        return null
+      }
+
+      return firstPreAuthorizedWallet
     },
     enable: async (wallet, options) => {
       await wallet.enable(options)
@@ -141,4 +150,4 @@ export function getSnWallet(
   }
 }
 
-export default getSnWallet()
+export default getStarknet()
