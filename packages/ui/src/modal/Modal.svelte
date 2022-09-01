@@ -36,13 +36,15 @@
   }
 
   onMount(() => {
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", handler)
-    return () => {
+    if (theme === null) {
       window
         .matchMedia("(prefers-color-scheme: dark)")
-        .removeEventListener("change", handler)
+        .addEventListener("change", handler)
+      return () => {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .removeEventListener("change", handler)
+      }
     }
   })
 

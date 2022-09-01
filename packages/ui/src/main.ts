@@ -38,70 +38,55 @@ export interface DisconnectOptions {
   clearDefaultWallet?: boolean
 }
 
+const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
+  if (!wallet) {
+    return null
+  }
+  return sn.enable(wallet, { starknetVersion: "v4" }).catch(() => null)
+}
+
 export const connect = async ({
   modalMode = "canAsk",
   storeVersion = getStoreVersionFromBrowser(),
   modalTheme,
   ...restOptions
 }: ConnectOptions = {}): Promise<StarknetWindowObject | null> => {
-  const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
-    if (!wallet) {
-      return null
-    }
-    return sn.enable(wallet, { starknetVersion: "v4" }).catch(() => null)
-  }
-
-  const lastWallet = await sn.getLastConnectedWallet()
-  if (modalMode !== "alwaysAsk" && lastWallet) {
-    return enableWithVersion(lastWallet)
-  }
-
   const preAuthorizedWallets = await sn.getPreAuthorizedWallets({
     ...restOptions,
-    exclude: [...(restOptions.exclude ?? []), lastWallet?.id],
   })
-  if (modalMode === "neverAsk" && preAuthorizedWallets.length === 1) {
-    return enableWithVersion(preAuthorizedWallets[0])
+
+  const lastWallet = await sn.getLastConnectedWallet()
+  if (modalMode !== "alwaysAsk") {
+    if (
+      lastWallet &&
+      preAuthorizedWallets.some((w) => w.id === lastWallet.id)
+    ) {
+      return enableWithVersion(lastWallet)
+    }
   }
 
   const defaultWallet = await sn.getDefaultWallet()
-  // show default wallet as first entry, but only autoconnect if modalMode is neverAsk and preauthorized
-  const preAuthorizedWalletsWithoutDefaultWallet = preAuthorizedWallets.filter(
-    (wallet) => wallet.id !== defaultWallet?.id,
-  )
-  if (
-    modalMode === "neverAsk" &&
-    defaultWallet &&
-    preAuthorizedWallets.some((w) => w.id === defaultWallet.id)
-  ) {
-    return enableWithVersion(defaultWallet)
+  if (modalMode === "neverAsk") {
+    if (
+      defaultWallet &&
+      preAuthorizedWallets.some((w) => w.id === defaultWallet.id)
+    ) {
+      return enableWithVersion(defaultWallet)
+    }
+
+    if (preAuthorizedWallets.length === 1) {
+      return enableWithVersion(preAuthorizedWallets[0])
+    }
+
+    return null
   }
 
-  const installedWallets = await sn.getAvailableWallets({
-    ...restOptions,
-    exclude: [
-      ...(restOptions.exclude ?? []),
-      lastWallet?.id,
-      ...preAuthorizedWallets.map((w) => w.id),
-    ],
-  })
+  const installedWallets = await sn.getAvailableWallets(restOptions)
   if (modalMode === "canAsk" && installedWallets.length === 1) {
     return enableWithVersion(installedWallets[0])
   }
 
-  if (modalMode === "neverAsk") {
-    return null
-  }
-
-  const discoveryWallets = await sn.getDiscoveryWallets({
-    ...restOptions,
-    exclude: [
-      ...(restOptions.exclude ?? []),
-      lastWallet?.id,
-      ...preAuthorizedWallets.map((w) => w.id),
-      ...installedWallets.map((w) => w.id),
-    ],
-  })
+  const discoveryWallets = await sn.getDiscoveryWallets(restOptions)
 
   const discoveryWalletsByStoreVersion: WalletProviderWithStoreVersion[] =
     discoveryWallets
@@ -113,8 +98,8 @@ export const connect = async ({
 
   return show({
     lastWallet,
-    defaultWallet: defaultWallet?.id !== lastWallet?.id ? defaultWallet : null,
-    preAuthorizedWallets: preAuthorizedWalletsWithoutDefaultWallet,
+    defaultWallet,
+    preAuthorizedWallets,
     installedWallets,
     discoveryWallets: discoveryWalletsByStoreVersion,
     enable: enableWithVersion,
