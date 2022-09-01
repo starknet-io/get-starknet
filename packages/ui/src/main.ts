@@ -1,6 +1,9 @@
 import show, { type WalletProviderWithStoreVersion } from "./modal"
 import Bowser from "bowser"
-import sn, { type StarknetWindowObject } from "get-starknet-core"
+import sn, {
+  type GetWalletOptions,
+  type StarknetWindowObject,
+} from "get-starknet-core"
 
 type StoreVersion = "chrome" | "firefox" | "edge"
 
@@ -25,7 +28,7 @@ function getStoreVersionFromBrowser(): StoreVersion | null {
   }
 }
 
-export interface ConnectOptions {
+export interface ConnectOptions extends GetWalletOptions {
   modalMode?: "alwaysAsk" | "canAsk" | "neverAsk"
   modalTheme?: "light" | "dark" | "system"
   storeVersion?: StoreVersion
@@ -39,6 +42,7 @@ export const connect = async ({
   modalMode = "canAsk",
   storeVersion = getStoreVersionFromBrowser(),
   modalTheme,
+  ...restOptions
 }: ConnectOptions = {}): Promise<StarknetWindowObject | null> => {
   const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
     if (!wallet) {
@@ -53,7 +57,8 @@ export const connect = async ({
   }
 
   const preAuthorizedWallets = await sn.getPreAuthorizedWallets({
-    exclude: [lastWallet?.id],
+    ...restOptions,
+    exclude: [...(restOptions.exclude ?? []), lastWallet?.id],
   })
   if (modalMode === "neverAsk" && preAuthorizedWallets.length === 1) {
     return enableWithVersion(preAuthorizedWallets[0])
@@ -73,7 +78,12 @@ export const connect = async ({
   }
 
   const installedWallets = await sn.getAvailableWallets({
-    exclude: [lastWallet?.id, ...preAuthorizedWallets.map((w) => w.id)],
+    ...restOptions,
+    exclude: [
+      ...(restOptions.exclude ?? []),
+      lastWallet?.id,
+      ...preAuthorizedWallets.map((w) => w.id),
+    ],
   })
   if (modalMode === "canAsk" && installedWallets.length === 1) {
     return enableWithVersion(installedWallets[0])
@@ -84,7 +94,9 @@ export const connect = async ({
   }
 
   const discoveryWallets = await sn.getDiscoveryWallets({
+    ...restOptions,
     exclude: [
+      ...(restOptions.exclude ?? []),
       lastWallet?.id,
       ...preAuthorizedWallets.map((w) => w.id),
       ...installedWallets.map((w) => w.id),
