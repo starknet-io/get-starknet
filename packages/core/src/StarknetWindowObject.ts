@@ -115,6 +115,7 @@ export type StarknetWindowObject =
 declare global {
   interface Window {
     starknet?: StarknetWindowObject
+    starknet_braavos?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }
