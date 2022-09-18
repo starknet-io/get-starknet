@@ -486,9 +486,9 @@
     resolve "^1.19.0"
 
 "@rollup/plugin-typescript@^8.3.1":
-  version "8.3.4"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-8.3.4.tgz#45cdc0787b658b37d0362c705d8de86bc8bc040e"
-  integrity sha512-wt7JnYE9antX6BOXtsxGoeVSu4dZfw0dU3xykfOQ4hC3EddxRbVG/K0xiY1Wup7QOHJcjLYXWAn0Kx9Z1SBHHg==
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-8.5.0.tgz#7ea11599a15b0a30fa7ea69ce3b791d41b862515"
+  integrity sha512-wMv1/scv0m/rXx21wD2IsBbJFba8wGF3ErJIr6IKRfRj49S85Lszbxb4DCo8iILpluTjk2GAAu9CoZt4G3ppgQ==
   dependencies:
     "@rollup/pluginutils" "^3.1.0"
     resolve "^1.17.0"
@@ -3670,9 +3670,9 @@ rollup-pluginutils@^2.8.2:
     estree-walker "^0.6.1"
 
 rollup@^2.70.1:
-  version "2.78.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.78.0.tgz#00995deae70c0f712ea79ad904d5f6b033209d9e"
-  integrity sha512-4+YfbQC9QEVvKTanHhIAFVUFSRsezvQF8vFOJwtGfb9Bb+r014S+qryr9PSmw8x6sMnPkmFBGAvIFVQxvJxjtg==
+  version "2.79.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.79.0.tgz#9177992c9f09eb58c5e56cbfa641607a12b57ce2"
+  integrity sha512-x4KsrCgwQ7ZJPcFA/SUu6QVcYlO7uRLfLAy0DSA4NS2eG8japdbpM50ToH7z4iObodRYOJ0soneF0iaQRJ6zhA==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -3709,9 +3709,9 @@ sander@^0.5.0:
     rimraf "^2.5.2"
 
 sass@^1.50.0:
-  version "1.54.4"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.4.tgz#803ff2fef5525f1dd01670c3915b4b68b6cba72d"
-  integrity sha512-3tmF16yvnBwtlPrNBHw/H907j8MlOX8aTBnlNX1yrKx24RKcJGPyLhFUwkoKBKesR3unP93/2z14Ll8NicwQUA==
+  version "1.54.9"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.9.tgz#b05f14ed572869218d1a76961de60cd647221762"
+  integrity sha512-xb1hjASzEH+0L0WI9oFjqhRi51t/gagWnxLiwUNMltA0Ab6jIDkAacgKiGYKM9Jhy109osM7woEEai6SXeJo5Q==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
