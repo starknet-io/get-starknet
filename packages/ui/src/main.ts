@@ -56,34 +56,33 @@ export const connect = async ({
   })
 
   const lastWallet = await sn.getLastConnectedWallet()
-  if (modalMode !== "alwaysAsk") {
-    if (
-      lastWallet &&
-      preAuthorizedWallets.some((w) => w.id === lastWallet.id)
-    ) {
-      return enableWithVersion(lastWallet)
-    }
-  }
-
   const defaultWallet = await sn.getDefaultWallet()
   if (modalMode === "neverAsk") {
-    if (
-      defaultWallet &&
-      preAuthorizedWallets.some((w) => w.id === defaultWallet.id)
-    ) {
-      return enableWithVersion(defaultWallet)
-    }
+    const wallet =
+      preAuthorizedWallets.find((w) => w.id === defaultWallet?.id) ??
+      preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
+      preAuthorizedWallets[0] // at this point pre-authorized is already sorted
 
-    if (preAuthorizedWallets.length === 1) {
-      return enableWithVersion(preAuthorizedWallets[0])
-    }
-
-    return null
+    // return `wallet` even if it's null/undefined since we aren't allowed
+    // to show any "connect" related UI
+    return enableWithVersion(wallet)
   }
 
   const installedWallets = await sn.getAvailableWallets(restOptions)
-  if (modalMode === "canAsk" && installedWallets.length === 1) {
-    return enableWithVersion(installedWallets[0])
+  if (
+    modalMode === "canAsk" &&
+    // we return/display wallet options once per first-dapp (ever) connect
+    (defaultWallet || lastWallet)
+  ) {
+    const wallet =
+      preAuthorizedWallets.find((w) => w.id === defaultWallet?.id) ??
+      preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
+      installedWallets.length === 1
+        ? installedWallets[0]
+        : undefined
+    if (wallet) {
+      return enableWithVersion(wallet)
+    } // otherwise fallback to modal
   }
 
   const discoveryWallets = await sn.getDiscoveryWallets(restOptions)
