@@ -1,11 +1,12 @@
 import show, { type WalletProviderWithStoreVersion } from "./modal"
 import Bowser from "bowser"
 import sn, {
+  type DisconnectOptions,
   type GetWalletOptions,
   type StarknetWindowObject,
 } from "get-starknet-core"
 
-export { type StarknetWindowObject } from "get-starknet-core"
+export type { StarknetWindowObject, DisconnectOptions } from "get-starknet-core"
 
 type StoreVersion = "chrome" | "firefox" | "edge"
 
@@ -36,10 +37,6 @@ export interface ConnectOptions extends GetWalletOptions {
   storeVersion?: StoreVersion
 }
 
-export interface DisconnectOptions {
-  clearDefaultWallet?: boolean
-}
-
 const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
   if (!wallet) {
     return null
@@ -58,10 +55,8 @@ export const connect = async ({
   })
 
   const lastWallet = await sn.getLastConnectedWallet()
-  const defaultWallet = await sn.getDefaultWallet()
   if (modalMode === "neverAsk") {
     const wallet =
-      preAuthorizedWallets.find((w) => w.id === defaultWallet?.id) ??
       preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
       preAuthorizedWallets[0] // at this point pre-authorized is already sorted
 
@@ -74,10 +69,9 @@ export const connect = async ({
   if (
     modalMode === "canAsk" &&
     // we return/display wallet options once per first-dapp (ever) connect
-    (defaultWallet || lastWallet)
+    lastWallet
   ) {
     const wallet =
-      preAuthorizedWallets.find((w) => w.id === defaultWallet?.id) ??
       preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
       installedWallets.length === 1
         ? installedWallets[0]
@@ -99,7 +93,6 @@ export const connect = async ({
 
   return show({
     lastWallet,
-    defaultWallet,
     preAuthorizedWallets,
     installedWallets,
     discoveryWallets: discoveryWalletsByStoreVersion,

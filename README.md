@@ -46,7 +46,6 @@ import {
   disconnect,
   enable,
   getAvailableWallets,
-  getDefaultWallet,
   getDiscoveryWallets,
   getLastConnectedWallet,
   getPreAuthorizedWallets,
@@ -65,8 +64,6 @@ interface GetStarknetResult {
   getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]>
   // Returns the last wallet connected when it's still connected
   getLastConnectedWallet: () => Promise<StarknetWindowObject | null>
-  // Returns the default wallet
-  getDefaultWallet: () => Promise<StarknetWindowObject | null>
   // Connects to a wallet
   enable: (
     wallet: StarknetWindowObject,
@@ -75,7 +72,7 @@ interface GetStarknetResult {
     },
   ) => Promise<ConnectedStarknetWindowObject>
   // Disconnects from a wallet
-  disconnect: (options?: { clearDefaultWallet?: boolean }) => Promise<void>
+  disconnect: (options?: { clearLastWallet?: boolean }) => Promise<void>
 }
 ```
 

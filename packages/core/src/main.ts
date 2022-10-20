@@ -41,6 +41,9 @@ export interface GetWalletOptions {
   exclude?: FilterList
 }
 
+export interface DisconnectOptions {
+  clearLastWallet?: boolean
+}
 interface GetStarknetResult {
   getAvailableWallets: (
     options?: GetWalletOptions,
@@ -50,14 +53,13 @@ interface GetStarknetResult {
   ) => Promise<StarknetWindowObject[]> // Returns only preauthorized wallets available in the window object
   getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]> // Returns all wallets in existence (from discovery file)
   getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
-  getDefaultWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the default wallet
   enable: (
     wallet: StarknetWindowObject,
     options?: {
       starknetVersion?: "v3" | "v4"
     },
   ) => Promise<ConnectedStarknetWindowObject> // Connects to a wallet
-  disconnect: (options?: { clearDefaultWallet?: boolean }) => Promise<void> // Disconnects from a wallet
+  disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
 }
 
 export function getStarknet(
@@ -68,7 +70,6 @@ export function getStarknet(
     ...options,
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
-  const defaultWalletStore = storageFactoryImplementation("gsw-default")
 
   return {
     getAvailableWallets: async (options = {}) => {
@@ -115,36 +116,17 @@ export function getStarknet(
 
       return firstPreAuthorizedWallet
     },
-    getDefaultWallet: async () => {
-      const defaultWalletId = defaultWalletStore.get()
-      const allWallets = scanObjectForWallets(windowObject, isWalletObject)
-      const defaultWallet = allWallets.find((w) => w.id === defaultWalletId)
-      const [firstPreAuthorizedWallet] = await filterByPreAuthorized(
-        defaultWallet ? [defaultWallet] : [],
-      )
-
-      if (!firstPreAuthorizedWallet) {
-        defaultWalletStore.delete()
-        return null
-      }
-
-      return firstPreAuthorizedWallet
-    },
     enable: async (wallet, options) => {
       await wallet.enable(options)
       if (!wallet.isConnected) {
         throw new Error("Failed to connect to wallet")
       }
-      if (!defaultWalletStore.get()) {
-        defaultWalletStore.set(wallet.id)
-      }
       lastConnectedStore.set(wallet.id)
       return wallet
     },
-    disconnect: async ({ clearDefaultWallet } = {}) => {
-      lastConnectedStore.delete()
-      if (clearDefaultWallet) {
-        defaultWalletStore.delete()
+    disconnect: async ({ clearLastWallet } = {}) => {
+      if (clearLastWallet) {
+        lastConnectedStore.delete()
       }
     },
   }

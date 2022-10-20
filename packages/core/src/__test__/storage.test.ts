@@ -27,8 +27,8 @@ describe("getLastConnectedWallet()", () => {
       "starknet-walletA": makePreAuthorized(false)(UnknownWalletAMock),
       "starknet-walletB": makePreAuthorized(false)(UnknownWalletBMock),
     })
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet).toBe(null)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet).toBe(null)
   })
   it("should return null if the last connected wallet is not available", async () => {
     const sn = getWallet(
@@ -40,8 +40,8 @@ describe("getLastConnectedWallet()", () => {
         "gsw-last": "braavos",
       }),
     )
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet).toBe(null)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet).toBe(null)
   })
   it("should not return the last connected wallet if not preauthorized", async () => {
     const sn = getWallet(
@@ -53,8 +53,8 @@ describe("getLastConnectedWallet()", () => {
         "gsw-last": "braavos",
       }),
     )
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet).toBe(null)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet).toBe(null)
   })
   it("should return the last connected wallet if still preauthorized", async () => {
     const sn = getWallet(
@@ -66,8 +66,8 @@ describe("getLastConnectedWallet()", () => {
         "gsw-last": "braavos",
       }),
     )
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet?.id).toBe(BraavosMock.id)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet?.id).toBe(BraavosMock.id)
   })
   it("should return the last connected wallet when last and default are available", async () => {
     const sn = getWallet(
@@ -80,8 +80,8 @@ describe("getLastConnectedWallet()", () => {
         "gsw-default": "argentX",
       }),
     )
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet?.id).toBe(BraavosMock.id)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet?.id).toBe(BraavosMock.id)
   })
   it("should not return the default wallet if last is not available", async () => {
     const sn = getWallet(
@@ -93,44 +93,31 @@ describe("getLastConnectedWallet()", () => {
         "gsw-default": "argentX",
       }),
     )
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet).toBe(null)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet).toBe(null)
   })
-  it("should return the default wallet", async () => {
-    const sn = getWallet(
-      {
-        "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
-        "starknet-braavos": makePreAuthorized(true)(BraavosMock),
-      },
-      mockStorageFunction({
-        "gsw-default": "argentX",
-      }),
-    )
-    const defaultWallet = await sn.getDefaultWallet()
-    expect(defaultWallet?.id).toBe(ArgentXMock.id)
-  })
-  it("should set the default wallet when enabled", async () => {
+  it("should set the last connected wallet when enabled", async () => {
     const sn = getWallet({
       "starknet-argentX": makeConnected(true)(ArgentXMock),
       "starknet-braavos": makeConnected(true)(BraavosMock),
     })
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet).toBe(null)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet).toBe(null)
 
-    const [newDefaultWallet] = await sn.getAvailableWallets()
-    await sn.enable(newDefaultWallet)
-    const defaultWalletAfterEnable = await sn.getLastConnectedWallet()
-    expect(defaultWalletAfterEnable).toBe(newDefaultWallet)
+    const [newLastConnectedWallet] = await sn.getAvailableWallets()
+    await sn.enable(newLastConnectedWallet)
+    const lastConnectedWalletAfterEnable = await sn.getLastConnectedWallet()
+    expect(lastConnectedWalletAfterEnable).toBe(newLastConnectedWallet)
   })
   it("enabling fails", async () => {
     const sn = getWallet({
       "starknet-argentX": makeConnected(false)(ArgentXMock),
     })
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet).toBe(null)
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet).toBe(null)
 
-    const [newDefaultWallet] = await sn.getAvailableWallets()
-    expect(sn.enable(newDefaultWallet)).rejects.toThrow()
+    const [newConnectedWallet] = await sn.getAvailableWallets()
+    expect(sn.enable(newConnectedWallet)).rejects.toThrow()
   })
   it("should default disable", async () => {
     const sn = getWallet(
@@ -142,10 +129,27 @@ describe("getLastConnectedWallet()", () => {
         "gsw-last": "braavos",
       }),
     )
-    const defaultWallet = await sn.getLastConnectedWallet()
-    expect(defaultWallet?.id).toBe(BraavosMock.id)
-    if (defaultWallet?.id) {
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet?.id).toBe(BraavosMock.id)
+    if (lastConnectedWallet?.id) {
       await sn.disconnect()
+      expect((await sn.getLastConnectedWallet())?.id).toBe(BraavosMock.id)
+    }
+  })
+  it("should disable with clearLastWallet", async () => {
+    const sn = getWallet(
+      {
+        "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
+        "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+      },
+      mockStorageFunction({
+        "gsw-last": "braavos",
+      }),
+    )
+    const lastConnectedWallet = await sn.getLastConnectedWallet()
+    expect(lastConnectedWallet?.id).toBe(BraavosMock.id)
+    if (lastConnectedWallet?.id) {
+      await sn.disconnect({ clearLastWallet: true })
       expect(await sn.getLastConnectedWallet()).toBe(null)
     }
   })

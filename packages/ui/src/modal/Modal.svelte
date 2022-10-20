@@ -4,7 +4,6 @@
   import { onMount } from "svelte"
 
   export let lastWallet: StarknetWindowObject | null = null
-  export let defaultWallet: StarknetWindowObject | null = null
   export let installedWallets: StarknetWindowObject[] = []
   export let preAuthorizedWallets: StarknetWindowObject[] = []
   export let discoveryWallets: WalletProviderWithStoreVersion[] = []
@@ -50,7 +49,6 @@
 
   const wallets = [
     lastWallet,
-    defaultWallet,
     ...preAuthorizedWallets,
     ...installedWallets,
   ].filter(Boolean)

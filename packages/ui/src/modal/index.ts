@@ -21,13 +21,11 @@ export default async function show({
   discoveryWallets,
   installedWallets,
   lastWallet,
-  defaultWallet,
   preAuthorizedWallets,
   enable,
   modalOptions,
 }: {
   lastWallet?: StarknetWindowObject
-  defaultWallet?: StarknetWindowObject
   installedWallets?: StarknetWindowObject[]
   preAuthorizedWallets?: StarknetWindowObject[]
   discoveryWallets?: WalletProviderWithStoreVersion[]
@@ -40,7 +38,7 @@ export default async function show({
 }): Promise<StarknetWindowObject | null> {
   return new Promise((resolve) => {
     // make sure wallets are not shown twice
-    const fixedWallets = [lastWallet, defaultWallet].filter(Boolean)
+    const fixedWallets = [lastWallet].filter(Boolean)
     preAuthorizedWallets = excludeWallets(preAuthorizedWallets, fixedWallets)
     installedWallets = excludeWallets(installedWallets, [
       ...fixedWallets,
@@ -61,7 +59,6 @@ export default async function show({
           resolve(enabledValue)
         },
         lastWallet,
-        defaultWallet,
         installedWallets,
         preAuthorizedWallets,
         discoveryWallets,
