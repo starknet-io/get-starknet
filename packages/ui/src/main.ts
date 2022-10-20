@@ -5,6 +5,8 @@ import sn, {
   type StarknetWindowObject,
 } from "get-starknet-core"
 
+export { type StarknetWindowObject } from "get-starknet-core"
+
 type StoreVersion = "chrome" | "firefox" | "edge"
 
 function getStoreVersionFromBrowser(): StoreVersion | null {
