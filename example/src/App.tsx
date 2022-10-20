@@ -51,7 +51,7 @@ function App() {
           Always ask with light theme
         </button>
         <button onClick={handleDisconnect()}>Disconnect</button>
-        <button onClick={handleDisconnect({ clearDefaultWallet: true })}>
+        <button onClick={handleDisconnect({ clearLastWallet: true })}>
           Disconnect and reset
         </button>
       </div>
