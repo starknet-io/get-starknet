@@ -107,7 +107,7 @@ export const connect = async ({
     lastWallet,
     preAuthorizedWallets,
     installedWallets,
-    discoveryWallets: alwaysShowDiscovery ? discoveryWalletsByStoreVersion : [],
+    discoveryWallets: discoveryWalletsByStoreVersion,
     enable: enableWithVersion,
     modalOptions: {
       theme: modalTheme,
