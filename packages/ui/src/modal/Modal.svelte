@@ -3,6 +3,7 @@
   import type { StarknetWindowObject } from "get-starknet-core"
   import { onMount } from "svelte"
 
+  const ssrSafeWindow = typeof window !== "undefined" ? window : null
   export let lastWallet: StarknetWindowObject | null = null
   export let installedWallets: StarknetWindowObject[] = []
   export let preAuthorizedWallets: StarknetWindowObject[] = []
@@ -24,7 +25,7 @@
   if (
     theme === "dark" ||
     (theme === null &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ssrSafeWindow?.matchMedia("(prefers-color-scheme: dark)").matches)
   ) {
     darkModeControlClass = "dark"
   } else {
@@ -36,12 +37,12 @@
 
   onMount(() => {
     if (theme === null) {
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
+      ssrSafeWindow
+        ?.matchMedia("(prefers-color-scheme: dark)")
         .addEventListener("change", handler)
       return () => {
-        window
-          .matchMedia("(prefers-color-scheme: dark)")
+        ssrSafeWindow
+          ?.matchMedia("(prefers-color-scheme: dark)")
           .removeEventListener("change", handler)
       }
     }
@@ -57,18 +58,29 @@
 <div
   class={"backdrop-blur-sm fixed inset-0 flex items-center justify-center bg-black/25 z-40 " +
     darkModeControlClass}
-  on:click={() => cb(null)}>
+  on:click={() => cb(null)}
+  on:keyup={(e) => {
+    if (e.key === "Escape") {
+      cb(null)
+    }
+  }}>
   <main
     role="dialog"
     class={"bg-slate-50 rounded-md shadow w-full max-w-[500px] mx-6 p-4 text-center z-50 dark:bg-neutral-900 dark:text-white"}
-    on:click={(e) => e.stopPropagation()}>
+    on:click={(e) => e.stopPropagation()}
+    on:keyup={(e) => e.stopPropagation()}>
     <header class="flex items-center justify-between mb-4">
       <h1 class="text-xl">Connect a wallet</h1>
       <span
         role="button"
         alt="Close"
         class="cursor-pointer"
-        on:click={() => cb(null)}>
+        on:click={() => cb(null)}
+        on:keyup={(e) => {
+          if (e.key === "Enter") {
+            cb(null)
+          }
+        }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -85,7 +97,12 @@
       {#each wallets as wallet}
         <li
           class="flex justify-between items-center p-3 bg-slate-100 rounded-md cursor-pointer shadow-sm hover:bg-slate-200 transition-colors dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:border-neutral-600 dark:text-white"
-          on:click={() => cb(wallet)}>
+          on:click={() => cb(wallet)}
+          on:keyup={(e) => {
+            if (e.key === "Enter") {
+              cb(wallet)
+            }
+          }}>
           {wallet.name}
           {#if loadingItem === wallet.id}
             <div role="status">
@@ -120,7 +137,12 @@
           rel="noopener noreferrer">
           <li
             class="flex justify-between items-center p-3 bg-slate-100 rounded-md shadow-sm cursor-pointer hover:bg-slate-200 transition-colors dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:border-neutral-600 dark:text-white"
-            on:click={() => cb(null)}>
+            on:click={() => cb(null)}
+            on:keyup={(e) => {
+              if (e.key === "Enter") {
+                cb(null)
+              }
+            }}>
             Install {discoveryWallet.name}
             <img
               alt={discoveryWallet.name}

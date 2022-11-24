@@ -10,8 +10,10 @@ export type { StarknetWindowObject, DisconnectOptions } from "get-starknet-core"
 
 type StoreVersion = "chrome" | "firefox" | "edge"
 
+const ssrSafeWindow = typeof window !== "undefined" ? window : null
+
 function getStoreVersionFromBrowser(): StoreVersion | null {
-  const browserName = Bowser.getParser(window.navigator.userAgent)
+  const browserName = Bowser.getParser(ssrSafeWindow?.navigator.userAgent)
     .getBrowserName()
     ?.toLowerCase()
   switch (browserName) {

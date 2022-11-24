@@ -29,8 +29,10 @@ export interface GetStarknetOptions {
   storageFactoryImplementation: (name: string) => IStorageWrapper
 }
 
+const ssrSafeWindow = typeof window !== "undefined" ? window : {}
+
 const defaultOptions: GetStarknetOptions = {
-  windowObject: window,
+  windowObject: ssrSafeWindow,
   isWalletObject: isWalletObj,
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
 }
