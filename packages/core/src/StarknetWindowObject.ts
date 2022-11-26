@@ -83,16 +83,16 @@ interface IStarknetWindowObject {
   ) => Promise<T["result"]>
   enable: (options?: { starknetVersion?: "v3" | "v4" }) => Promise<string[]>
   isPreauthorized: () => Promise<boolean>
-  on: (
-    event: WalletEvents["type"],
-    handleEvent: WalletEvents["handler"],
+  on: <E extends WalletEvents>(
+    event: E["type"],
+    handleEvent: E["handler"],
   ) => void
-  off: (
-    event: WalletEvents["type"],
-    handleEvent: WalletEvents["handler"],
+  off: <E extends WalletEvents>(
+    event: E["type"],
+    handleEvent: E["handler"],
   ) => void
   account?: AccountInterface
-  provider: ProviderInterface
+  provider?: ProviderInterface
   selectedAddress?: string
   chainId?: string
 }
@@ -100,6 +100,7 @@ interface IStarknetWindowObject {
 export interface ConnectedStarknetWindowObject extends IStarknetWindowObject {
   isConnected: true
   account: AccountInterface
+  provider: ProviderInterface
   selectedAddress: string
   chainId: string
 }
@@ -116,6 +117,7 @@ declare global {
   interface Window {
     starknet?: StarknetWindowObject
     starknet_braavos?: StarknetWindowObject
+    starknet_argentX?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }
