@@ -67,11 +67,6 @@ export type RpcMessage =
       params: SwitchStarknetChainParameter
       result: boolean
     }
-  | {
-      type: string
-      params: any
-      result: never
-    }
 
 interface IStarknetWindowObject {
   id: string
