@@ -1,69 +1,102 @@
-# get-starknet<br/>StarkNet wallet <-> dApp bridge
+# get-starknet
 
 [![npm](https://img.shields.io/npm/v/get-starknet.svg)](https://www.npmjs.com/package/get-starknet)
 
-## Alpha version
-
 ## Goals
 
-- Allow dApps to seamlessly connect to any wallet on StarkNet
-- Allow wallets to seamlessly connect to any dApp, and get discovered by users which need a new wallet
-- An open source wallet/dApp API controlled by the community
-- An open source StarkNet wallet discovery list moderated by the community
+- ❤️‍🩹 Allow Starknet dApps and wallets to seamlessly connect
+- 🪶 Lightweight and easy to use
+- 🏎 Fast integration, building and testing
+- ⚙️ Customizable and extensible
+- 🌍 Open source and controlled by the community
 
 ## Installation
+
 ```
 # using npm
-npm install get-starknet
+npm install get-starknet starknet@next
 
 # using yarn
-yarn add get-starknet
+yarn add get-starknet starknet@next
+
+# using pnpm
+pnpm add get-starknet starknet@next
 ```
 
 ## Usage for dApp developers
 
-If you were using getStarknet() before, simply replace the import line as below.
+You can use the built-in UI to connect to any Starknet wallet as fast as
+possible like this:
 
-```diff
--import { getStarknet } from "@argent/get-starknet"
-+import { getStarknet } from "get-starknet"
+```tsx
+import { connect, disconnect } from "get-starknet"
+
+return <button onClick={() => connect()}>Connect wallet</button>
 ```
 
-- Optional - customize the CSS of get-starknet to match your look&amp;feel
-- Optional - integrate with new API functions (e.g.: modify wallet list using custom sort/include/exclude, etc.)
+### Advanced usage
 
-## Details
+You can also choose to customize the UI by overwriting the CSS classes, or by
+implementing your very own UI. This is possible due to a split into a `core` and
+`ui` package. As a library author or dapp developer who wants to implement a
+custom UI, you can use the `core` package.
 
-### Flow
+```tsx
+import {
+  disconnect,
+  enable,
+  getAvailableWallets,
+  getDiscoveryWallets,
+  getLastConnectedWallet,
+  getPreAuthorizedWallets,
+} from "get-starknet-core"
 
-- Once a dApp wants to connect to a wallet, it calls `getStarknet()` (or optionally use the new `connect` API to control the order, included/excluded, etc.)
+interface GetStarknetResult {
+  // Returns all wallets available in the window object
+  getAvailableWallets: (
+    options?: GetWalletOptions,
+  ) => Promise<StarknetWindowObject[]>
+  // Returns only preauthorized wallets available in the window object
+  getPreAuthorizedWallets: (
+    options?: GetWalletOptions,
+  ) => Promise<StarknetWindowObject[]>
+  // Returns all wallets in existence (from discovery file)
+  getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]>
+  // Returns the last wallet connected when it's still connected
+  getLastConnectedWallet: () => Promise<StarknetWindowObject | null>
+  // Connects to a wallet
+  enable: (
+    wallet: StarknetWindowObject,
+    options?: {
+      starknetVersion?: "v3" | "v4"
+    },
+  ) => Promise<ConnectedStarknetWindowObject>
+  // Disconnects from a wallet
+  disconnect: (options?: { clearLastWallet?: boolean }) => Promise<void>
+}
+```
 
-- In the first call to `getStarknet()` the package will look for all injected extensions in the window which were added using a key starting with `starknet-*`, i.e. `starknet-walletname`
+## Development
 
+You need Node and pnpm installed. Make sure to clone this repo and run:
 
-- There are three cases
+```bash
+pnpm install
+pnpm build
+```
 
-  - No objects found: meaning there is no installed wallet extension. In this case, a popup is shown (possibly customizable by the dApp) with a few ordering options of the known wallets with install links -
-     - dApp controlled order
-     - Community controlled order
-     - Random
-     - Also allowed including/excluding wallets from the list
-  - A single object is found: this object is returned as the Starknet window object. dApp will use the returned (installed) wallet for this session
-  - Multiple objects are found: In this case a popup is shown to the user (again, possibly customizable) with a random order of the available wallet objects. Users can select the wallet they want to use, possibly selecting the default wallet for this dApp.
-    - If there is one or more pre-authorized wallets, show them first in the list ordered by last selected (from connect-to-wallet popup, saved in localStorage by the lib)
-    - Multiple objects are found AND a default wallet was selected for this dApp (based on localstorage): the default wallet is selected
+To start watching for changes, run:
 
-### Wallet Developers
+```bash
+pnpm dev
+```
 
-- Create a wallet complying to the required APIs (based on the starknet.js APIs + 3 new fields: `name`, `icon` and `id`, for the &quot;choose a wallet&quot; popup (e.g. installed wallets list))
-- The wallet's page-script object should be added to `window` using a key starting with `starknet`, i.e. `starknet-walletname`
-- Optional - for the wallet to be included in the discovery list - the wallet developer will issue a pull request to `get-starknet`, comprising of the following:
-  - Name and icon
-  - Formalized links object with links to to download page over chrome, firefox and other extension stores
+and open `http://localhost:5173/`
 
+### Running tests
 
-### Package maintainers
+For running tests:
 
-- Implement the code
-- Provide CSS classes for easy customization of popups (wallet discovery and wallet selection)
-- Accept pull requests for new wallets into the discovery popup, after some validation of the wallet functionality (in the future we can enable wallet list management on-chain with a governance mechanism for adding new wallets using the StarkNet token / governance mechanism).
+```bash
+pnpm test
+```

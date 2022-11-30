@@ -1,0 +1,49 @@
+{
+  "name": "get-starknet-core",
+  "version": "2.0.0",
+  "keywords": [
+    "starknet",
+    "starkware",
+    "l2",
+    "zk",
+    "rollup",
+    "wallet",
+    "dapp"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/core.js",
+      "require": "./dist/core.umd.cjs"
+    }
+  },
+  "main": "./dist/core.umd.cjs",
+  "module": "./dist/core.js",
+  "types": "./dist/core.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "c8": "^7.12.0",
+    "happy-dom": "^6.0.4",
+    "starknet": "^4.9.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0",
+    "vite-plugin-dts": "^1.4.0",
+    "vitest": "^0.19.1"
+  },
+  "peerDependencies": {
+    "starknet": "^4.9.0"
+  },
+  "peerDependenciesMeta": {
+    "starknet": {
+      "optional": false
+    }
+  }
+}

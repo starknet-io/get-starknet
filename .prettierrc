@@ -1,12 +1,13 @@
 {
-    "tabWidth": 4,
-    "useTabs": false,
-    "bracketSpacing": true,
-    "trailingComma": "es5",
-    "printWidth": 90,
-    "singleQuote": false,
-    "bracketSameLine": true,
-    "semi": true,
-    "arrowParens": "avoid",
-    "proseWrap": "always"
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "trailingComma": "all",
+  "singleQuote": false,
+  "bracketSameLine": true,
+  "semi": false,
+  "arrowParens": "always",
+  "proseWrap": "always",
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
