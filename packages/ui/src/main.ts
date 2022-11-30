@@ -37,7 +37,6 @@ export interface ConnectOptions extends GetWalletOptions {
   modalMode?: "alwaysAsk" | "canAsk" | "neverAsk"
   modalTheme?: "light" | "dark" | "system"
   storeVersion?: StoreVersion
-  alwaysShowDiscovery?: boolean
 }
 
 const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
@@ -51,7 +50,6 @@ export const connect = async ({
   modalMode = "canAsk",
   storeVersion = getStoreVersionFromBrowser(),
   modalTheme,
-  alwaysShowDiscovery = true,
   ...restOptions
 }: ConnectOptions = {}): Promise<StarknetWindowObject | null> => {
   const preAuthorizedWallets = await sn.getPreAuthorizedWallets({
@@ -90,14 +88,6 @@ export const connect = async ({
   const discoveryWalletsByStoreVersion: WalletProviderWithStoreVersion[] =
     discoveryWallets
       .filter((w) => Boolean(w.downloads[storeVersion]))
-      .filter(
-        // if alwaysShowDiscovery=false: only show discovery wallets if there are no other options
-        () =>
-          alwaysShowDiscovery ||
-          (!lastWallet &&
-            preAuthorizedWallets.length === 0 &&
-            installedWallets.length === 0),
-      )
       .map(({ downloads, ...w }) => ({
         ...w,
         download: downloads[storeVersion],
