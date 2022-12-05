@@ -26,7 +26,7 @@ jobs:
       - name: run tests
         run: pnpm test
       - name: copy readme to every package
-        run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp Readme.md
+        run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
       - name: create and publish versions
         uses: changesets/action@v1
         with:
