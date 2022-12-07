@@ -23,8 +23,8 @@ jobs:
           cache: "pnpm"
       - name: Setup npmrc
         run:
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >>
-          .npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN
+          }}" >> .npmrc
       - name: install dependencies
         run: pnpm install
       - name: run tests
