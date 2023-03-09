@@ -60,7 +60,7 @@ interface GetStarknetResult {
   enable: (
     wallet: StarknetWindowObject,
     options?: {
-      starknetVersion?: "v3" | "v4"
+      starknetVersion?: "v4" | "v5"
     },
   ) => Promise<ConnectedStarknetWindowObject> // Connects to a wallet
   disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
@@ -121,7 +121,7 @@ export function getStarknet(
       return firstPreAuthorizedWallet
     },
     enable: async (wallet, options) => {
-      await wallet.enable(options)
+      await wallet.enable(options ?? { starknetVersion: "v4" })
       if (!wallet.isConnected) {
         throw new Error("Failed to connect to wallet")
       }
