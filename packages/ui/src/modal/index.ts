@@ -1,12 +1,13 @@
 import Modal from "./Modal.svelte"
 import type {
   ConnectedStarknetWindowObject,
+  ExtensionWalletProvider,
   StarknetWindowObject,
-  WalletProvider,
+  WebWalletProvider,
 } from "get-starknet-core"
 
-export interface WalletProviderWithStoreVersion
-  extends Omit<WalletProvider, "downloads"> {
+export interface ExtensionWalletProviderWithStoreVersion
+  extends Omit<ExtensionWalletProvider, "downloads"> {
   download: string
 }
 
@@ -18,18 +19,24 @@ function excludeWallets<T extends { id: string }>(
 }
 
 export default async function show({
-  discoveryWallets,
-  installedWallets,
+  extensionWallets,
+  webWallets,
+  injectedWallets,
   lastWallet,
   preAuthorizedWallets,
-  enable,
+  openWebWallet,
+  connect,
   modalOptions,
 }: {
   lastWallet?: StarknetWindowObject
-  installedWallets?: StarknetWindowObject[]
+  injectedWallets?: StarknetWindowObject[]
   preAuthorizedWallets?: StarknetWindowObject[]
-  discoveryWallets?: WalletProviderWithStoreVersion[]
-  enable?: (
+  extensionWallets?: ExtensionWalletProviderWithStoreVersion[]
+  webWallets?: WebWalletProvider[]
+  openWebWallet?: (
+    wp: WebWalletProvider,
+  ) => Promise<StarknetWindowObject | null>
+  connect?: (
     wallet: StarknetWindowObject | null,
   ) => Promise<ConnectedStarknetWindowObject | null>
   modalOptions?: {
@@ -40,13 +47,13 @@ export default async function show({
     // make sure wallets are not shown twice
     const fixedWallets = [lastWallet].filter(Boolean)
     preAuthorizedWallets = excludeWallets(preAuthorizedWallets, fixedWallets)
-    installedWallets = excludeWallets(installedWallets, [
+    injectedWallets = excludeWallets(injectedWallets, [
       ...fixedWallets,
       ...preAuthorizedWallets,
     ])
-    discoveryWallets = excludeWallets(discoveryWallets, [
+    extensionWallets = excludeWallets(extensionWallets, [
       ...fixedWallets,
-      ...installedWallets,
+      ...injectedWallets,
       ...preAuthorizedWallets,
     ])
 
@@ -54,14 +61,16 @@ export default async function show({
       target: document.body,
       props: {
         callback: async (value: StarknetWindowObject | null) => {
-          const enabledValue = (await enable?.(value)) ?? value
+          const enabledValue = (await connect?.(value)) ?? value
           modal.$destroy()
           resolve(enabledValue)
         },
         lastWallet,
-        installedWallets,
+        injectedWallets,
         preAuthorizedWallets,
-        discoveryWallets,
+        extensionWallets,
+        webWallets,
+        openWebWallet,
         theme:
           modalOptions?.theme === "system" ? null : modalOptions?.theme ?? null,
       },

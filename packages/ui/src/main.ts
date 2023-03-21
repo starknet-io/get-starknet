@@ -1,4 +1,4 @@
-import show, { type WalletProviderWithStoreVersion } from "./modal"
+import show, { type ExtensionWalletProviderWithStoreVersion } from "./modal"
 import Bowser from "bowser"
 import sn, {
   type DisconnectOptions,
@@ -39,11 +39,12 @@ export interface ConnectOptions extends GetWalletOptions {
   storeVersion?: StoreVersion
 }
 
-const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
+const connectWithVersion = async (wallet: StarknetWindowObject | null) => {
   if (!wallet) {
     return null
   }
-  return sn.enable(wallet, { starknetVersion: "v4" }).catch(() => null)
+  console.log("connectWithVersion")
+  return sn.connect(wallet, { starknetVersion: "v4" }).catch(() => null)
 }
 
 export const connect = async ({
@@ -64,10 +65,10 @@ export const connect = async ({
 
     // return `wallet` even if it's null/undefined since we aren't allowed
     // to show any "connect" related UI
-    return enableWithVersion(wallet)
+    return connectWithVersion(wallet)
   }
 
-  const installedWallets = await sn.getAvailableWallets(restOptions)
+  const injectedWallets = await sn.getInjectedWallets(restOptions)
   if (
     modalMode === "canAsk" &&
     // we return/display wallet options once per first-dapp (ever) connect
@@ -75,30 +76,33 @@ export const connect = async ({
   ) {
     const wallet =
       preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
-      installedWallets.length === 1
-        ? installedWallets[0]
+      injectedWallets.length === 1
+        ? injectedWallets[0]
         : undefined
     if (wallet) {
-      return enableWithVersion(wallet)
+      return connectWithVersion(wallet)
     } // otherwise fallback to modal
   }
 
-  const discoveryWallets = await sn.getDiscoveryWallets(restOptions)
-
-  const discoveryWalletsByStoreVersion: WalletProviderWithStoreVersion[] =
-    discoveryWallets
+  const extensionWallets = await sn.getExtensionWallets(restOptions)
+  const extensionWalletsByStoreVersion: ExtensionWalletProviderWithStoreVersion[] =
+    extensionWallets
       .filter((w) => Boolean(w.downloads[storeVersion]))
       .map(({ downloads, ...w }) => ({
         ...w,
         download: downloads[storeVersion],
       }))
 
+  const webWallets = await sn.getWebWallets(restOptions)
+
   return show({
     lastWallet,
     preAuthorizedWallets,
-    installedWallets,
-    discoveryWallets: discoveryWalletsByStoreVersion,
-    enable: enableWithVersion,
+    injectedWallets,
+    extensionWallets: extensionWalletsByStoreVersion,
+    webWallets: webWallets,
+    openWebWallet: sn.openWebWallet,
+    connect: connectWithVersion,
     modalOptions: {
       theme: modalTheme,
     },

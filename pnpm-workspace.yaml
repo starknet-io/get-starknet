@@ -3,3 +3,5 @@ packages:
   - "packages/*"
   # example website using the ui package
   - "example"
+  # sample web wallet
+  - "web_wallet_mock"

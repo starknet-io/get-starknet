@@ -2,13 +2,19 @@ import {
   ConnectedStarknetWindowObject,
   StarknetWindowObject,
 } from "./StarknetWindowObject"
-import discovery, { WalletProvider } from "./discovery"
+import {
+  ExtensionWalletProvider,
+  WebWalletProvider,
+  wWallets,
+  xWallets,
+} from "./discovery"
 import { IStorageWrapper, LocalStorageWrapper } from "./localStorageStore"
 import { pipe } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
 import { scanObjectForWallets } from "./wallet/scan"
 import { Sort, sortBy } from "./wallet/sort"
+import { getWebWalletStarknetObject } from "./webwallet/webWalletObject"
 
 export type {
   AccountChangeEventHandler,
@@ -21,7 +27,7 @@ export type {
   WalletEvents,
   WatchAssetParameters,
 } from "./StarknetWindowObject"
-export type { WalletProvider } from "./discovery"
+export type { WebWalletProvider, ExtensionWalletProvider } from "./discovery"
 
 export interface GetStarknetOptions {
   windowObject: Record<string, any>
@@ -46,22 +52,29 @@ export interface GetWalletOptions {
 export interface DisconnectOptions {
   clearLastWallet?: boolean
 }
+
 interface GetStarknetResult {
-  getAvailableWallets: (
+  getInjectedWallets: (
     options?: GetWalletOptions,
   ) => Promise<StarknetWindowObject[]> // Returns all wallets available in the window object
-  getPreAuthorizedWallets: (
+  getWebWallets: (options?: GetWalletOptions) => Promise<WebWalletProvider[]> // Return all available web wallets
+  getExtensionWallets: (
     options?: GetWalletOptions,
-  ) => Promise<StarknetWindowObject[]> // Returns only preauthorized wallets available in the window object
-  getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]> // Returns all wallets in existence (from discovery file)
-  getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
-  enable: (
+  ) => Promise<ExtensionWalletProvider[]> // Return all available extension wallets
+  openWebWallet: (
+    wwp: WebWalletProvider,
+  ) => Promise<StarknetWindowObject | null | undefined> //// Connect with a web wallet to get StarknetWindowOject
+  connect: (
     wallet: StarknetWindowObject,
     options?: {
       starknetVersion?: "v3" | "v4"
     },
   ) => Promise<ConnectedStarknetWindowObject> // Connects to a wallet
   disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
+  getPreAuthorizedWallets: (
+    options?: GetWalletOptions,
+  ) => Promise<StarknetWindowObject[]> // Returns only preauthorized wallets available in the window object
+  getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
 }
 
 export function getStarknet(
@@ -74,7 +87,7 @@ export function getStarknet(
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
 
   return {
-    getAvailableWallets: async (options = {}) => {
+    getInjectedWallets: async (options = {}) => {
       const availableWallets = scanObjectForWallets(
         windowObject,
         isWalletObject,
@@ -83,6 +96,35 @@ export function getStarknet(
         (_) => filterBy(_, options),
         (_) => sortBy(_, options.sort),
       )(availableWallets)
+    },
+    getWebWallets: async (options = {}) => {
+      return pipe<WebWalletProvider[]>(
+        (_) => filterBy(_, options),
+        (_) => sortBy(_, options.sort),
+      )(wWallets)
+    },
+    getExtensionWallets: async (options = {}) => {
+      return pipe<ExtensionWalletProvider[]>(
+        (_) => filterBy(_, options),
+        (_) => sortBy(_, options.sort),
+      )(xWallets)
+    },
+    openWebWallet: async (w: WebWalletProvider) => {
+      const wallet = await getWebWalletStarknetObject(w)
+      return wallet
+    },
+    connect: async (wallet, options) => {
+      await wallet.enable(options)
+      if (!wallet.isConnected) {
+        throw new Error("Failed to connect to wallet")
+      }
+      lastConnectedStore.set(wallet.id)
+      return wallet
+    },
+    disconnect: async ({ clearLastWallet } = {}) => {
+      if (clearLastWallet) {
+        lastConnectedStore.delete()
+      }
     },
     getPreAuthorizedWallets: async (options = {}) => {
       const availableWallets = scanObjectForWallets(
@@ -94,12 +136,6 @@ export function getStarknet(
         (_) => filterBy(_, options),
         (_) => sortBy(_, options.sort),
       )(availableWallets)
-    },
-    getDiscoveryWallets: async (options = {}) => {
-      return pipe<WalletProvider[]>(
-        (_) => filterBy(_, options),
-        (_) => sortBy(_, options.sort),
-      )(discovery)
     },
     getLastConnectedWallet: async () => {
       const lastConnectedWalletId = lastConnectedStore.get()
@@ -117,19 +153,6 @@ export function getStarknet(
       }
 
       return firstPreAuthorizedWallet
-    },
-    enable: async (wallet, options) => {
-      await wallet.enable(options)
-      if (!wallet.isConnected) {
-        throw new Error("Failed to connect to wallet")
-      }
-      lastConnectedStore.set(wallet.id)
-      return wallet
-    },
-    disconnect: async ({ clearLastWallet } = {}) => {
-      if (clearLastWallet) {
-        lastConnectedStore.delete()
-      }
     },
   }
 }
