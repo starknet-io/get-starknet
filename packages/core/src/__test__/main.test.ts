@@ -2,6 +2,7 @@ import { getStarknet } from "../main"
 import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
+  BitKeepMock,
   BraavosMock,
   UnknownWalletAMock,
   UnknownWalletBMock,
@@ -31,11 +32,13 @@ describe("getAvailableWallets()", () => {
       },
       starknet: ArgentXMock,
       "starknet-braavos": BraavosMock,
+      "starknet-bitkeep": BitKeepMock,
     })
     const availableWallets = await sn.getAvailableWallets()
-    expect(availableWallets.length).toBe(2)
+    expect(availableWallets.length).toBe(3)
     expect(availableWallets).toContainEqual(ArgentXMock)
     expect(availableWallets).toContainEqual(BraavosMock)
+    expect(availableWallets).toContainEqual(BitKeepMock)
   })
   it("should return one injected wallet", async () => {
     const sn = getWallet({
@@ -110,15 +113,18 @@ describe("getPreAuthorizedWallets()", () => {
     const sn = getWallet({
       "starknet-argent": makePreAuthorized(true)(ArgentXMock),
       "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+      "starknet-bitkeep": makePreAuthorized(true)(BitKeepMock),
     })
     const preauthorizedWallets = await sn.getPreAuthorizedWallets()
-    expect(preauthorizedWallets.length).toBe(2)
+    expect(preauthorizedWallets.length).toBe(3)
     expect(preauthorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
     expect(preauthorizedWallets.map((w) => w.id)).contains(BraavosMock.id)
+    expect(preauthorizedWallets.map((w) => w.id)).contains(BitKeepMock.id)
   })
   it("should return one preauthorized wallet", async () => {
     const sn = getWallet({
       "starknet-argent": makePreAuthorized(true)(ArgentXMock),
+      "starknet-bitkeep": makePreAuthorized(false)(BitKeepMock),
       "starknet-braavos": makePreAuthorized(false)(BraavosMock),
     })
     const preauthorizedWallets = await sn.getPreAuthorizedWallets()
@@ -131,8 +137,9 @@ describe("getDiscoveryWallets()", () => {
   it("should return all discovery wallets", async () => {
     const sn = getWallet({})
     const discoveryWallets = await sn.getDiscoveryWallets()
-    expect(discoveryWallets.length).toBe(2)
+    expect(discoveryWallets.length).toBe(3)
     expect(discoveryWallets.map((w) => w.id)).contains(ArgentXMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(BraavosMock.id)
+    expect(discoveryWallets.map((w) => w.id)).contains(BitKeepMock.id)
   })
 })
