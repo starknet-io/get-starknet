@@ -68,7 +68,7 @@ export type RpcMessage =
       result: boolean
     }
 
-interface IStarknetWindowObject {
+export interface IStarknetWindowObject {
   id: string
   name: string
   version: string
@@ -100,7 +100,8 @@ export interface ConnectedStarknetWindowObject extends IStarknetWindowObject {
   chainId: string
 }
 
-interface DisconnectedStarknetWindowObject extends IStarknetWindowObject {
+export interface DisconnectedStarknetWindowObject
+  extends IStarknetWindowObject {
   isConnected: false
 }
 

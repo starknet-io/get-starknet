@@ -20,6 +20,8 @@ export type {
   SwitchStarknetChainParameter,
   WalletEvents,
   WatchAssetParameters,
+  DisconnectedStarknetWindowObject,
+  IStarknetWindowObject,
 } from "./StarknetWindowObject"
 export type { WalletProvider } from "./discovery"
 
