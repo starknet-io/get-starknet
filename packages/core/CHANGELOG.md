@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 2.0.1
+
+### Patch Changes
+
+- 171dcd8: release v2.0.1 with more types exposed
+
 ## 0.1.2
 
 ### Patch Changes
