@@ -1,14 +1,22 @@
-export type WalletProvider = {
+export interface WalletProvider {
   id: string
   name: string
   icon: string
+}
+
+export interface ExtensionWalletProvider extends WalletProvider {
   downloads:
     | { chrome?: `https://chrome.google.com/webstore/detail/${string}` }
     | { firefox?: `https://addons.mozilla.org/en-US/firefox/addon/${string}` }
     | { edge?: `https://microsoftedge.microsoft.com/addons/detail/${string}` }
 }
 
-const wallets: WalletProvider[] = [
+export interface WebWalletProvider extends WalletProvider {
+  url_login: string | undefined
+  url_account: string | undefined
+}
+
+export const xWallets: ExtensionWalletProvider[] = [
   {
     id: "argentX",
     name: "Argent X",
@@ -32,4 +40,12 @@ const wallets: WalletProvider[] = [
   },
 ]
 
-export default wallets
+export const wWallets: WebWalletProvider[] = [
+  {
+    id: "fresh",
+    name: "Fresh",
+    icon: "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIzLjAuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAxMTQ5LjA0IDEwNDkuNDciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDExNDkuMDQgMTA0OS40NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNGRkZGRkY7fQo8L3N0eWxlPgo8cmVjdCBjbGFzcz0ic3QwIiB3aWR0aD0iMTE0OS4wNCIgaGVpZ2h0PSIxMDQ5LjQ3Ii8+CjxwYXRoIGQ9Ik0xOTAuMDYsNjY5LjM1djE5MC4wNmgyODkuMjJ2LTQyLjE0SDIzMi4yMVY2NjkuMzVIMTkwLjA2eiBNOTE2LjgzLDY2OS4zNXYxNDcuOTJINjY5Ljc1djQyLjE0aDI4OS4yMlY2NjkuMzVIOTE2LjgzegoJIE00NzkuNywzODAuMTJ2Mjg5LjIyaDE5MC4wNXYtMzguMDFINTIxLjg0VjM4MC4xMkg0NzkuN3ogTTE5MC4wNiwxOTAuMDZ2MTkwLjA2aDQyLjE0VjIzMi4yMWgyNDcuMDh2LTQyLjE0SDE5MC4wNnoKCSBNNjY5Ljc1LDE5MC4wNnY0Mi4xNGgyNDcuMDh2MTQ3LjkyaDQyLjE0VjE5MC4wNkg2NjkuNzV6Ii8+Cjwvc3ZnPgo=",
+    url_login: "http://localhost:3005/iframes/login",
+    url_account: "http://localhost:3005/iframes/account",
+  },
+]
