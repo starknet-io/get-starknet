@@ -76,7 +76,7 @@ export interface IStarknetWindowObject {
   request: <T extends RpcMessage>(
     call: Omit<T, "result">,
   ) => Promise<T["result"]>
-  enable: (options?: { starknetVersion?: "v3" | "v4" }) => Promise<string[]>
+  enable: (options?: { starknetVersion?: "v4" | "v5" }) => Promise<string[]>
   isPreauthorized: () => Promise<boolean>
   on: <E extends WalletEvents>(
     event: E["type"],

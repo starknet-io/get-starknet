@@ -68,7 +68,7 @@ interface GetStarknetResult {
   enable: (
     wallet: StarknetWindowObject,
     options?: {
-      starknetVersion?: "v3" | "v4"
+      starknetVersion?: "v4" | "v5"
     },
   ) => Promise<ConnectedStarknetWindowObject>
   // Disconnects from a wallet
