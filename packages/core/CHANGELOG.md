@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 2.1.0
+
+### Minor Changes
+
+- 0140123: Default to starknet.js v4 and add future compatiblity to v5
+
 ## 2.0.1
 
 ### Patch Changes
