@@ -9,10 +9,13 @@
     "start": "next start --port 3005"
   },
   "dependencies": {
+    "@simplewebauthn/browser": "^7.2.0",
+    "@simplewebauthn/server": "^7.2.0",
     "@types/node": "18.14.2",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@weblivion/react-penpal": "^2.0.0",
+    "base64url": "3.0.1",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.1",
     "next": "13.2.1",

@@ -111,7 +111,7 @@ importers:
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       '@weblivion/react-penpal': ^2.0.0
-      base64url: ^3.0.1
+      base64url: 3.0.1
       eslint: 8.35.0
       eslint-config-next: 13.2.1
       next: 13.2.1
@@ -1348,8 +1348,8 @@ packages:
       '@simplewebauthn/typescript-types': 7.0.0
       '@types/debug': 4.1.7
       '@types/node': 18.14.2
-      cbor-x: 1.5.1
-      cross-fetch: 3.1.5
+      cbor-x: 1.5.3
+      cross-fetch: 3.1.6
       debug: 4.3.4
     transitivePeerDependencies:
       - encoding
@@ -2074,8 +2074,8 @@ packages:
     dev: false
     optional: true
 
-  /cbor-x/1.5.1:
-    resolution: {integrity: sha512-/vAkC4tiKCQCm5en4sA+mpKmjwY6Xxp1LO+BgZCNhp+Zow3pomyUHeBOK5EDp0mDaE36jw39l5eLHsoF3M1Lmg==}
+  /cbor-x/1.5.3:
+    resolution: {integrity: sha512-adrN0S67C7jY2hgqeGcw+Uj6iEGLQa5D/p6/9YNl5AaVIYJaJz/bARfWsP8UikBZWbhS27LN0DJK4531vo9ODw==}
     optionalDependencies:
       cbor-extract: 2.1.1
     dev: false
@@ -2330,10 +2330,10 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-fetch/3.1.5:
-    resolution: {integrity: sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==}
+  /cross-fetch/3.1.6:
+    resolution: {integrity: sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==}
     dependencies:
-      node-fetch: 2.6.7
+      node-fetch: 2.6.11
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -4561,6 +4561,18 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    dev: false
+
+  /node-fetch/2.6.11:
+    resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
+    engines: {node: 4.x || >=6.0.0}
+    peerDependencies:
+      encoding: ^0.1.0
+    peerDependenciesMeta:
+      encoding:
+        optional: true
+    dependencies:
+      whatwg-url: 5.0.0
     dev: false
 
   /node-fetch/2.6.7:
