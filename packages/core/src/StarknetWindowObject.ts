@@ -1,4 +1,8 @@
 import type { AccountInterface, ProviderInterface } from "starknet"
+import type {
+  AccountInterface as AccountInterfaceV4,
+  ProviderInterface as ProviderInterfaceV4,
+} from "starknet4"
 
 export type AccountChangeEventHandler = (accounts: string[]) => void
 
@@ -86,16 +90,16 @@ export interface IStarknetWindowObject {
     event: E["type"],
     handleEvent: E["handler"],
   ) => void
-  account?: AccountInterface
-  provider?: ProviderInterface
+  account?: AccountInterface | AccountInterfaceV4
+  provider?: ProviderInterface | ProviderInterfaceV4
   selectedAddress?: string
   chainId?: string
 }
 
 export interface ConnectedStarknetWindowObject extends IStarknetWindowObject {
   isConnected: true
-  account: AccountInterface
-  provider: ProviderInterface
+  account: AccountInterface | AccountInterfaceV4
+  provider: ProviderInterface | ProviderInterfaceV4
   selectedAddress: string
   chainId: string
 }
