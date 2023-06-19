@@ -5,7 +5,7 @@
   "fixed": [],
   "linked": [["get-starknet-core", "get-starknet"]],
   "access": "public",
-  "baseBranch": "main",
+  "baseBranch": "master",
   "updateInternalDependencies": "patch",
   "ignore": []
 }
