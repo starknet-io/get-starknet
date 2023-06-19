@@ -121,7 +121,7 @@ export function getStarknet(
       return firstPreAuthorizedWallet
     },
     enable: async (wallet, options) => {
-      await wallet.enable(options ?? { starknetVersion: "v4" })
+      await wallet.enable(options ?? { starknetVersion: "v5" })
       if (!wallet.isConnected) {
         throw new Error("Failed to connect to wallet")
       }
