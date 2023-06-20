@@ -1,5 +1,13 @@
 # get-starknet
 
+## 3.0.1
+
+### Patch Changes
+
+- 83cbdcf: fix build
+- Updated dependencies [83cbdcf]
+  - get-starknet-core@3.0.1
+
 ## 3.0.0
 
 ### Patch Changes
