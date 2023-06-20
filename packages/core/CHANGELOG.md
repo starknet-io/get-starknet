@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.0.1
+
+### Patch Changes
+
+- 83cbdcf: fix build
+
 ## 3.0.0
 
 ### Major Changes
