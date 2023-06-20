@@ -1,6 +1,6 @@
 {
   "name": "get-starknet-example",
-  "version": "2.1.2",
+  "version": "2.1.1",
   "private": true,
   "type": "module",
   "scripts": {
