@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "bowser": "^2.11.0",
-    "get-starknet-core": "workspace:^3.0.1"
+    "get-starknet-core": "workspace:^3.0.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",

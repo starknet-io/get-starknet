@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "get-starknet": "workspace:^3.0.1",
+    "get-starknet": "workspace:^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
