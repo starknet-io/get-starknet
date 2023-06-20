@@ -16,11 +16,11 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/action-setup@v2.2.2
         with:
-          version: 7
+          version: 8
       - name: setup node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
           cache: "pnpm"
       - name: install dependencies
         run: pnpm install
