@@ -1,6 +1,6 @@
 {
   "name": "get-starknet-example",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "get-starknet": "workspace:^2.1.0",
+    "get-starknet": "workspace:^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

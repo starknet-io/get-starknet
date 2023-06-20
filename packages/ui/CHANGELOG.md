@@ -1,5 +1,12 @@
 # get-starknet
 
+## 3.0.0
+
+### Patch Changes
+
+- Updated dependencies [cd660ef]
+  - get-starknet-core@3.0.0
+
 ## 2.1.0
 
 ### Minor Changes

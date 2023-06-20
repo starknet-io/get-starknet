@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.0.0
+
+### Major Changes
+
+- cd660ef: Introduce a breaking version for starknet.js v5 migration
+
 ## 2.1.0
 
 ### Minor Changes
