@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- a8ac896: fix: build
+
+## 3.0.1
+
+### Patch Changes
+
 - 83cbdcf: fix build
 
 ## 3.0.0

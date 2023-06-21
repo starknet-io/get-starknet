@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- a8ac896: fix: build
+- Updated dependencies [a8ac896]
+  - get-starknet@3.0.1
+
+## 2.1.2
+
+### Patch Changes
+
 - 83cbdcf: fix build
 - Updated dependencies [83cbdcf]
   - get-starknet@3.0.1
