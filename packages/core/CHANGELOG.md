@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.1.0
+
+### Minor Changes
+
+- cd4a6f7: use latest stable starknet.js v5
+
 ## 3.0.1
 
 ### Patch Changes
