@@ -32,7 +32,7 @@
   "devDependencies": {
     "c8": "^7.12.0",
     "happy-dom": "^6.0.4",
-    "starknet": "^5.12.0",
+    "starknet": "^5.14.1",
     "starknet4": "npm:starknet@4.22.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.0",
@@ -40,7 +40,7 @@
     "vitest": "^0.19.1"
   },
   "peerDependencies": {
-    "starknet": "^5.0.0"
+    "starknet": "^5.14.1"
   },
   "peerDependenciesMeta": {
     "starknet": {
