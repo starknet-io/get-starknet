@@ -73,8 +73,8 @@ importers:
         specifier: ^6.0.4
         version: 6.0.4
       starknet:
-        specifier: ^5.14.1
-        version: 5.14.1
+        specifier: ^5.18.0
+        version: 5.18.0
       starknet4:
         specifier: npm:starknet@4.22.0
         version: /starknet@4.22.0
@@ -4506,8 +4506,8 @@ packages:
       - encoding
     dev: true
 
-  /starknet@5.14.1:
-    resolution: {integrity: sha512-EtJwQ6RmFsqSLGuMP+PRp4DwNsMYXy63HDnd1plLCdQKl3FMYajqNKf5RbDl03uGU0uE5ctGp+OW3firHuv6IA==}
+  /starknet@5.18.0:
+    resolution: {integrity: sha512-2b5+F+kfp8fTBAfBpHNmtjhuljZb3P2JMhubP/KWIJAGXwBAalPklOwEYY7Bb2slkPjfkDH0kPxI4037sQcQ+Q==}
     dependencies:
       '@noble/curves': 1.0.0
       isomorphic-fetch: 3.0.0
