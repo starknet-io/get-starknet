@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.2.0
+
+### Minor Changes
+
+- e0e414c: starknet.js 5.18.0
+
 ## 3.1.0
 
 ### Minor Changes
