@@ -75,9 +75,7 @@ export const connect = async ({
   ) {
     const wallet =
       preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
-      installedWallets.length === 1
-        ? installedWallets[0]
-        : undefined
+      (installedWallets.length === 1 ? installedWallets[0] : undefined)
     if (wallet) {
       return enableWithVersion(wallet)
     } // otherwise fallback to modal
