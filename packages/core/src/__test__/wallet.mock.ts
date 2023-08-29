@@ -29,6 +29,11 @@ export const BraavosMock: WalletMock = {
   isPreauthorized: async () => false,
 }
 
+export const BitKeepMock: WalletMock = {
+  ...wallets.find((w) => w.id === "bitkeep")!,
+  isPreauthorized: async () => false,
+}
+
 export function makePreAuthorized(isPreauthorized: boolean) {
   return (wallet: WalletMock) => ({
     ...wallet,

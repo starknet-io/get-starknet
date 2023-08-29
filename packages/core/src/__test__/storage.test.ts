@@ -2,6 +2,7 @@ import { getStarknet } from "../main"
 import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
+  BitKeepMock,
   BraavosMock,
   UnknownWalletAMock,
   UnknownWalletBMock,
@@ -48,6 +49,7 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makePreAuthorized(false)(ArgentXMock),
         "starknet-braavos": makePreAuthorized(false)(BraavosMock),
+        "starknet-bitkeep": makePreAuthorized(false)(BitKeepMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -61,6 +63,7 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makePreAuthorized(false)(ArgentXMock),
         "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-bitkeep": makePreAuthorized(false)(BitKeepMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -74,6 +77,7 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
         "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-bitkeep": makePreAuthorized(true)(BitKeepMock),
       },
       mockStorageFunction({ "gsw-last": "braavos" }),
     )
@@ -84,6 +88,7 @@ describe("getLastConnectedWallet()", () => {
     const sn = getWallet({
       "starknet-argentX": makeConnected(true)(ArgentXMock),
       "starknet-braavos": makeConnected(true)(BraavosMock),
+      "starknet-bitkeep": makeConnected(true)(BitKeepMock),
     })
     const lastConnectedWallet = await sn.getLastConnectedWallet()
     expect(lastConnectedWallet).toBe(null)
@@ -108,6 +113,7 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
         "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-bitkeep": makePreAuthorized(true)(BitKeepMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -125,6 +131,7 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
         "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-bitkeep": makePreAuthorized(true)(BitKeepMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",

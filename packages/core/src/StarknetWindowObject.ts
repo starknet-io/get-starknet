@@ -118,6 +118,7 @@ declare global {
     starknet?: StarknetWindowObject
     starknet_braavos?: StarknetWindowObject
     starknet_argentX?: StarknetWindowObject
+    starknet_bitkeep?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }
