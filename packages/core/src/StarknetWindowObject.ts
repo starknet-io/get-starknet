@@ -1,5 +1,11 @@
 type FELT = string
 
+type Call = {
+  contract_address: FELT
+  entrypoint: string
+  calldata?: FELT[]
+}
+
 type SIERRA_ENTRY_POINT = {
   selector: FELT
   function_idx: number
@@ -63,10 +69,9 @@ export type WalletEvents =
  */
 export interface AddInvokeTransactionParameters {
   /**
-   * The data expected by the account's `execute` function (in most use-cases,
-   * this includes the called contract address and a function selector)
+   * Calls to invoke by the account
    */
-  calldata: FELT[]
+  calls: Call[]
 }
 export interface AddInvokeTransactionResult {
   /**
