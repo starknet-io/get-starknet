@@ -7,7 +7,6 @@ export const isWalletObj = (wallet: any): boolean => {
         "request",
         "isConnected",
         "provider",
-        "enable",
         "isPreauthorized",
         "on",
         "off",

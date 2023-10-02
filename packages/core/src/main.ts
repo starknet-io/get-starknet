@@ -1,5 +1,6 @@
-import {
+import type {
   ConnectedStarknetWindowObject,
+  RequestAccountsParameters,
   StarknetWindowObject,
 } from "./StarknetWindowObject"
 import discovery, { WalletProvider } from "./discovery"
@@ -17,11 +18,18 @@ export type {
   NetworkChangeEventHandler,
   RpcMessage,
   StarknetWindowObject,
-  SwitchStarknetChainParameter,
+  SwitchStarknetChainParameters,
   WalletEvents,
   WatchAssetParameters,
   DisconnectedStarknetWindowObject,
   IStarknetWindowObject,
+  RequestAccountsParameters,
+  AddDeclareTransactionParameters,
+  AddDeclareTransactionResult,
+  AddDeployAccountTransactionParameters,
+  AddDeployAccountTransactionResult,
+  AddInvokeTransactionParameters,
+  AddInvokeTransactionResult,
 } from "./StarknetWindowObject"
 export type { WalletProvider } from "./discovery"
 
@@ -59,9 +67,7 @@ interface GetStarknetResult {
   getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
   enable: (
     wallet: StarknetWindowObject,
-    options?: {
-      starknetVersion?: "v4" | "v5"
-    },
+    options?: RequestAccountsParameters,
   ) => Promise<ConnectedStarknetWindowObject> // Connects to a wallet
   disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
 }
@@ -121,7 +127,7 @@ export function getStarknet(
       return firstPreAuthorizedWallet
     },
     enable: async (wallet, options) => {
-      await wallet.enable(options ?? { starknetVersion: "v5" })
+      await wallet.request({ type: "wallet_requestAccounts", params: options })
       if (!wallet.isConnected) {
         throw new Error("Failed to connect to wallet")
       }

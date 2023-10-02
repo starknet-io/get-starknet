@@ -3,6 +3,7 @@ import Bowser from "bowser"
 import sn, {
   type DisconnectOptions,
   type GetWalletOptions,
+  type RequestAccountsParameters,
   type StarknetWindowObject,
 } from "get-starknet-core"
 
@@ -39,11 +40,14 @@ export interface ConnectOptions extends GetWalletOptions {
   storeVersion?: StoreVersion
 }
 
-const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
+const enableWithVersion = async (
+  wallet: StarknetWindowObject | null,
+  options?: RequestAccountsParameters,
+) => {
   if (!wallet) {
     return null
   }
-  return sn.enable(wallet, { starknetVersion: "v5" }).catch(() => null)
+  return sn.enable(wallet, options).catch(() => null)
 }
 
 export const connect = async ({
@@ -64,7 +68,7 @@ export const connect = async ({
 
     // return `wallet` even if it's null/undefined since we aren't allowed
     // to show any "connect" related UI
-    return enableWithVersion(wallet)
+    return enableWithVersion(wallet, { silentMode: true })
   }
 
   const installedWallets = await sn.getAvailableWallets(restOptions)

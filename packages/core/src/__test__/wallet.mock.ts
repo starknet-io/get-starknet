@@ -39,7 +39,7 @@ export function makePreAuthorized(isPreauthorized: boolean) {
 export function makeConnected(isConnected: boolean) {
   return (wallet: WalletMock) => ({
     ...makePreAuthorized(true)(wallet),
-    enable: async () => [],
+    request: async () => [],
     isConnected,
   })
 }
