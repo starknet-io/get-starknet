@@ -30,6 +30,7 @@ export type {
   AddDeployAccountTransactionResult,
   AddInvokeTransactionParameters,
   AddInvokeTransactionResult,
+  TypedData,
 } from "./StarknetWindowObject"
 export type { WalletProvider } from "./discovery"
 

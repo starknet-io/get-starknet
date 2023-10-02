@@ -36,7 +36,7 @@ interface StarkNetDomain extends Record<string, unknown> {
 /**
  * The complete typed data, with all the structs, domain data, primary type of the message, and the message itself.
  */
-interface TypedData {
+export interface TypedData {
   types: Record<string, StarkNetType[]>
   primaryType: string
   domain: StarkNetDomain
