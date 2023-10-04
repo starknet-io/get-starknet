@@ -11,7 +11,7 @@ type SIERRA_ENTRY_POINT = {
   function_idx: number
 }
 
-type StarkNetMerkleType = {
+type StarknetMerkleType = {
   name: string
   type: "merkletree"
   contains: string
@@ -23,17 +23,17 @@ type StarkNetMerkleType = {
  * Note that the `uint` and `int` aliases like in Solidity, and fixed point numbers are not supported by the EIP-712
  * standard.
  */
-type StarkNetType =
+type StarknetType =
   | {
       name: string
       type: string
     }
-  | StarkNetMerkleType
+  | StarknetMerkleType
 
 /**
  * The EIP712 domain struct. Any of these fields are optional, but it must contain at least one field.
  */
-interface StarkNetDomain extends Record<string, unknown> {
+interface StarknetDomain extends Record<string, unknown> {
   name?: string
   version?: string
   chainId?: string | number
@@ -43,9 +43,9 @@ interface StarkNetDomain extends Record<string, unknown> {
  * The complete typed data, with all the structs, domain data, primary type of the message, and the message itself.
  */
 export interface TypedData {
-  types: Record<string, StarkNetType[]>
+  types: Record<string, StarknetType[]>
   primaryType: string
-  domain: StarkNetDomain
+  domain: StarknetDomain
   message: Record<string, unknown>
 }
 
@@ -171,7 +171,7 @@ export interface RequestAccountsParameters {
 export interface WatchAssetParameters {
   type: "ERC20" // The asset's interface, e.g. 'ERC20'
   options: {
-    address: string // The hexadecimal StarkNet address of the token contract
+    address: string // The hexadecimal Starknet address of the token contract
     symbol?: string // A ticker symbol or shorthand, up to 5 alphanumerical characters
     decimals?: number // The number of asset decimals
     image?: string // A string url of the token logo
@@ -192,7 +192,7 @@ export interface AddStarknetChainParameters {
   blockExplorerUrls?: string[]
 
   nativeCurrency?: {
-    address: string // Not part of the standard, but required by StarkNet as it can work with any ERC20 token as the fee token
+    address: string // Not part of the standard, but required by Starknet as it can work with any ERC20 token as the fee token
     name: string
     symbol: string // 2-6 characters long
     decimals: number
