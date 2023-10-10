@@ -1,7 +1,9 @@
 import "./App.css"
+import { deployContract, sendErc20Transaction, signMessage } from "./lib"
 import {
   type ConnectOptions,
   type DisconnectOptions,
+  StarknetWindowObject,
   connect,
   disconnect,
 } from "get-starknet"
@@ -9,11 +11,15 @@ import { useState } from "react"
 
 function App() {
   const [walletName, setWalletName] = useState("")
+  const [wallet, setWallet] = useState<StarknetWindowObject | null>(null)
 
   function handleConnect(options?: ConnectOptions) {
     return async () => {
       const res = await connect(options)
-      console.log(res)
+      //TODO(harsh): remove
+      window.strkn_wallet = res
+      setWallet(res)
+
       setWalletName(res?.name || "")
     }
   }
@@ -62,6 +68,34 @@ function App() {
           </h2>
         </div>
       )}
+      <div>
+        <button
+          onClick={() => {
+            sendErc20Transaction(wallet)
+          }}>
+          send erc20 transaction
+        </button>
+      </div>
+
+      <br />
+      <div>
+        <button
+          onClick={() => {
+            signMessage(wallet)
+          }}>
+          sign message
+        </button>
+      </div>
+
+      <br />
+      <div>
+        <button
+          onClick={() => {
+            deployContract(wallet)
+          }}>
+          deploy contract
+        </button>
+      </div>
     </div>
   )
 }

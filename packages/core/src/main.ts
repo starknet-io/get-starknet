@@ -7,6 +7,7 @@ import { IStorageWrapper, LocalStorageWrapper } from "./localStorageStore"
 import { pipe } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
+import { MetaMaskSnap } from "./wallet/metamask_snap"
 import { scanObjectForWallets } from "./wallet/scan"
 import { Sort, sortBy } from "./wallet/sort"
 
@@ -74,6 +75,18 @@ export function getStarknet(
     ...options,
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
+
+  // TODO(harsh): we wrap the window object with a proxy, and then have a handler to this part
+  let interval = setInterval(()=>{
+      if(windowObject["ethereum"]) {
+        console.log("metamask found, injecting starknet wrapper")
+        const ethereum = windowObject["ethereum"];
+        const metaMaskSnapWrapper = new MetaMaskSnap(ethereum);
+        windowObject["starknet_metamask"] = metaMaskSnapWrapper
+        clearInterval(interval);
+      }
+      console.log("metamask not found")
+  }, 1000);
 
   return {
     getAvailableWallets: async (options = {}) => {

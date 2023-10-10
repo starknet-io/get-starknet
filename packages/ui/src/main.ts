@@ -43,7 +43,7 @@ const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
   if (!wallet) {
     return null
   }
-  return sn.enable(wallet, { starknetVersion: "v5" }).catch(() => null)
+  window.strkn_wallet = await sn.enable(wallet, { starknetVersion: "v5" }).catch(() => null)
 }
 
 export const connect = async ({
