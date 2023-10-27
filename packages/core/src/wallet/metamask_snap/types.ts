@@ -1,6 +1,17 @@
-export type ChainId = `0x${string}`
+export type ChainId = string
 
-export type SnapRequest<Params> = {
+export type RequestSnapRequest = {
+  method: string
+  params: {
+    [key in string]: {
+      version?: string
+    }
+  }
+}
+
+export type SnapRequest<Params> = RequestSnapRequest | InvokeSnapRequest<Params>
+
+export type InvokeSnapRequest<Params> = {
   method: string
   params: {
     snapId: string
@@ -18,4 +29,13 @@ export type SendTransactionParam = {
   senderAddress: string
   maxFee?: string | null
   chainId: string
+}
+
+export type RequestSnapResponse = {
+  [key in string]: {
+    version: string
+    id: string
+    enabled: boolean
+    blocked: boolean
+  }
 }
