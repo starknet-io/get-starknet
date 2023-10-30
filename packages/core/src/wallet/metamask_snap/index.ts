@@ -7,30 +7,20 @@ import {
 } from "../../StarknetWindowObject"
 import { MetaMaskAccountWrapper } from "./accounts"
 import { CHAIN_ID_TESTNET } from "./constants"
-import { ChainId, SnapRequest } from "./types"
+import { ChainId, RequestSnapResponse } from "./types"
 import {
   AccContract,
   Network,
 } from "@consensys/starknet-snap/src/types/snapState"
-import { JsonRpcResponse } from "@metamask/types"
+import { MetaMaskInpageProvider } from "@metamask/providers"
 import { AccountInterface, Provider, ProviderInterface } from "starknet"
-
-export type JsonRpcRequestSnapParam = {
-  [key in `npm:${string}`]: {
-    version?: string
-  }
-}
-
-export interface IMetaMaskInjectedProvider {
-  request<P, T>(arg: SnapRequest<P>): Promise<JsonRpcResponse<T>>
-}
 
 export class MetaMaskSnap implements IStarknetWindowObject {
   id: string
   name: string
   version: string
   icon: string
-  metamaskProvider: IMetaMaskInjectedProvider
+  metamaskProvider: MetaMaskInpageProvider
   account?: AccountInterface | undefined
   provider?: ProviderInterface | undefined
   selectedAddress?: string | undefined
@@ -38,7 +28,7 @@ export class MetaMaskSnap implements IStarknetWindowObject {
   snapId: string
   isConnected?: boolean
 
-  constructor(metamaskProvider: IMetaMaskInjectedProvider) {
+  constructor(metamaskProvider: MetaMaskInpageProvider) {
     this.id = "metamask"
     this.name = "Metamask"
     this.version = "v0.0.1"
@@ -49,18 +39,28 @@ export class MetaMaskSnap implements IStarknetWindowObject {
     this.chainId = CHAIN_ID_TESTNET
   }
 
+  async request<T extends RpcMessage>(
+    call: Omit<T, "result">,
+  ): Promise<T["result"]> {
+    throw new Error("method not implemented")
+  }
+
   async enable(
     options?: { starknetVersion?: "v4" | "v5" | undefined } | undefined,
   ) {
-    const response = await this.metamaskProvider.request({
+    const response = await this.metamaskProvider.request<RequestSnapResponse>({
       method: "wallet_requestSnaps",
       params: {
         [this.snapId]: {},
       },
     })
 
-    if (response.error) {
-      throw response.error
+    if (typeof this.chainId === "undefined") {
+      throw new Error("chain id is undefined")
+    }
+
+    if (!response) {
+      throw new Error("the snap was not found")
     }
 
     const snapResponse = response[this.snapId]
@@ -95,6 +95,12 @@ export class MetaMaskSnap implements IStarknetWindowObject {
       )
       this.chainId = await this.provider.getChainId()
     }
+
+    if (!this.selectedAddress) {
+      throw new Error("")
+    }
+
+    return [this.selectedAddress]
   }
 
   async isPreauthorized() {
@@ -111,14 +117,6 @@ export class MetaMaskSnap implements IStarknetWindowObject {
   off<E extends WalletEvents>(event: E["type"], handleEvent: E["handler"]) {
     // todo!()
     throw new Error("event handler is not implemented")
-  }
-
-  // Snap needs to have implementation for wallet_watchAsset
-  // The method for adding new chain needs to be adjusted as well,
-  // where we should not ask the class hash of account contract
-  async request<T extends RpcMessage>(call: Omit<T, "result">) {
-    // todo!()
-    throw new Error("request is not implemented")
   }
 
   private async getNetworkInfo(chainId: ChainId): Promise<Network | undefined> {

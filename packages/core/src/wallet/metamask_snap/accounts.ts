@@ -1,6 +1,6 @@
-import { IMetaMaskInjectedProvider } from "."
 import { UDC_ADDRESS } from "./constants"
-import { SendTransactionParam } from "./types"
+import { MetaMaskSigner } from "./signer"
+import { MetaMaskInpageProvider } from "@metamask/providers"
 import {
   Abi,
   AccountInterface,
@@ -17,6 +17,7 @@ import {
   DeployAccountContractPayload,
   DeployContractResponse,
   DeployContractUDCResponse,
+  DeployTransactionReceiptResponse,
   EstimateFeeAction,
   EstimateFeeDetails,
   EstimateFeeResponse,
@@ -26,15 +27,19 @@ import {
   InvocationsDetails,
   InvocationsDetailsWithNonce,
   InvokeFunctionResponse,
+  MultiDeployContractResponse,
   Nonce,
   Provider,
   ProviderInterface,
   Signature,
+  SignerInterface,
   SimulateTransactionDetails,
   SimulateTransactionResponse,
   TypedData,
   UniversalDeployerContractPayload,
+  ec,
   num,
+  parseUDCEvent,
   stark,
   typedData,
 } from "starknet"
@@ -47,25 +52,34 @@ export class MetaMaskAccountWrapper
   implements AccountInterface
 {
   address: string
-  provider: ProviderInterface
   cairoVersion: CairoVersion
-  metaMaskInjectedProvider: IMetaMaskInjectedProvider
+  metaMaskInjectedProvider: MetaMaskInpageProvider
   snapId: string
+  signer: SignerInterface
 
   constructor(
     address: string,
     provider: ProviderInterface,
     cairoVersion: CairoVersion = "0",
-    metamMaskInjectedProvider: IMetaMaskInjectedProvider,
+    metaMaskInjectedProvider: MetaMaskInpageProvider,
     snapId: string,
   ) {
     super(provider)
 
     this.address = address
-    this.provider = provider
     this.cairoVersion = cairoVersion
-    this.metaMaskInjectedProvider = metamMaskInjectedProvider
+    this.metaMaskInjectedProvider = metaMaskInjectedProvider
     this.snapId = snapId
+    this.signer = new MetaMaskSigner()
+  }
+
+  deploy(
+    payload:
+      | UniversalDeployerContractPayload
+      | UniversalDeployerContractPayload[],
+    details?: InvocationsDetails | undefined,
+  ): Promise<MultiDeployContractResponse> {
+    throw new Error("Method not implemented.")
   }
 
   async execute(
@@ -79,6 +93,7 @@ export class MetaMaskAccountWrapper
     }
 
     let { contractAddress, entrypoint, calldata } = transactions[0]
+    let nonce = await this.getNonce()
 
     return await this.invokeFunction(
       {
@@ -86,7 +101,9 @@ export class MetaMaskAccountWrapper
         entrypoint,
         calldata,
       },
-      {},
+      {
+        nonce,
+      },
     )
   }
 
@@ -102,37 +119,44 @@ export class MetaMaskAccountWrapper
 
     const maxFee = details.maxFee ? toHex(details.maxFee) : null
 
-    const contractCallData = calldata ? calldata.join(",") : ""
+    const contractCallData = CallData.toHex(calldata).join(",")
 
     const senderAddress = this.address
-    const chainId = toHex(await this.provider.getChainId())
+    const chainId = toHex(await this.getChainId())
 
-    const response = await this.metaMaskInjectedProvider.request<
-      SendTransactionParam,
-      string
-    >({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.snapId,
-        request: {
-          method: "starkNet_sendTransaction",
-          params: {
-            contractAddress,
-            contractFuncName: entrypoint,
-            contractCallData,
-            senderAddress,
-            maxFee,
-            chainId,
+    const response =
+      await this.metaMaskInjectedProvider.request<InvokeFunctionResponse>({
+        method: "wallet_invokeSnap",
+        params: {
+          snapId: this.snapId,
+          request: {
+            method: "starkNet_sendTransaction",
+            params: {
+              contractAddress,
+              contractFuncName: entrypoint,
+              contractCallData,
+              senderAddress,
+              maxFee,
+              chainId,
+            },
           },
         },
-      },
-    })
+      })
 
-    return response
+    if (!response) {
+      throw new Error("invalid response for starkNet_sendTransaction")
+    }
+    if (!response.transaction_hash) {
+      throw new Error(
+        "invalid response for starkNet_sendTransaction, transaction hash not found",
+      )
+    }
+
+    return { transaction_hash: response.transaction_hash }
   }
 
   async getNonce(blockIdentifier?: BlockIdentifier): Promise<Nonce> {
-    return this.provider.getNonceForAddress(this.address, blockIdentifier)
+    return this.getNonceForAddress(this.address, blockIdentifier)
   }
 
   public async getSuggestedMaxFee(
@@ -228,10 +252,10 @@ export class MetaMaskAccountWrapper
     return getMessageHash(typedData, this.address)
   }
 
-  // todo: the return type has to be fixed, i.e to be of type Signature and not
+  // todo(harsh): the return type has to be fixed, i.e to be of type Signature and not
   // of type string
   public async signMessage(typedData: TypedData): Promise<Signature> {
-    const signature = await this.metaMaskInjectedProvider.request({
+    const signature = (await this.metaMaskInjectedProvider.request({
       method: "wallet_invokeSnap",
       params: {
         snapId: this.snapId,
@@ -240,41 +264,29 @@ export class MetaMaskAccountWrapper
           params: {
             typedDataMessage: JSON.stringify(typedData),
             signerAddress: this.address,
-            chainId: await this.provider.getChainId(),
+            chainId: await this.getChainId(),
           },
         },
       },
-    })
+    })) as unknown as string
 
-    return signature
+    return ec.starkCurve.Signature.fromDER(signature)
   }
 
+  //todo(harsh): the below method should just use the UDC to deploy the account
   async deployAccount(
     _contractPayload: DeployAccountContractPayload,
     _transactionsDetail?: InvocationsDetails | undefined,
   ): Promise<DeployContractResponse> {
-    const response = await this.metaMaskInjectedProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.snapId,
-        request: {
-          method: "starkNet_createAccount",
-          params: {
-            deploy: true,
-            chainId: await this.provider.getChainId(),
-          },
-        },
-      },
-    })
-
-    return response
+    throw new Error("deploy account is not implemented yet")
   }
 
+  // todo!()
   public async declareAndDeploy(
     _payload: DeclareAndDeployContractPayload,
     _details?: InvocationsDetails | undefined,
   ): Promise<DeclareDeployUDCResponse> {
-    // todo!()
+    throw new Error("declare and deploy is not supported")
   }
 
   public async deployContract(
@@ -296,10 +308,14 @@ export class MetaMaskAccountWrapper
       constructorCalldata,
     } = udcPayload[0]
 
-    const compiledConstructorCallData = CallData.compile(constructorCalldata)
+    const classHashHex = "0x" + classHash.toString(16)
+
+    const compiledConstructorCallData = CallData.toHex(
+      constructorCalldata ? constructorCalldata : [],
+    )
     const deploySalt = salt ? salt : stark.randomAddress()
 
-    const response = await this.metaMaskInjectedProvider.request({
+    const response = (await this.metaMaskInjectedProvider.request({
       method: "wallet_invokeSnap",
       params: {
         snapId: this.snapId,
@@ -309,28 +325,29 @@ export class MetaMaskAccountWrapper
             contractAddress: UDC_ADDRESS,
             contractFuncName: "deployContract",
             contractCallData: [
-              "0x" + classHash.toString(16),
+              classHashHex,
               deploySalt,
               toCairoBool(unique),
               "0x" + compiledConstructorCallData.length.toString(16),
               ...compiledConstructorCallData,
             ].join(","),
             senderAddress: this.address,
-            chainId: await this.provider.getChainId(),
+            chainId: await this.getChainId(),
           },
         },
       },
-    })
+    })) as unknown as InvokeFunctionResponse
 
-    return response
+    const txReceipt = await this.waitForTransaction(response.transaction_hash)
+    return parseUDCEvent(txReceipt as DeployTransactionReceiptResponse)
   }
 
   // declare isn't allowed via the exposed RPC as of now
+  // todo!()
   public async declare(
     _contractPayload: DeclareContractPayload,
     _transactionsDetail?: InvocationsDetails | undefined,
   ): Promise<DeclareContractResponse> {
-    // todo!()
     throw new Error("declare isn't implemented as of now")
   }
 }
