@@ -9,30 +9,82 @@ import {
   TypedData,
 } from "starknet"
 
+interface Wallet {
+  request<T>(request: { method: string; params: any }): Promise<T>
+}
 //todo(harsh): signer needs to be implemented
-export class MetaMaskSigner extends SignerInterface {
-  getPubKey(): Promise<string> {
-    throw new Error("Method not implemented.")
+export class MetaMaskSigner implements SignerInterface {
+  #metamaskProvider: Wallet
+  #snapId: string
+  #address: string
+
+  constructor(metamaskProvider: Wallet, snapId: string, address: string) {
+    this.#metamaskProvider = metamaskProvider
+    this.#snapId = snapId
+    this.#address = address
   }
-  signMessage(
+  async getPubKey(): Promise<string> {
+    return await this.#metamaskProvider.request({
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: this.#snapId,
+        request: {
+          method: "starkNet_extractPublicKey",
+          params: {
+            userAddress: this.#address,
+          },
+        },
+      },
+    })
+  }
+
+  async signMessage(
     typedData: TypedData,
     accountAddress: string,
   ): Promise<Signature> {
-    throw new Error("Method not implemented.")
+    return await this.#metamaskProvider.request({
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: this.#snapId,
+        request: {
+          method: "starkNet_extractPublicKey",
+          params: {
+            typedDataMessag: typedData,
+            signerAddress: accountAddress,
+          },
+        },
+      },
+    })
   }
-  signTransaction(
+
+  async signTransaction(
     transactions: Call[],
     transactionsDetail: InvocationsSignerDetails,
     abis?: Abi[] | undefined,
   ): Promise<Signature> {
-    throw new Error("Method not implemented.")
+    return await this.#metamaskProvider.request({
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: this.#snapId,
+        request: {
+          method: "starkNet_extractPublicKey",
+          params: {
+            userAddress: this.#address,
+            transactions: transactions,
+            transactionsDetail: transactionsDetail,
+            abis: abis,
+          },
+        },
+      },
+    })
   }
-  signDeployAccountTransaction(
+  async signDeployAccountTransaction(
     transaction: DeployAccountSignerDetails,
   ): Promise<Signature> {
     throw new Error("Method not implemented.")
   }
-  signDeclareTransaction(
+
+  async signDeclareTransaction(
     transaction: DeclareSignerDetails,
   ): Promise<Signature> {
     throw new Error("Method not implemented.")

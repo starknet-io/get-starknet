@@ -5,15 +5,20 @@ import {
   RpcMessage,
   WalletEvents,
 } from "../../StarknetWindowObject"
-import { MetaMaskAccountWrapper } from "./accounts"
 import { CHAIN_ID_TESTNET } from "./constants"
+import { MetaMaskSigner } from "./signer"
 import { ChainId, RequestSnapResponse } from "./types"
 import {
   AccContract,
   Network,
 } from "@consensys/starknet-snap/src/types/snapState"
 import { MetaMaskInpageProvider } from "@metamask/providers"
-import { AccountInterface, Provider, ProviderInterface } from "starknet"
+import {
+  Account,
+  AccountInterface,
+  Provider,
+  ProviderInterface,
+} from "starknet"
 
 export class MetaMaskSnap implements IStarknetWindowObject {
   id: string
@@ -86,12 +91,16 @@ export class MetaMaskSnap implements IStarknetWindowObject {
         },
       })
 
-      this.account = new MetaMaskAccountWrapper(
-        this.selectedAddress,
-        this.provider,
-        "0",
+      const signer = new MetaMaskSigner(
         this.metamaskProvider,
         this.snapId,
+        this.selectedAddress,
+      )
+      this.account = new Account(
+        this.provider,
+        this.selectedAddress,
+        signer,
+        "0", //we should not hardcode
       )
       this.chainId = await this.provider.getChainId()
     }
