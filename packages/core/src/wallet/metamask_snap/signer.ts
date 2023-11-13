@@ -1,3 +1,4 @@
+import { MetaMaskInpageProvider } from "@metamask/providers"
 import {
   Abi,
   Call,
@@ -9,22 +10,23 @@ import {
   TypedData,
 } from "starknet"
 
-interface Wallet {
-  request<T>(request: { method: string; params: any }): Promise<T>
-}
-//todo(harsh): signer needs to be implemented
 export class MetaMaskSigner implements SignerInterface {
-  #metamaskProvider: Wallet
+  #metamaskProvider: MetaMaskInpageProvider
   #snapId: string
   #address: string
 
-  constructor(metamaskProvider: Wallet, snapId: string, address: string) {
+  constructor(
+    metamaskProvider: MetaMaskInpageProvider,
+    snapId: string,
+    address: string,
+  ) {
     this.#metamaskProvider = metamaskProvider
     this.#snapId = snapId
     this.#address = address
   }
+
   async getPubKey(): Promise<string> {
-    return await this.#metamaskProvider.request({
+    return (await this.#metamaskProvider.request({
       method: "wallet_invokeSnap",
       params: {
         snapId: this.#snapId,
@@ -35,26 +37,26 @@ export class MetaMaskSigner implements SignerInterface {
           },
         },
       },
-    })
+    })) as string
   }
 
   async signMessage(
     typedData: TypedData,
     accountAddress: string,
   ): Promise<Signature> {
-    return await this.#metamaskProvider.request({
+    return (await this.#metamaskProvider.request({
       method: "wallet_invokeSnap",
       params: {
         snapId: this.#snapId,
         request: {
-          method: "starkNet_extractPublicKey",
+          method: "starkNet_signMessage",
           params: {
-            typedDataMessag: typedData,
+            typedDataMessage: typedData,
             signerAddress: accountAddress,
           },
         },
       },
-    })
+    })) as Signature
   }
 
   async signTransaction(
@@ -62,12 +64,12 @@ export class MetaMaskSigner implements SignerInterface {
     transactionsDetail: InvocationsSignerDetails,
     abis?: Abi[] | undefined,
   ): Promise<Signature> {
-    return await this.#metamaskProvider.request({
+    return (await this.#metamaskProvider.request({
       method: "wallet_invokeSnap",
       params: {
         snapId: this.#snapId,
         request: {
-          method: "starkNet_extractPublicKey",
+          method: "starkNet_signTransaction",
           params: {
             userAddress: this.#address,
             transactions: transactions,
@@ -76,8 +78,9 @@ export class MetaMaskSigner implements SignerInterface {
           },
         },
       },
-    })
+    })) as Signature
   }
+
   async signDeployAccountTransaction(
     transaction: DeployAccountSignerDetails,
   ): Promise<Signature> {
