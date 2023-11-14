@@ -71,7 +71,7 @@ export class MetaMaskSigner implements SignerInterface {
         request: {
           method: "starkNet_signTransaction",
           params: {
-            userAddress: this.#address,
+            signerAddress: this.#address,
             transactions: transactions,
             transactionsDetail: transactionsDetail,
             abis: abis,
@@ -84,12 +84,36 @@ export class MetaMaskSigner implements SignerInterface {
   async signDeployAccountTransaction(
     transaction: DeployAccountSignerDetails,
   ): Promise<Signature> {
-    throw new Error("Method not implemented.")
+    return (await this.#metamaskProvider.request({
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: this.#snapId,
+        request: {
+          method: "starkNet_signDeployAccountTransaction",
+          params: {
+            signerAddress: this.#address,
+            transactions: transaction,
+          },
+        },
+      },
+    })) as Signature
   }
 
   async signDeclareTransaction(
     transaction: DeclareSignerDetails,
   ): Promise<Signature> {
-    throw new Error("Method not implemented.")
+    return (await this.#metamaskProvider.request({
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: this.#snapId,
+        request: {
+          method: "starkNet_signDeclareTransaction",
+          params: {
+            signerAddress: this.#address,
+            transactions: transaction,
+          },
+        },
+      },
+    })) as Signature
   }
 }
