@@ -33,6 +33,8 @@ function getBrowserStoreVersionFromBrowser(): BrowserStoreVersion | null {
     case "opera": // opera is chromium based
     case "vivaldi": // vivaldi is chromium based
       return "chrome"
+    case "safari":
+      return "safari"
     default:
       return null
   }
