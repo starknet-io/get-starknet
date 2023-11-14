@@ -29,6 +29,11 @@ export const BraavosMock: WalletMock = {
   isPreauthorized: async () => false,
 }
 
+export const OKXMock: WalletMock = {
+  ...wallets.find((w) => w.id === "okxwallet")!,
+  isPreauthorized: async () => false,
+}
+
 export function makePreAuthorized(isPreauthorized: boolean) {
   return (wallet: WalletMock) => ({
     ...wallet,
