@@ -1,3 +1,8 @@
+import {
+  AddStarknetChainParameters,
+  SwitchStarknetChainParameter,
+  WatchAssetParameters,
+} from "../../StarknetWindowObject"
 import { ChainId } from "./types"
 import {
   AccContract,
@@ -230,6 +235,71 @@ export class MetaMaskSnap {
   #getSnapParams() {
     return {
       chainId: this.#chainId,
+    }
+  }
+
+  async switchNetwork(
+    params: SwitchStarknetChainParameter,
+  ): Promise<{ result: boolean }> {
+    try {
+      // Use the provided chainId to switch the network
+      const response = (await this.#provider.request({
+        method: "wallet_invokeSnap",
+        params: {
+          snapId: this.#snapId,
+          request: {
+            method: "starkNet_switchStarknetChain",
+            params,
+          },
+        },
+      })) as { success: boolean }
+
+      return { result: response.success }
+    } catch (error) {
+      console.error("Error switching Starknet chain:", error)
+      return { result: false }
+    }
+  }
+
+  async addStarknetChain(
+    params: AddStarknetChainParameters,
+  ): Promise<{ result: boolean }> {
+    try {
+      const response = (await this.#provider.request({
+        method: "wallet_invokeSnap",
+        params: {
+          snapId: this.#snapId,
+          request: {
+            method: "starkNet_addStarknetChain",
+            params,
+          },
+        },
+      })) as { success: boolean }
+
+      return { result: response.success }
+    } catch (error) {
+      console.error("Error adding Starknet chain:", error)
+      return { result: false }
+    }
+  }
+
+  async watchAsset(params: WatchAssetParameters): Promise<{ result: boolean }> {
+    try {
+      const response = (await this.#provider.request({
+        method: "wallet_invokeSnap",
+        params: {
+          snapId: this.#snapId,
+          request: {
+            method: "starkNet_watchAsset",
+            params,
+          },
+        },
+      })) as { success: boolean }
+
+      return { result: response.success }
+    } catch (error) {
+      console.error("Error watching asset:", error)
+      return { result: false }
     }
   }
 }

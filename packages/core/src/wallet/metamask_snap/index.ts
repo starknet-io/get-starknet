@@ -1,9 +1,12 @@
 /// The adapter is supposed to wrap a metamask inject provider
 /// and implement the  IStarknetWindowObject interface
 import {
+  AddStarknetChainParameters,
   IStarknetWindowObject,
   RpcMessage,
+  SwitchStarknetChainParameter,
   WalletEvents,
+  WatchAssetParameters,
 } from "../../StarknetWindowObject"
 import { MetaMaskAccount } from "./accounts"
 import { CHAIN_ID_TESTNET } from "./constants"
@@ -45,7 +48,35 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   async request<T extends RpcMessage>(
     call: Omit<T, "result">,
   ): Promise<T["result"]> {
-    throw new Error("method not implemented")
+    if (call.type === "wallet_switchStarknetChain") {
+      const params = call as {
+        type: "wallet_switchStarknetChain"
+        params: SwitchStarknetChainParameter
+      }
+
+      const result = (await this.snap?.switchNetwork(params.params)) ?? false
+      return result as T["result"]
+    }
+
+    if (call.type === "wallet_addStarknetChain") {
+      const params = call as {
+        type: "wallet_addStarknetChain"
+        params: AddStarknetChainParameters
+      }
+      const result = (await this.snap?.addStarknetChain(params.params)) ?? false
+      return result as T["result"]
+    }
+
+    if (call.type === "wallet_watchAsset") {
+      const params = call as {
+        type: "wallet_watchAsset"
+        params: WatchAssetParameters
+      }
+      const result = (await this.snap?.watchAsset(params.params)) ?? false
+      return result as T["result"]
+    }
+
+    throw new Error(`Method ${call.type} not implemented`)
   }
 
   async enable(
@@ -93,9 +124,9 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
 
       const snap = new MetaMaskSnap(
         this.snapId,
-        this.selectedAddress,
         this.chainId,
         this.metamaskProvider,
+        this.selectedAddress,
       )
 
       const signer = new MetaMaskSigner(snap)
