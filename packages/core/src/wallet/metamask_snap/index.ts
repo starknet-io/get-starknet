@@ -89,17 +89,20 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
       },
     })
 
-    if (typeof this.chainId === "undefined") {
-      throw new Error("chain id is undefined")
-    }
-
     if (!response) {
       throw new Error("the snap was not found")
     }
 
     const snapResponse = response[this.snapId]
+    const network = await this.snap?.getCurrentNetwork()
+    const chainId = network?.chainId
+    this.chainId = chainId
+
+    if (typeof this.chainId === "undefined") {
+      throw new Error("chain id is undefined")
+    }
+
     if (snapResponse && snapResponse.enabled) {
-      //chainId should select by wallet, right now hardcoded
       const response = await this.recoverAccounts(this.chainId)
 
       if (!response) {
@@ -115,7 +118,6 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
         )
       }
 
-      //chainId should select by wallet, right now hardcoded
       this.provider = new Provider({
         rpc: {
           nodeUrl: networkInfo.nodeUrl,

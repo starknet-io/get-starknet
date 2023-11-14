@@ -302,4 +302,19 @@ export class MetaMaskSnap {
       return { result: false }
     }
   }
+
+  async getCurrentNetwork(): Promise<Network | undefined> {
+    const response = (await this.#provider.request({
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: this.#snapId,
+        request: {
+          method: "starkNet_getCurrentNetwork",
+          params: {},
+        },
+      },
+    })) as unknown as Network
+
+    return response
+  }
 }
