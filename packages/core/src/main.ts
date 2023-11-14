@@ -7,7 +7,7 @@ import { IStorageWrapper, LocalStorageWrapper } from "./localStorageStore"
 import { pipe } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
-import { MetaMaskSnap } from "./wallet/metamask_snap"
+import { MetaMaskSnapWallet } from "./wallet/metamask_snap"
 import { scanObjectForWallets } from "./wallet/scan"
 import { Sort, sortBy } from "./wallet/sort"
 
@@ -81,7 +81,7 @@ export function getStarknet(
     if (windowObject["ethereum"]) {
       console.log("metamask found, injecting starknet wrapper")
       const ethereum = windowObject["ethereum"]
-      const metaMaskSnapWrapper = new MetaMaskSnap(ethereum)
+      const metaMaskSnapWrapper = new MetaMaskSnapWallet(ethereum)
       windowObject["starknet_metamask"] = metaMaskSnapWrapper
       clearInterval(interval)
     }

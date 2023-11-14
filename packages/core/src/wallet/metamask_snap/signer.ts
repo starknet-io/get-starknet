@@ -1,4 +1,4 @@
-import { MetaMaskInpageProvider } from "@metamask/providers"
+import { MetaMaskSnap } from "./snap"
 import {
   Abi,
   Call,
@@ -11,52 +11,21 @@ import {
 } from "starknet"
 
 export class MetaMaskSigner implements SignerInterface {
-  #metamaskProvider: MetaMaskInpageProvider
-  #snapId: string
-  #address: string
+  #snap: MetaMaskSnap
 
-  constructor(
-    metamaskProvider: MetaMaskInpageProvider,
-    snapId: string,
-    address: string,
-  ) {
-    this.#metamaskProvider = metamaskProvider
-    this.#snapId = snapId
-    this.#address = address
+  constructor(snap: MetaMaskSnap) {
+    this.#snap = snap
   }
 
   async getPubKey(): Promise<string> {
-    return (await this.#metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.#snapId,
-        request: {
-          method: "starkNet_extractPublicKey",
-          params: {
-            userAddress: this.#address,
-          },
-        },
-      },
-    })) as string
+    return this.#snap.getPubKey()
   }
 
   async signMessage(
     typedData: TypedData,
     accountAddress: string,
   ): Promise<Signature> {
-    return (await this.#metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.#snapId,
-        request: {
-          method: "starkNet_signMessage",
-          params: {
-            typedDataMessage: typedData,
-            signerAddress: accountAddress,
-          },
-        },
-      },
-    })) as Signature
+    return this.#snap.signMessage(typedData, false, accountAddress)
   }
 
   async signTransaction(
@@ -64,56 +33,18 @@ export class MetaMaskSigner implements SignerInterface {
     transactionsDetail: InvocationsSignerDetails,
     abis?: Abi[] | undefined,
   ): Promise<Signature> {
-    return (await this.#metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.#snapId,
-        request: {
-          method: "starkNet_signTransaction",
-          params: {
-            signerAddress: this.#address,
-            transactions: transactions,
-            transactionsDetail: transactionsDetail,
-            abis: abis,
-          },
-        },
-      },
-    })) as Signature
+    return this.#snap.signTransaction(transactions, transactionsDetail, abis)
   }
 
   async signDeployAccountTransaction(
     transaction: DeployAccountSignerDetails,
   ): Promise<Signature> {
-    return (await this.#metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.#snapId,
-        request: {
-          method: "starkNet_signDeployAccountTransaction",
-          params: {
-            signerAddress: this.#address,
-            transactions: transaction,
-          },
-        },
-      },
-    })) as Signature
+    return this.#snap.signDeployAccountTransaction(transaction)
   }
 
   async signDeclareTransaction(
     transaction: DeclareSignerDetails,
   ): Promise<Signature> {
-    return (await this.#metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.#snapId,
-        request: {
-          method: "starkNet_signDeclareTransaction",
-          params: {
-            signerAddress: this.#address,
-            transactions: transaction,
-          },
-        },
-      },
-    })) as Signature
+    return this.#snap.signDeclareTransaction(transaction)
   }
 }

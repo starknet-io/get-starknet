@@ -5,22 +5,19 @@ import {
   RpcMessage,
   WalletEvents,
 } from "../../StarknetWindowObject"
+import { MetaMaskAccount } from "./accounts"
 import { CHAIN_ID_TESTNET } from "./constants"
 import { MetaMaskSigner } from "./signer"
+import { MetaMaskSnap } from "./snap"
 import { ChainId, RequestSnapResponse } from "./types"
 import {
   AccContract,
   Network,
 } from "@consensys/starknet-snap/src/types/snapState"
 import { MetaMaskInpageProvider } from "@metamask/providers"
-import {
-  Account,
-  AccountInterface,
-  Provider,
-  ProviderInterface,
-} from "starknet"
+import { AccountInterface, Provider, ProviderInterface } from "starknet"
 
-export class MetaMaskSnap implements IStarknetWindowObject {
+export class MetaMaskSnapWallet implements IStarknetWindowObject {
   id: string
   name: string
   version: string
@@ -32,6 +29,7 @@ export class MetaMaskSnap implements IStarknetWindowObject {
   chainId?: string | undefined
   snapId: string
   isConnected?: boolean
+  snap?: MetaMaskSnap
 
   constructor(metamaskProvider: MetaMaskInpageProvider) {
     this.id = "metamask"
@@ -70,6 +68,7 @@ export class MetaMaskSnap implements IStarknetWindowObject {
 
     const snapResponse = response[this.snapId]
     if (snapResponse && snapResponse.enabled) {
+      //chainId should select by wallet, right now hardcoded
       const response = await this.recoverAccounts(this.chainId)
 
       if (!response) {
@@ -85,18 +84,23 @@ export class MetaMaskSnap implements IStarknetWindowObject {
         )
       }
 
+      //chainId should select by wallet, right now hardcoded
       this.provider = new Provider({
         rpc: {
           nodeUrl: networkInfo.nodeUrl,
         },
       })
 
-      const signer = new MetaMaskSigner(
-        this.metamaskProvider,
+      const snap = new MetaMaskSnap(
         this.snapId,
         this.selectedAddress,
+        this.chainId,
+        this.metamaskProvider,
       )
-      this.account = new Account(
+
+      const signer = new MetaMaskSigner(snap)
+      this.account = new MetaMaskAccount(
+        snap,
         this.provider,
         this.selectedAddress,
         signer,
