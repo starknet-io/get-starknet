@@ -52,7 +52,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
       }
 
       const result = (await this.snap.switchNetwork(params.params)) ?? false
-      return result as T["result"]
+      return result as unknown as T["result"]
     }
 
     if (call.type === "wallet_addStarknetChain") {
@@ -61,7 +61,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
         params: AddStarknetChainParameters
       }
       const result = (await this.snap.addStarknetChain(params.params)) ?? false
-      return result as T["result"]
+      return result as unknown as T["result"]
     }
 
     if (call.type === "wallet_watchAsset") {
@@ -70,7 +70,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
         params: WatchAssetParameters
       }
       const result = (await this.snap.watchAsset(params.params)) ?? false
-      return result as T["result"]
+      return result as unknown as T["result"]
     }
 
     throw new Error(`Method ${call.type} not implemented`)
@@ -99,6 +99,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
     }
 
     if (snapResponse && snapResponse.enabled) {
+      this.isConnected = true
       const response = await this.snap.recoverDefaultAccount(this.chainId)
 
       if (!response || !response.address) {
@@ -125,7 +126,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
     }
 
     if (!this.selectedAddress) {
-      throw new Error("")
+      throw new Error("Selected address is undefined")
     }
 
     return [this.selectedAddress]
