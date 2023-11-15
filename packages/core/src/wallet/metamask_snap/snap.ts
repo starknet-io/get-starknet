@@ -324,7 +324,7 @@ export class MetaMaskSnap {
     }
   }
 
-  static async IsInstalled(window: any) {
+  static async GetProvider(window: any) {
     let { ethereum } = window
     let providers = [ethereum]
 
@@ -338,10 +338,10 @@ export class MetaMaskSnap {
     //delect provider by sending request
     for (const provider of providers) {
       if (provider && (await MetaMaskSnap.IsSupportSnap(provider))) {
-        return true
+        return provider
       }
     }
-    return false
+    return null
   }
 
   static async IsSupportSnap(provider: any) {

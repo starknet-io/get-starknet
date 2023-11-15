@@ -8,6 +8,7 @@ import { pipe } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
 import { MetaMaskSnapWallet } from "./wallet/metamask_snap"
+import { MetaMaskSnap } from "./wallet/metamask_snap/snap"
 import { scanObjectForWallets } from "./wallet/scan"
 import { Sort, sortBy } from "./wallet/sort"
 
@@ -67,6 +68,19 @@ interface GetStarknetResult {
   disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
 }
 
+export async function injectMetamaskSnapWallet(
+  windowObject: Record<string, any>,
+) {
+  if (windowObject && windowObject.hasOwnProperty("starknet_metamask")) {
+    return
+  }
+  const provider = await MetaMaskSnap.GetProvider(windowObject)
+  if (provider) {
+    const metaMaskSnapWrapper = new MetaMaskSnapWallet(provider)
+    windowObject["starknet_metamask"] = metaMaskSnapWrapper
+  }
+}
+
 export function getStarknet(
   options: Partial<GetStarknetOptions> = {},
 ): GetStarknetResult {
@@ -76,20 +90,9 @@ export function getStarknet(
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
 
-  // TODO(harsh): we wrap the window object with a proxy, and then have a handler to this part
-  let interval = setInterval(() => {
-    if (windowObject["ethereum"]) {
-      console.log("metamask found, injecting starknet wrapper")
-      const ethereum = windowObject["ethereum"]
-      const metaMaskSnapWrapper = new MetaMaskSnapWallet(ethereum)
-      windowObject["starknet_metamask"] = metaMaskSnapWrapper
-      clearInterval(interval)
-    }
-    console.log("metamask not found")
-  }, 1000)
-
   return {
     getAvailableWallets: async (options = {}) => {
+      await injectMetamaskSnapWallet(windowObject)
       const availableWallets = scanObjectForWallets(
         windowObject,
         isWalletObject,
@@ -100,6 +103,7 @@ export function getStarknet(
       )(availableWallets)
     },
     getPreAuthorizedWallets: async (options = {}) => {
+      await injectMetamaskSnapWallet(windowObject)
       const availableWallets = scanObjectForWallets(
         windowObject,
         isWalletObject,
@@ -111,12 +115,14 @@ export function getStarknet(
       )(availableWallets)
     },
     getDiscoveryWallets: async (options = {}) => {
+      await injectMetamaskSnapWallet(windowObject)
       return pipe<WalletProvider[]>(
         (_) => filterBy(_, options),
         (_) => sortBy(_, options.sort),
       )(discovery)
     },
     getLastConnectedWallet: async () => {
+      await injectMetamaskSnapWallet(windowObject)
       const lastConnectedWalletId = lastConnectedStore.get()
       const allWallets = scanObjectForWallets(windowObject, isWalletObject)
       const lastConnectedWallet = allWallets.find(
