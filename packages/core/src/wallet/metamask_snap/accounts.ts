@@ -18,6 +18,7 @@ import {
 
 export class MetaMaskAccount extends Account {
   #snap: MetaMaskSnap
+  #address: string
 
   constructor(
     snap: MetaMaskSnap,
@@ -28,6 +29,7 @@ export class MetaMaskAccount extends Account {
   ) {
     super(providerOrOptions, address, pkOrSigner, cairoVersion)
     this.#snap = snap
+    this.#address = address
   }
 
   async execute(
@@ -35,17 +37,21 @@ export class MetaMaskAccount extends Account {
     abis?: Abi[] | undefined,
     transactionsDetail?: InvocationsDetails,
   ): Promise<InvokeFunctionResponse> {
-    return this.#snap.execute(calls, abis, transactionsDetail)
+    return this.#snap.execute(this.#address, calls, abis, transactionsDetail)
   }
 
   async signMessage(typedData: TypedData): Promise<Signature> {
-    return this.#snap.signMessage(typedData, true)
+    return this.#snap.signMessage(typedData, true, this.#address)
   }
 
   async declare(
     contractPayload: DeclareContractPayload,
     transactionsDetails?: InvocationsDetails,
   ): Promise<DeclareContractResponse> {
-    return this.#snap.declare(contractPayload, transactionsDetails)
+    return this.#snap.declare(
+      this.#address,
+      contractPayload,
+      transactionsDetails,
+    )
   }
 }

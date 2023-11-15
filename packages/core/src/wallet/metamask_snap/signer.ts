@@ -12,13 +12,15 @@ import {
 
 export class MetaMaskSigner implements SignerInterface {
   #snap: MetaMaskSnap
+  #address: string
 
-  constructor(snap: MetaMaskSnap) {
+  constructor(snap: MetaMaskSnap, address: string) {
     this.#snap = snap
+    this.#address = address
   }
 
   async getPubKey(): Promise<string> {
-    return this.#snap.getPubKey()
+    return this.#snap.getPubKey(this.#address)
   }
 
   async signMessage(
@@ -33,18 +35,23 @@ export class MetaMaskSigner implements SignerInterface {
     transactionsDetail: InvocationsSignerDetails,
     abis?: Abi[] | undefined,
   ): Promise<Signature> {
-    return this.#snap.signTransaction(transactions, transactionsDetail, abis)
+    return this.#snap.signTransaction(
+      this.#address,
+      transactions,
+      transactionsDetail,
+      abis,
+    )
   }
 
   async signDeployAccountTransaction(
     transaction: DeployAccountSignerDetails,
   ): Promise<Signature> {
-    return this.#snap.signDeployAccountTransaction(transaction)
+    return this.#snap.signDeployAccountTransaction(this.#address, transaction)
   }
 
   async signDeclareTransaction(
     transaction: DeclareSignerDetails,
   ): Promise<Signature> {
-    return this.#snap.signDeclareTransaction(transaction)
+    return this.#snap.signDeclareTransaction(this.#address, transaction)
   }
 }

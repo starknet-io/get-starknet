@@ -27,22 +27,13 @@ import {
 export class MetaMaskSnap {
   #provider: MetaMaskInpageProvider
   #snapId: string
-  #address: string | undefined
-  #chainId: string
 
-  constructor(
-    snapId: string,
-    chainId: string,
-    provider: MetaMaskInpageProvider,
-    address?: string,
-  ) {
+  constructor(snapId: string, provider: MetaMaskInpageProvider) {
     this.#provider = provider
-    this.#address = address
-    this.#chainId = chainId
     this.#snapId = snapId
   }
 
-  async getPubKey(): Promise<string> {
+  async getPubKey(userAddress: string): Promise<string> {
     return (await this.#provider.request({
       method: "wallet_invokeSnap",
       params: {
@@ -50,8 +41,8 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_extractPublicKey",
           params: {
-            userAddress: this.#address,
-            ...this.#getSnapParams(),
+            userAddress,
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -59,6 +50,7 @@ export class MetaMaskSnap {
   }
 
   async signTransaction(
+    signerAddress: string,
     transactions: Call[],
     transactionsDetail: InvocationsSignerDetails,
     abis?: Abi[] | undefined,
@@ -70,11 +62,11 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_signTransaction",
           params: {
-            signerAddress: this.#address,
+            signerAddress,
             transactions: transactions,
             transactionsDetail: transactionsDetail,
             abis: abis,
-            ...this.#getSnapParams(),
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -82,6 +74,7 @@ export class MetaMaskSnap {
   }
 
   async signDeployAccountTransaction(
+    signerAddress: string,
     transaction: DeployAccountSignerDetails,
   ): Promise<Signature> {
     return (await this.#provider.request({
@@ -91,9 +84,9 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_signDeployAccountTransaction",
           params: {
-            signerAddress: this.#address,
+            signerAddress,
             transactions: transaction,
-            ...this.#getSnapParams(),
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -101,6 +94,7 @@ export class MetaMaskSnap {
   }
 
   async signDeclareTransaction(
+    signerAddress: string,
     transaction: DeclareSignerDetails,
   ): Promise<Signature> {
     return (await this.#provider.request({
@@ -110,9 +104,9 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_signDeclareTransaction",
           params: {
-            signerAddress: this.#address,
+            signerAddress,
             transactions: transaction,
-            ...this.#getSnapParams(),
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -120,6 +114,7 @@ export class MetaMaskSnap {
   }
 
   async execute(
+    senderAddress: string,
     calls: AllowArray<Call>,
     abis?: Abi[] | undefined,
     transactionsDetail?: InvocationsDetails,
@@ -131,11 +126,11 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_executeTxn",
           params: {
-            senderAddress: this.#address,
+            senderAddress,
             calls,
             abis,
             transactionsDetail,
-            ...this.#getSnapParams(),
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -145,7 +140,7 @@ export class MetaMaskSnap {
   async signMessage(
     typedData: TypedData,
     enableAutherize: boolean,
-    address?: string,
+    signerAddress: string,
   ): Promise<Signature> {
     return (await this.#provider.request({
       method: "wallet_invokeSnap",
@@ -154,10 +149,10 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_signMessage",
           params: {
-            signerAddress: address || this.#address,
+            signerAddress,
             typedData,
             enableAutherize: enableAutherize,
-            ...this.#getSnapParams(),
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -165,6 +160,7 @@ export class MetaMaskSnap {
   }
 
   async declare(
+    senderAddress: string,
     contractPayload: DeclareContractPayload,
     transactionsDetails?: InvocationsDetails,
   ): Promise<DeclareContractResponse> {
@@ -175,10 +171,10 @@ export class MetaMaskSnap {
         request: {
           method: "starkNet_declareContract",
           params: {
-            senderAddress: this.#address,
+            senderAddress,
             contractPayload,
             invocationsDetails: transactionsDetails,
-            ...this.#getSnapParams(),
+            ...(await this.#getSnapParams()),
           },
         },
       },
@@ -232,12 +228,6 @@ export class MetaMaskSnap {
     })) as Array<AccContract>
   }
 
-  #getSnapParams() {
-    return {
-      chainId: this.#chainId,
-    }
-  }
-
   async switchNetwork(
     params: SwitchStarknetChainParameter,
   ): Promise<{ result: boolean }> {
@@ -248,8 +238,10 @@ export class MetaMaskSnap {
         params: {
           snapId: this.#snapId,
           request: {
-            method: "starkNet_switchStarknetChain",
-            params,
+            method: "starkNet_switchNetwork",
+            params: {
+              chainId: params.chainId,
+            },
           },
         },
       })) as { success: boolean }
@@ -270,13 +262,19 @@ export class MetaMaskSnap {
         params: {
           snapId: this.#snapId,
           request: {
-            method: "starkNet_addStarknetChain",
-            params,
+            method: "starkNet_addNetwork",
+            networkName: params.chainName,
+            networkChainId: params.chainId,
+            networkBaseUrl: params.baseUrl,
+            networkNodeUrl: params.rpcUrls,
+            networkVoyagerUrl: params.blockExplorerUrls
+              ? params.blockExplorerUrls[0]
+              : "",
           },
         },
-      })) as { success: boolean }
+      })) as boolean
 
-      return { result: response.success }
+      return { result: response }
     } catch (error) {
       console.error("Error adding Starknet chain:", error)
       return { result: false }
@@ -303,7 +301,8 @@ export class MetaMaskSnap {
     }
   }
 
-  async getCurrentNetwork(): Promise<Network | undefined> {
+  //TODO cache it
+  async getCurrentNetwork(): Promise<Network> {
     const response = (await this.#provider.request({
       method: "wallet_invokeSnap",
       params: {
@@ -316,5 +315,12 @@ export class MetaMaskSnap {
     })) as unknown as Network
 
     return response
+  }
+
+  async #getSnapParams() {
+    const network = await this.getCurrentNetwork()
+    return {
+      chainId: network.chainId,
+    }
   }
 }

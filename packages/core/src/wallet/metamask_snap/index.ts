@@ -12,11 +12,7 @@ import { MetaMaskAccount } from "./accounts"
 import { CHAIN_ID_TESTNET } from "./constants"
 import { MetaMaskSigner } from "./signer"
 import { MetaMaskSnap } from "./snap"
-import { ChainId, RequestSnapResponse } from "./types"
-import {
-  AccContract,
-  Network,
-} from "@consensys/starknet-snap/src/types/snapState"
+import { RequestSnapResponse } from "./types"
 import { MetaMaskInpageProvider } from "@metamask/providers"
 import { AccountInterface, Provider, ProviderInterface } from "starknet"
 
@@ -32,7 +28,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   chainId?: string | undefined
   snapId: string
   isConnected?: boolean
-  snap?: MetaMaskSnap
+  snap: MetaMaskSnap
 
   constructor(metamaskProvider: MetaMaskInpageProvider) {
     this.id = "metamask"
@@ -43,6 +39,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
     this.metamaskProvider = metamaskProvider
 
     this.chainId = CHAIN_ID_TESTNET
+    this.snap = new MetaMaskSnap(this.snapId, this.metamaskProvider)
   }
 
   async request<T extends RpcMessage>(
@@ -54,7 +51,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
         params: SwitchStarknetChainParameter
       }
 
-      const result = (await this.snap?.switchNetwork(params.params)) ?? false
+      const result = (await this.snap.switchNetwork(params.params)) ?? false
       return result as T["result"]
     }
 
@@ -63,7 +60,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
         type: "wallet_addStarknetChain"
         params: AddStarknetChainParameters
       }
-      const result = (await this.snap?.addStarknetChain(params.params)) ?? false
+      const result = (await this.snap.addStarknetChain(params.params)) ?? false
       return result as T["result"]
     }
 
@@ -72,7 +69,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
         type: "wallet_watchAsset"
         params: WatchAssetParameters
       }
-      const result = (await this.snap?.watchAsset(params.params)) ?? false
+      const result = (await this.snap.watchAsset(params.params)) ?? false
       return result as T["result"]
     }
 
@@ -94,52 +91,37 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
     }
 
     const snapResponse = response[this.snapId]
-    const network = await this.snap?.getCurrentNetwork()
-    const chainId = network?.chainId
-    this.chainId = chainId
+    const network = await this.snap.getCurrentNetwork()
+    this.chainId = network.chainId
 
     if (typeof this.chainId === "undefined") {
       throw new Error("chain id is undefined")
     }
 
     if (snapResponse && snapResponse.enabled) {
-      const response = await this.recoverAccounts(this.chainId)
+      const response = await this.snap.recoverDefaultAccount(this.chainId)
 
-      if (!response) {
+      if (!response || !response.address) {
         throw new Error("can't recover accounts")
       }
 
-      this.selectedAddress = response[0].address
-
-      const networkInfo = await this.getNetworkInfo(this.chainId)
-      if (!networkInfo) {
-        throw Error(
-          `can't find network info for network with ID ${this.chainId}`,
-        )
-      }
+      this.selectedAddress = response.address
 
       this.provider = new Provider({
         rpc: {
-          nodeUrl: networkInfo.nodeUrl,
+          nodeUrl: network.nodeUrl,
         },
       })
 
-      const snap = new MetaMaskSnap(
-        this.snapId,
-        this.chainId,
-        this.metamaskProvider,
-        this.selectedAddress,
-      )
+      const signer = new MetaMaskSigner(this.snap, this.selectedAddress)
 
-      const signer = new MetaMaskSigner(snap)
       this.account = new MetaMaskAccount(
-        snap,
+        this.snap,
         this.provider,
         this.selectedAddress,
         signer,
         "0", //we should not hardcode
       )
-      this.chainId = await this.provider.getChainId()
     }
 
     if (!this.selectedAddress) {
@@ -163,44 +145,5 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   off<E extends WalletEvents>(event: E["type"], handleEvent: E["handler"]) {
     // todo!()
     throw new Error("event handler is not implemented")
-  }
-
-  private async getNetworkInfo(chainId: ChainId): Promise<Network | undefined> {
-    const response = (await this.metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.snapId,
-        request: {
-          method: "starkNet_getStoredNetworks",
-          params: {},
-        },
-      },
-    })) as unknown as Network[]
-
-    let network = response.find((n) => {
-      return n.chainId === chainId
-    })
-
-    return network
-  }
-
-  private async recoverAccounts(chainId: ChainId): Promise<Array<AccContract>> {
-    const response = await this.metamaskProvider.request({
-      method: "wallet_invokeSnap",
-      params: {
-        snapId: this.snapId,
-        request: {
-          method: "starkNet_recoverAccounts",
-          params: {
-            startScanIndex: 0,
-            maxScanned: 1,
-            maxMissed: 1,
-            chainId: chainId,
-          },
-        },
-      },
-    })
-
-    return response as unknown as Array<AccContract>
   }
 }
