@@ -323,4 +323,35 @@ export class MetaMaskSnap {
       chainId: network.chainId,
     }
   }
+
+  static async IsInstalled(window: any) {
+    let { ethereum } = window
+    let providers = [ethereum]
+
+    //ethereum.detected or ethereum.providers may exist when more than 1 wallet installed
+    if ("detected" in ethereum) {
+      providers = ethereum["detected"]
+    } else if ("providers" in ethereum) {
+      providers = ethereum["providers"]
+    }
+
+    //delect provider by sending request
+    for (const provider of providers) {
+      if (provider && (await MetaMaskSnap.IsSupportSnap(provider))) {
+        return true
+      }
+    }
+    return false
+  }
+
+  static async IsSupportSnap(provider: any) {
+    try {
+      await provider.request({
+        method: "wallet_getSnaps",
+      })
+      return true
+    } catch {
+      return false
+    }
+  }
 }
