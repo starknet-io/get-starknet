@@ -1,5 +1,5 @@
 import "./App.css"
-import { deployContract, sendErc20Transaction, signMessage } from "./lib"
+import * as util from "./lib"
 import {
   type ConnectOptions,
   type DisconnectOptions,
@@ -16,10 +16,8 @@ function App() {
   function handleConnect(options?: ConnectOptions) {
     return async () => {
       const res = await connect(options)
-      //TODO(harsh): remove
-      window.strkn_wallet = res
+      console.log("wallet", res)
       setWallet(res)
-
       setWalletName(res?.name || "")
     }
   }
@@ -68,34 +66,84 @@ function App() {
           </h2>
         </div>
       )}
-      <div>
-        <button
-          onClick={() => {
-            sendErc20Transaction(wallet)
-          }}>
-          send erc20 transaction
-        </button>
-      </div>
+      <ul>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.sendErc20Transaction(wallet)
+            }}>
+            send erc20 transaction
+          </button>
+        </li>
 
-      <br />
-      <div>
-        <button
-          onClick={() => {
-            signMessage(wallet)
-          }}>
-          sign message
-        </button>
-      </div>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.deployContract(wallet)
+            }}>
+            deploy contract
+          </button>
+        </li>
 
-      <br />
-      <div>
-        <button
-          onClick={() => {
-            deployContract(wallet)
-          }}>
-          deploy contract
-        </button>
-      </div>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.signMessage(wallet)
+            }}>
+            sign message
+          </button>
+        </li>
+
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.signMessageSlient(wallet)
+            }}>
+            sign message (slient)
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.signDeployAccountTransaction(wallet)
+            }}>
+            sign deploy account transaction
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.signDeclareTransaction(wallet)
+            }}>
+            sign delcare transaction
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.signTransaction(wallet)
+            }}>
+            sign transaction
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.getPubKey(wallet)
+            }}>
+            get public key
+          </button>
+        </li>
+
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.getNonce(wallet)
+            }}>
+            get Nonce
+          </button>
+        </li>
+      </ul>
     </div>
   )
 }

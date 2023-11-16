@@ -63,8 +63,8 @@ export class MetaMaskSnap {
           method: "starkNet_signTransaction",
           params: {
             signerAddress,
-            transactions: transactions,
-            transactionsDetail: transactionsDetail,
+            transactions,
+            transactionsDetail,
             abis: abis,
             ...(await this.#getSnapParams()),
           },
@@ -85,7 +85,7 @@ export class MetaMaskSnap {
           method: "starkNet_signDeployAccountTransaction",
           params: {
             signerAddress,
-            transactions: transaction,
+            transaction,
             ...(await this.#getSnapParams()),
           },
         },
@@ -105,7 +105,7 @@ export class MetaMaskSnap {
           method: "starkNet_signDeclareTransaction",
           params: {
             signerAddress,
-            transactions: transaction,
+            transaction,
             ...(await this.#getSnapParams()),
           },
         },
@@ -115,9 +115,9 @@ export class MetaMaskSnap {
 
   async execute(
     senderAddress: string,
-    calls: AllowArray<Call>,
+    txnInvocation: AllowArray<Call>,
     abis?: Abi[] | undefined,
-    transactionsDetail?: InvocationsDetails,
+    invocationsDetails?: InvocationsDetails,
   ): Promise<InvokeFunctionResponse> {
     return (await this.#provider.request({
       method: "wallet_invokeSnap",
@@ -127,9 +127,9 @@ export class MetaMaskSnap {
           method: "starkNet_executeTxn",
           params: {
             senderAddress,
-            calls,
+            txnInvocation,
             abis,
-            transactionsDetail,
+            invocationsDetails,
             ...(await this.#getSnapParams()),
           },
         },
@@ -138,7 +138,7 @@ export class MetaMaskSnap {
   }
 
   async signMessage(
-    typedData: TypedData,
+    typedDataMessage: TypedData,
     enableAutherize: boolean,
     signerAddress: string,
   ): Promise<Signature> {
@@ -150,7 +150,7 @@ export class MetaMaskSnap {
           method: "starkNet_signMessage",
           params: {
             signerAddress,
-            typedData,
+            typedDataMessage,
             enableAutherize: enableAutherize,
             ...(await this.#getSnapParams()),
           },
@@ -162,7 +162,7 @@ export class MetaMaskSnap {
   async declare(
     senderAddress: string,
     contractPayload: DeclareContractPayload,
-    transactionsDetails?: InvocationsDetails,
+    invocationsDetails?: InvocationsDetails,
   ): Promise<DeclareContractResponse> {
     return (await this.#provider.request({
       method: "wallet_invokeSnap",
@@ -173,7 +173,7 @@ export class MetaMaskSnap {
           params: {
             senderAddress,
             contractPayload,
-            invocationsDetails: transactionsDetails,
+            invocationsDetails,
             ...(await this.#getSnapParams()),
           },
         },

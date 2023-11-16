@@ -82,10 +82,9 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
     const response = await this.metamaskProvider.request<RequestSnapResponse>({
       method: "wallet_requestSnaps",
       params: {
-        [this.snapId]: {},
+        [this.snapId]: { version: "2.2.0-dev-560751f-20231116" },
       },
     })
-
     if (!response) {
       throw new Error("the snap was not found")
     }
