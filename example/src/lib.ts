@@ -135,7 +135,16 @@ export const signMessageSlient = async (wallet: StarknetWindowObject) => {
       signMessagePayload,
       wallet.account?.address,
     )
-    console.log("response is ----> ", response)
+    console.log("sign is ----> ", response)
+
+    if (response) {
+      const verify = await wallet.account?.verifyMessage(
+        signMessagePayload,
+        response,
+      )
+
+      console.log("verify result is ----> ", verify)
+    }
   } catch (err) {
     console.log("error", err)
   }
@@ -146,7 +155,7 @@ export const signTransaction = async (wallet: StarknetWindowObject) => {
     [transactionPayload],
     signTransactionsDetail,
   )
-  console.log("response is ----> ", response)
+  console.log("sign is ----> ", response)
 }
 
 export const signDeployAccountTransaction = async (
@@ -155,14 +164,15 @@ export const signDeployAccountTransaction = async (
   const response = await wallet.account?.signer.signDeployAccountTransaction(
     signDeployAccountTransactionPayload,
   )
-  console.log("response is ----> ", response)
+  console.log("sign is ----> ", response)
 }
 
 export const signDeclareTransaction = async (wallet: StarknetWindowObject) => {
   const response = await wallet.account?.signer.signDeclareTransaction(
     delcareContractPayload,
   )
-  console.log("response is ----> ", response)
+
+  console.log("sign is ----> ", response)
 }
 
 export const getNonce = async (wallet: StarknetWindowObject) => {
