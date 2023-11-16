@@ -241,6 +241,7 @@ export class MetaMaskSnap {
             method: "starkNet_switchNetwork",
             params: {
               chainId: params.chainId,
+              enableAutherize: true,
             },
           },
         },
