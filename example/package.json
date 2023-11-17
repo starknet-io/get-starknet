@@ -12,7 +12,8 @@
     "get-starknet": "workspace:^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "starknet": "^5.18.0"
+    "starknet": "^5.18.0",
+    "starknet4": "npm:starknet@4.22.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",

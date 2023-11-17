@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers"
 import { StarknetWindowObject } from "get-starknet"
 import { constants } from "starknet"
 
@@ -48,10 +49,14 @@ const transactionPayload = {
   entrypoint: "transfer",
 }
 
-const signTransactionsDetail = {
+type InvocationsSignerDetails =
+  | import("starknet").InvocationsSignerDetails
+  | import("starknet4").InvocationsSignerDetails
+
+const signTransactionsDetail: InvocationsSignerDetails = {
   walletAddress:
     "0x00b28a089e7fb83debee4607b6334d687918644796b47d9e9e38ea8213833137",
-  chainId: "0x534e5f474f45524c49",
+  chainId: constants.StarknetChainId.SN_GOERLI2,
   cairoVersion: "0",
   nonce: "0x1",
   version: "0x0",
@@ -73,9 +78,9 @@ const signDeployAccountTransactionPayload = {
 }
 
 const deployContractPayload = {
-  classHash: BigInt(
+  classHash: BigNumber.from(
     "0x189ce59d98d8d3883a5a9fc7026cc94519ca099147196680734ec46aee5e750",
-  ),
+  ).toHexString(),
   constructorCalldata: [],
 }
 
@@ -129,12 +134,17 @@ export const signMessage = async (wallet: StarknetWindowObject) => {
   }
 }
 
+type StarknetSignature =
+  | import("starknet").Signature
+  | import("starknet4").Signature
+
 export const signMessageSlient = async (wallet: StarknetWindowObject) => {
   try {
-    const response = await wallet.account?.signer.signMessage(
-      signMessagePayload,
-      wallet.account?.address,
-    )
+    const response: StarknetSignature =
+      await wallet.account?.signer.signMessage(
+        signMessagePayload,
+        wallet.account?.address,
+      )
     console.log("sign is ----> ", response)
 
     if (response) {
@@ -162,14 +172,14 @@ export const signDeployAccountTransaction = async (
   wallet: StarknetWindowObject,
 ) => {
   const response = await wallet.account?.signer.signDeployAccountTransaction(
-    signDeployAccountTransactionPayload,
+    signDeployAccountTransactionPayload as any,
   )
   console.log("sign is ----> ", response)
 }
 
 export const signDeclareTransaction = async (wallet: StarknetWindowObject) => {
   const response = await wallet.account?.signer.signDeclareTransaction(
-    delcareContractPayload,
+    delcareContractPayload as any,
   )
 
   console.log("sign is ----> ", response)

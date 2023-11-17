@@ -11,7 +11,6 @@ import {
   TypedData,
   ec,
   num,
-  stark,
 } from "starknet"
 
 export class MetaMaskSigner implements SignerInterface {
