@@ -95,6 +95,10 @@ const delcareContractPayload = {
   maxFee: 100,
 }
 
+const switchNetworkPayload = {
+  chainId: constants.StarknetChainId.SN_MAIN,
+}
+
 export const sendErc20Transaction = async (wallet: StarknetWindowObject) => {
   try {
     const response = await wallet.account?.execute(transactionPayload)
@@ -187,5 +191,10 @@ export const signDeclareTransaction = async (wallet: StarknetWindowObject) => {
 
 export const getNonce = async (wallet: StarknetWindowObject) => {
   const response = await wallet.account?.getNonce()
+  console.log("response is ----> ", response)
+}
+
+export const switchNetwork = async (wallet: StarknetWindowObject) => {
+  const response = await wallet.account?.switchNetwork(switchNetworkPayload)
   console.log("response is ----> ", response)
 }

@@ -143,6 +143,14 @@ function App() {
             get Nonce
           </button>
         </li>
+        <li>
+          <button
+            onClick={() => {
+              wallet && util.switchNetwork(wallet)
+            }}>
+            Switch Network
+          </button>
+        </li>
       </ul>
     </div>
   )
