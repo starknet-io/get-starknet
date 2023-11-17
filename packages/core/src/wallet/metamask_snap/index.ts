@@ -14,7 +14,7 @@ import { MetaMaskSigner } from "./signer"
 import { MetaMaskSnap } from "./snap"
 import { RequestSnapResponse } from "./types"
 import { MetaMaskInpageProvider } from "@metamask/providers"
-import { AccountInterface, ProviderInterface, RpcProvider } from "starknet"
+import { AccountInterface, Provider, ProviderInterface } from "starknet"
 
 export class MetaMaskSnapWallet implements IStarknetWindowObject {
   id: string
@@ -113,8 +113,10 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
 
       this.selectedAddress = accountResponse.address
 
-      this.provider = new RpcProvider({
-        nodeUrl: network.nodeUrl,
+      this.provider = new Provider({
+        rpc: {
+          nodeUrl: network.nodeUrl,
+        },
       })
 
       const signer = new MetaMaskSigner(this.snap, this.selectedAddress)

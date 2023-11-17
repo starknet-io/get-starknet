@@ -4,10 +4,6 @@ import {
   WatchAssetParameters,
 } from "../../StarknetWindowObject"
 import { ChainId } from "./types"
-import {
-  AccContract,
-  Network,
-} from "@consensys/starknet-snap/src/types/snapState"
 import { MetaMaskInpageProvider } from "@metamask/providers"
 import {
   Abi,
@@ -23,6 +19,26 @@ import {
   Signature,
   TypedData,
 } from "starknet"
+
+interface AccContract {
+  addressSalt: string
+  publicKey: string // in hex
+  address: string // in hex
+  addressIndex: number
+  derivationPath: string
+  deployTxnHash: string // in hex
+  chainId: string // in hex
+}
+
+interface Network {
+  name: string
+  chainId: string // in hex
+  baseUrl: string
+  nodeUrl: string
+  voyagerUrl: string
+  accountClassHash: string // in hex
+  useOldAccounts?: boolean
+}
 
 export class MetaMaskSnap {
   #provider: MetaMaskInpageProvider
@@ -286,7 +302,7 @@ export class MetaMaskSnap {
 
   async watchAsset(params: WatchAssetParameters): Promise<{ result: boolean }> {
     try {
-      const response = (await this.#provider.request({
+      const response = await this.#provider.request({
         method: "wallet_invokeSnap",
         params: {
           snapId: this.#snapId,
@@ -300,9 +316,11 @@ export class MetaMaskSnap {
             },
           },
         },
-      })) as { success: boolean }
-
-      return { result: response.success }
+      })
+      if (response === false) {
+        return { result: false }
+      }
+      return { result: true }
     } catch (error) {
       console.error("Error watching asset:", error)
       return { result: false }
