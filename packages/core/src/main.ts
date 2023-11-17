@@ -41,6 +41,20 @@ const defaultOptions: GetStarknetOptions = {
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
 }
 
+async function getFilteredAndSortedWallets(
+  windowObject: Record<string, any>,
+  isWalletObject: (wallet: any) => boolean,
+  options: GetWalletOptions,
+): Promise<StarknetWindowObject[]> {
+  await injectMetamaskSnapWallet(windowObject)
+  const availableWallets = scanObjectForWallets(windowObject, isWalletObject)
+  return pipe<StarknetWindowObject[]>(
+    (_) => filterByPreAuthorized(_),
+    (_) => filterBy(_, options),
+    (_) => sortBy(_, options.sort),
+  )(availableWallets)
+}
+
 export interface GetWalletOptions {
   sort?: Sort
   include?: FilterList
@@ -92,27 +106,10 @@ export function getStarknet(
 
   return {
     getAvailableWallets: async (options = {}) => {
-      await injectMetamaskSnapWallet(windowObject)
-      const availableWallets = scanObjectForWallets(
-        windowObject,
-        isWalletObject,
-      )
-      return pipe<StarknetWindowObject[]>(
-        (_) => filterBy(_, options),
-        (_) => sortBy(_, options.sort),
-      )(availableWallets)
+      return getFilteredAndSortedWallets(windowObject, isWalletObject, options)
     },
     getPreAuthorizedWallets: async (options = {}) => {
-      await injectMetamaskSnapWallet(windowObject)
-      const availableWallets = scanObjectForWallets(
-        windowObject,
-        isWalletObject,
-      )
-      return pipe<StarknetWindowObject[]>(
-        (_) => filterByPreAuthorized(_),
-        (_) => filterBy(_, options),
-        (_) => sortBy(_, options.sort),
-      )(availableWallets)
+      return getFilteredAndSortedWallets(windowObject, isWalletObject, options)
     },
     getDiscoveryWallets: async (options = {}) => {
       await injectMetamaskSnapWallet(windowObject)
@@ -140,12 +137,17 @@ export function getStarknet(
       return firstPreAuthorizedWallet
     },
     enable: async (wallet, options) => {
-      await wallet.enable(options ?? { starknetVersion: "v5" })
-      if (!wallet.isConnected) {
-        throw new Error("Failed to connect to wallet")
+      try {
+        await wallet.enable(options ?? { starknetVersion: "v5" })
+        if (!wallet.isConnected) {
+          throw new Error("Failed to connect to wallet")
+        }
+        lastConnectedStore.set(wallet.id)
+        return wallet
+      } catch (error) {
+        console.error("Error connecting to wallet:", error)
+        throw error
       }
-      lastConnectedStore.set(wallet.id)
-      return wallet
     },
     disconnect: async ({ clearLastWallet } = {}) => {
       if (clearLastWallet) {
