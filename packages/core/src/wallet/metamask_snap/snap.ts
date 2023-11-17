@@ -264,13 +264,15 @@ export class MetaMaskSnap {
           snapId: this.#snapId,
           request: {
             method: "starkNet_addNetwork",
-            networkName: params.chainName,
-            networkChainId: params.chainId,
-            networkBaseUrl: params.baseUrl,
-            networkNodeUrl: params.rpcUrls,
-            networkVoyagerUrl: params.blockExplorerUrls
-              ? params.blockExplorerUrls[0]
-              : "",
+            params: {
+              networkName: params.chainName,
+              networkChainId: params.chainId,
+              networkBaseUrl: params.baseUrl,
+              networkNodeUrl: params.rpcUrls,
+              networkVoyagerUrl: params.blockExplorerUrls
+                ? params.blockExplorerUrls[0]
+                : "",
+            },
           },
         },
       })) as boolean
@@ -289,8 +291,13 @@ export class MetaMaskSnap {
         params: {
           snapId: this.#snapId,
           request: {
-            method: "starkNet_watchAsset",
-            params,
+            method: "starkNet_addErc20Token",
+            params: {
+              tokenAddress: params.options.address,
+              tokenName: params.options.name,
+              tokenSymbol: params.options.symbol,
+              tokenDecimals: params.options.decimals,
+            },
           },
         },
       })) as { success: boolean }
