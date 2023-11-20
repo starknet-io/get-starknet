@@ -153,7 +153,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   }
 
   async isPreauthorized() {
-    return await this.snap.isInstalled()
+    return true
   }
 
   // TODO: Try to handle inside the snap itself
