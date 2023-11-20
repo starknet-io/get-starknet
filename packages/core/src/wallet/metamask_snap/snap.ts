@@ -390,13 +390,32 @@ export class MetaMaskSnap {
     }
   }
 
-  async isInstalled() {
+  async installIfNot() {
     const response = await this.#provider.request<RequestSnapResponse>({
       method: "wallet_requestSnaps",
       params: {
         [this.#snapId]: { version: this.#version },
       },
     })
-    return response ? response[this.#snapId]?.enabled : false
+    if (!response || !response[this.#snapId]?.enabled) {
+      throw new Error(`Snap ${this.#snapId} has not installed`)
+    }
+  }
+
+  async isInstalled() {
+    try {
+      await this.#provider.request({
+        method: "wallet_invokeSnap",
+        params: {
+          snapId: this.#snapId,
+          request: {
+            method: "ping",
+          },
+        },
+      })
+      return true
+    } catch (err) {
+      return false
+    }
   }
 }

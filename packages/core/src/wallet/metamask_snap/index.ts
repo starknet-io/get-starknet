@@ -132,10 +132,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   async enable(
     options?: { starknetVersion?: "v4" | "v5" | undefined } | undefined,
   ) {
-    if (!(await this.snap.isInstalled())) {
-      throw new Error("The snap was not installed")
-    }
-
+    await this.snap.installIfNot()
     this.isConnected = true
     this.network = await this.#getNetwork()
     if (!this.network) {
@@ -156,7 +153,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   }
 
   async isPreauthorized() {
-    return false
+    return await this.snap.isInstalled()
   }
 
   // TODO: Try to handle inside the snap itself
