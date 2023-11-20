@@ -3,7 +3,7 @@ import {
   SwitchStarknetChainParameter,
   WatchAssetParameters,
 } from "../../StarknetWindowObject"
-import { ChainId } from "./types"
+import { ChainId, RequestSnapResponse } from "./types"
 import { MetaMaskInpageProvider } from "@metamask/providers"
 import {
   Abi,
@@ -43,10 +43,16 @@ interface Network {
 export class MetaMaskSnap {
   #provider: MetaMaskInpageProvider
   #snapId: string
+  #version: string
 
-  constructor(snapId: string, provider: MetaMaskInpageProvider) {
+  constructor(
+    snapId: string,
+    version: string,
+    provider: MetaMaskInpageProvider,
+  ) {
     this.#provider = provider
     this.#snapId = snapId
+    this.#version = version
   }
 
   async getPubKey(userAddress: string): Promise<string> {
@@ -352,12 +358,15 @@ export class MetaMaskSnap {
 
   static async GetProvider(window: any) {
     let { ethereum } = window
+    if (!ethereum) {
+      return null
+    }
     let providers = [ethereum]
 
     //ethereum.detected or ethereum.providers may exist when more than 1 wallet installed
-    if ("detected" in ethereum) {
+    if (ethereum.hasOwnProperty("detected")) {
       providers = ethereum["detected"]
-    } else if ("providers" in ethereum) {
+    } else if (ethereum.hasOwnProperty("providers")) {
       providers = ethereum["providers"]
     }
 
@@ -379,5 +388,15 @@ export class MetaMaskSnap {
     } catch {
       return false
     }
+  }
+
+  async isInstalled() {
+    const response = await this.#provider.request<RequestSnapResponse>({
+      method: "wallet_requestSnaps",
+      params: {
+        [this.#snapId]: { version: this.#version },
+      },
+    })
+    return response ? response[this.#snapId]?.enabled : false
   }
 }
