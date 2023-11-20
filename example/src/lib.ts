@@ -144,7 +144,7 @@ type StarknetSignature =
 
 export const signMessageSlient = async (wallet: StarknetWindowObject) => {
   try {
-    const response: StarknetSignature =
+    const response: StarknetSignature | undefined =
       await wallet.account?.signer.signMessage(
         signMessagePayload,
         wallet.account?.address,
@@ -154,7 +154,7 @@ export const signMessageSlient = async (wallet: StarknetWindowObject) => {
     if (response) {
       const verify = await wallet.account?.verifyMessage(
         signMessagePayload,
-        response,
+        response as any,
       )
 
       console.log("verify result is ----> ", verify)
@@ -167,7 +167,7 @@ export const signMessageSlient = async (wallet: StarknetWindowObject) => {
 export const signTransaction = async (wallet: StarknetWindowObject) => {
   const response = await wallet.account?.signer.signTransaction(
     [transactionPayload],
-    signTransactionsDetail,
+    signTransactionsDetail as any,
   )
   console.log("sign is ----> ", response)
 }
