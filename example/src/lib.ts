@@ -195,6 +195,9 @@ export const getNonce = async (wallet: StarknetWindowObject) => {
 }
 
 export const switchNetwork = async (wallet: StarknetWindowObject) => {
-  const response = await wallet.account?.switchNetwork(switchNetworkPayload)
+  const response = await wallet.request({
+    type: "wallet_switchStarknetChain",
+    params: switchNetworkPayload,
+  })
   console.log("response is ----> ", response)
 }
