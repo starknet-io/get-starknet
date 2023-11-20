@@ -57,6 +57,9 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
       }
 
       const result = (await this.snap.switchNetwork(params.params)) ?? false
+      if (result.result === true) {
+        await this.enable()
+      }
       return result as unknown as T["result"]
     }
 
@@ -82,14 +85,11 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   }
 
   async #getNetwork() {
-    if (this.network) {
-      return this.network
-    }
-
     return await this.snap.getCurrentNetwork()
   }
 
   async #getWalletAddress(chainId: string) {
+    //address always same regardless network, only single address provided
     if (this.selectedAddress) {
       return this.selectedAddress
     }
@@ -104,9 +104,6 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   }
 
   async #getRPCProvider(network: { chainId: string; nodeUrl: string }) {
-    if (this.provider) {
-      return this.provider
-    }
     return new Provider({
       rpc: {
         nodeUrl: network.nodeUrl,
@@ -115,9 +112,6 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   }
 
   async #getAccountInstance(address: string, provider: ProviderInterface) {
-    if (this.account) {
-      return this.account
-    }
     const signer = new MetaMaskSigner(this.snap, address)
 
     return new MetaMaskAccount(
