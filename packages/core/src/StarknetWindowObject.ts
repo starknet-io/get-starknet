@@ -61,6 +61,7 @@ interface GetDeploymentDataResult {
   class_hash: string // Represented as 'felt252'
   salt: string // Represented as 'felt252'
   calldata: string[] // Array of 'felt252', length := calldata_len
+  sigdata?: string[] // Array of 'felt252', should be prepended to signature as extra data
 }
 
 export type RpcMessage =
