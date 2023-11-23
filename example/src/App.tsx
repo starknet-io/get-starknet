@@ -10,7 +10,7 @@ import {
 import { useState } from "react"
 
 function App() {
-  const [walletName, setWalletName] = useState("")
+  const [walletInfo, setWalletInfo] = useState("")
   const [wallet, setWallet] = useState<StarknetWindowObject | null>(null)
 
   function handleConnect(options?: ConnectOptions) {
@@ -18,14 +18,18 @@ function App() {
       const res = await connect(options)
       console.log("wallet", res)
       setWallet(res)
-      setWalletName(res?.name || "")
+      setWalletInfo(
+        `Name: ${res?.name || ""}, Address: ${
+          res?.selectedAddress || ""
+        }, ChainId: ${res?.chainId || ""}`,
+      )
     }
   }
 
   function handleDisconnect(options?: DisconnectOptions) {
     return async () => {
       await disconnect(options)
-      setWalletName("")
+      setWalletInfo("")
     }
   }
 
@@ -59,10 +63,10 @@ function App() {
           Disconnect and reset
         </button>
       </div>
-      {walletName && (
+      {walletInfo && (
         <div>
           <h2>
-            Selected Wallet: <pre>{walletName}</pre>
+            Selected Wallet: <pre>{walletInfo}</pre>
           </h2>
         </div>
       )}

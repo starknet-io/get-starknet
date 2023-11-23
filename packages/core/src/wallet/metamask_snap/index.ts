@@ -31,7 +31,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
 
   // TODO: cairoVersion should be dynamic
   private static readonly cairoVersion = "0"
-  private static readonly snapVersion = "2.2.0-dev-560751f-20231116"
+  private static readonly snapVersion = "2.3.0-staging"
 
   constructor(metamaskProvider: MetaMaskInpageProvider) {
     this.id = "metamask"

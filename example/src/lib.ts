@@ -1,7 +1,9 @@
-import { BigNumber } from "ethers"
 import { StarknetWindowObject } from "get-starknet"
-import { constants } from "starknet"
 
+enum StarknetChainId {
+  SN_MAIN = "0x534e5f4d41494e",
+  SN_GOERLI = "0x534e5f474f45524c49",
+}
 const signMessagePayload = {
   types: {
     StarkNetDomain: [
@@ -49,14 +51,10 @@ const transactionPayload = {
   entrypoint: "transfer",
 }
 
-type InvocationsSignerDetails =
-  | import("starknet").InvocationsSignerDetails
-  | import("starknet4").InvocationsSignerDetails
-
-const signTransactionsDetail: InvocationsSignerDetails = {
+const signTransactionsDetail = {
   walletAddress:
     "0x00b28a089e7fb83debee4607b6334d687918644796b47d9e9e38ea8213833137",
-  chainId: constants.StarknetChainId.SN_GOERLI2,
+  chainId: StarknetChainId.SN_GOERLI,
   cairoVersion: "0",
   nonce: "0x1",
   version: "0x0",
@@ -78,9 +76,8 @@ const signDeployAccountTransactionPayload = {
 }
 
 const deployContractPayload = {
-  classHash: BigNumber.from(
+  classHash:
     "0x189ce59d98d8d3883a5a9fc7026cc94519ca099147196680734ec46aee5e750",
-  ).toHexString(),
   constructorCalldata: [],
 }
 
@@ -89,14 +86,10 @@ const delcareContractPayload = {
     "0x025ec026985a3bf9d0cc1fe17326b245dfdc3ff89b8fde106542a3ea56c5a918",
   senderAddress:
     "0x00b28a089e7fb83debee4607b6334d687918644796b47d9e9e38ea8213833137",
-  chainId: constants.StarknetChainId.SN_GOERLI,
+  chainId: StarknetChainId.SN_GOERLI,
   nonce: "0x1",
   version: "0x0",
   maxFee: 100,
-}
-
-const switchNetworkPayload = {
-  chainId: constants.StarknetChainId.SN_MAIN,
 }
 
 export const sendErc20Transaction = async (wallet: StarknetWindowObject) => {
@@ -138,17 +131,12 @@ export const signMessage = async (wallet: StarknetWindowObject) => {
   }
 }
 
-type StarknetSignature =
-  | import("starknet").Signature
-  | import("starknet4").Signature
-
 export const signMessageSlient = async (wallet: StarknetWindowObject) => {
   try {
-    const response: StarknetSignature | undefined =
-      await wallet.account?.signer.signMessage(
-        signMessagePayload,
-        wallet.account?.address,
-      )
+    const response = await wallet.account?.signer.signMessage(
+      signMessagePayload,
+      wallet.account?.address,
+    )
     console.log("sign is ----> ", response)
 
     if (response) {
@@ -195,9 +183,15 @@ export const getNonce = async (wallet: StarknetWindowObject) => {
 }
 
 export const switchNetwork = async (wallet: StarknetWindowObject) => {
+  const chainId =
+    wallet.chainId == StarknetChainId.SN_MAIN
+      ? StarknetChainId.SN_GOERLI
+      : StarknetChainId.SN_MAIN
   const response = await wallet.request({
     type: "wallet_switchStarknetChain",
-    params: switchNetworkPayload,
+    params: {
+      chainId,
+    },
   })
   console.log("response is ----> ", response)
 }
