@@ -3,7 +3,6 @@ import {
   SwitchStarknetChainParameter,
   WatchAssetParameters,
 } from "../../StarknetWindowObject"
-import { ChainId, RequestSnapResponse } from "./types"
 import { MetaMaskInpageProvider } from "@metamask/providers"
 import {
   Abi,
@@ -38,6 +37,15 @@ interface Network {
   voyagerUrl: string
   accountClassHash: string // in hex
   useOldAccounts?: boolean
+}
+
+interface RequestSnapResponse {
+  [snapId: string]: {
+    enabled: boolean
+    version: string
+    id: string
+    blocked: boolean
+  }
 }
 
 export class MetaMaskSnap {
@@ -203,7 +211,7 @@ export class MetaMaskSnap {
     })) as DeclareContractResponse
   }
 
-  async getNetwork(chainId: ChainId): Promise<Network | undefined> {
+  async getNetwork(chainId: string): Promise<Network | undefined> {
     const response = (await this.#provider.request({
       method: "wallet_invokeSnap",
       params: {
@@ -222,13 +230,13 @@ export class MetaMaskSnap {
     return network
   }
 
-  async recoverDefaultAccount(chainId: ChainId): Promise<AccContract> {
+  async recoverDefaultAccount(chainId: string): Promise<AccContract> {
     const result = await this.recoverAccounts(chainId, 0, 1, 1)
     return result[0]
   }
 
   async recoverAccounts(
-    chainId: ChainId,
+    chainId: string,
     startScanIndex: number = 0,
     maxScanned: number = 1,
     maxMissed: number = 1,
