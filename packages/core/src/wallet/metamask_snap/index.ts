@@ -11,7 +11,7 @@ import {
 import { MetaMaskAccount } from "./accounts"
 import { MetaMaskSigner } from "./signer"
 import { MetaMaskSnap } from "./snap"
-import { MetaMaskInpageProvider } from "@metamask/providers"
+import { MetaMaskProvider } from "./type"
 import { AccountInterface, Provider, ProviderInterface } from "starknet"
 
 export class MetaMaskSnapWallet implements IStarknetWindowObject {
@@ -19,7 +19,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   name: string
   version: string
   icon: string
-  metamaskProvider: MetaMaskInpageProvider
+  metamaskProvider: MetaMaskProvider
   account?: AccountInterface | undefined
   provider?: ProviderInterface | undefined
   selectedAddress?: string | undefined
@@ -33,7 +33,7 @@ export class MetaMaskSnapWallet implements IStarknetWindowObject {
   private static readonly cairoVersion = "0"
   private static readonly snapVersion = "2.3.0-staging"
 
-  constructor(metamaskProvider: MetaMaskInpageProvider) {
+  constructor(metamaskProvider: MetaMaskProvider) {
     this.id = "metamask"
     this.name = "Metamask"
     this.version = "v0.0.1"

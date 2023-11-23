@@ -3,7 +3,12 @@ import {
   SwitchStarknetChainParameter,
   WatchAssetParameters,
 } from "../../StarknetWindowObject"
-import { MetaMaskInpageProvider } from "@metamask/providers"
+import {
+  AccContract,
+  MetaMaskProvider,
+  Network,
+  RequestSnapResponse,
+} from "./type"
 import {
   Abi,
   AllowArray,
@@ -19,45 +24,12 @@ import {
   TypedData,
 } from "starknet"
 
-interface AccContract {
-  addressSalt: string
-  publicKey: string // in hex
-  address: string // in hex
-  addressIndex: number
-  derivationPath: string
-  deployTxnHash: string // in hex
-  chainId: string // in hex
-}
-
-interface Network {
-  name: string
-  chainId: string // in hex
-  baseUrl: string
-  nodeUrl: string
-  voyagerUrl: string
-  accountClassHash: string // in hex
-  useOldAccounts?: boolean
-}
-
-interface RequestSnapResponse {
-  [snapId: string]: {
-    enabled: boolean
-    version: string
-    id: string
-    blocked: boolean
-  }
-}
-
 export class MetaMaskSnap {
-  #provider: MetaMaskInpageProvider
+  #provider: MetaMaskProvider
   #snapId: string
   #version: string
 
-  constructor(
-    snapId: string,
-    version: string,
-    provider: MetaMaskInpageProvider,
-  ) {
+  constructor(snapId: string, version: string, provider: MetaMaskProvider) {
     this.#provider = provider
     this.#snapId = snapId
     this.#version = version
@@ -399,12 +371,12 @@ export class MetaMaskSnap {
   }
 
   async installIfNot() {
-    const response = await this.#provider.request<RequestSnapResponse>({
+    const response = (await this.#provider.request({
       method: "wallet_requestSnaps",
       params: {
         [this.#snapId]: { version: this.#version },
       },
-    })
+    })) as RequestSnapResponse
     if (!response || !response[this.#snapId]?.enabled) {
       throw new Error(`Snap ${this.#snapId} has not installed`)
     }
