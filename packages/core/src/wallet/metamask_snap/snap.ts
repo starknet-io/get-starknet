@@ -247,9 +247,9 @@ export class MetaMaskSnap {
             },
           },
         },
-      })) as { success: boolean }
+      })) as boolean
 
-      return { result: response.success }
+      return { result: response }
     } catch (error) {
       console.error("Error switching Starknet chain:", error)
       return { result: false }
