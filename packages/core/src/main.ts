@@ -7,6 +7,7 @@ import { IStorageWrapper, LocalStorageWrapper } from "./localStorageStore"
 import { pipe } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
+import { bootstrapMetamaskBridge } from "./wallet/metamaskBridge"
 import { scanObjectForWallets } from "./wallet/scan"
 import { Sort, sortBy } from "./wallet/sort"
 
@@ -74,6 +75,8 @@ export function getStarknet(
     ...options,
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
+
+  bootstrapMetamaskBridge();
 
   return {
     getAvailableWallets: async (options = {}) => {

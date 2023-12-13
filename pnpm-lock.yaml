@@ -65,6 +65,10 @@ importers:
         version: 3.0.0
 
   packages/core:
+    dependencies:
+      '@metamask/detect-provider':
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       c8:
         specifier: ^7.12.0
@@ -958,6 +962,11 @@ packages:
       globby: 11.1.0
       read-yaml-file: 1.1.0
     dev: true
+
+  /@metamask/detect-provider@2.0.0:
+    resolution: {integrity: sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /@microsoft/api-extractor-model@7.27.3(@types/node@20.3.1):
     resolution: {integrity: sha512-fSFvw7otYHduOkyshjTbapKKgwF8bgquVHvgF8VgeKtMYvqXkoaj7W6VcM7PNY7E2bbblhUgC4XNdqZLD4SJGw==}
