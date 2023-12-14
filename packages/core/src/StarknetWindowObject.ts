@@ -1,3 +1,12 @@
+export enum StarknetChainId {
+  SN_MAIN = "0x534e5f4d41494e",
+  SN_GOERLI = "0x534e5f474f45524c49",
+}
+
+export enum Permission {
+  Accounts = "accounts",
+}
+
 type FELT = string
 
 type Call = {
@@ -51,7 +60,10 @@ export interface TypedData {
 
 export type AccountChangeEventHandler = (accounts?: string[]) => void
 
-export type NetworkChangeEventHandler = (network?: string) => void
+export type NetworkChangeEventHandler = (
+  chainId?: StarknetChainId,
+  accounts?: string[],
+) => void
 
 export type WalletEvents =
   | {
@@ -206,6 +218,11 @@ export interface SwitchStarknetChainParameters {
 
 export type RpcMessage =
   | {
+      type: "wallet_getPermissions"
+      params: never
+      result: Permission[]
+    }
+  | {
       type: "wallet_requestAccounts"
       params?: RequestAccountsParameters
       result: string[]
@@ -224,6 +241,11 @@ export type RpcMessage =
       type: "wallet_switchStarknetChain"
       params: SwitchStarknetChainParameters
       result: boolean
+    }
+  | {
+      type: "wallet_requestChainId"
+      params: never
+      result: StarknetChainId // returns the chain ID of the current network
     }
   | {
       type: "starknet_addInvokeTransaction"
@@ -246,7 +268,7 @@ export type RpcMessage =
       result: string[]
     }
 
-export interface IStarknetWindowObject {
+export interface StarknetWindowObject {
   id: string
   name: string
   version: string
@@ -254,7 +276,6 @@ export interface IStarknetWindowObject {
   request: <T extends RpcMessage>(
     call: Omit<T, "result">,
   ) => Promise<T["result"]>
-  isPreauthorized: () => Promise<boolean>
   on: <E extends WalletEvents>(
     event: E["type"],
     handleEvent: E["handler"],
@@ -263,31 +284,10 @@ export interface IStarknetWindowObject {
     event: E["type"],
     handleEvent: E["handler"],
   ) => void
-  selectedAddress?: string
-  chainId?: string
-  isConnected: boolean
 }
-
-export interface ConnectedStarknetWindowObject extends IStarknetWindowObject {
-  selectedAddress: string
-  chainId: string
-  isConnected: true
-}
-
-export interface DisconnectedStarknetWindowObject
-  extends IStarknetWindowObject {
-  isConnected: false
-}
-
-export type StarknetWindowObject =
-  | ConnectedStarknetWindowObject
-  | DisconnectedStarknetWindowObject
 
 declare global {
   interface Window {
-    starknet?: StarknetWindowObject
-    starknet_braavos?: StarknetWindowObject
-    starknet_argentX?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }

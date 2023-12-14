@@ -3,10 +3,10 @@ import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
   BraavosMock,
+  makeAuthorized,
+  makeConnected,
   UnknownWalletAMock,
   UnknownWalletBMock,
-  makeConnected,
-  makePreAuthorized,
 } from "./wallet.mock"
 import { describe, expect, it } from "vitest"
 
@@ -24,8 +24,8 @@ function getWallet(
 describe("getLastConnectedWallet()", () => {
   it("should return null if no last wallet set", async () => {
     const sn = getWallet({
-      "starknet-walletA": makePreAuthorized(false)(UnknownWalletAMock),
-      "starknet-walletB": makePreAuthorized(false)(UnknownWalletBMock),
+      "starknet-walletA": makeAuthorized(false)(UnknownWalletAMock),
+      "starknet-walletB": makeAuthorized(false)(UnknownWalletBMock),
     })
     const lastConnectedWallet = await sn.getLastConnectedWallet()
     expect(lastConnectedWallet).toBe(null)
@@ -33,8 +33,8 @@ describe("getLastConnectedWallet()", () => {
   it("should return null if the last connected wallet is not available", async () => {
     const sn = getWallet(
       {
-        "starknet-walletA": makePreAuthorized(false)(UnknownWalletAMock),
-        "starknet-walletB": makePreAuthorized(false)(UnknownWalletBMock),
+        "starknet-walletA": makeAuthorized(false)(UnknownWalletAMock),
+        "starknet-walletB": makeAuthorized(false)(UnknownWalletBMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -46,8 +46,8 @@ describe("getLastConnectedWallet()", () => {
   it("should not return the last connected wallet if not preauthorized", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makePreAuthorized(false)(ArgentXMock),
-        "starknet-braavos": makePreAuthorized(false)(BraavosMock),
+        "starknet-argentX": makeAuthorized(false)(ArgentXMock),
+        "starknet-braavos": makeAuthorized(false)(BraavosMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -59,8 +59,8 @@ describe("getLastConnectedWallet()", () => {
   it("should return the last connected wallet if still preauthorized", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makePreAuthorized(false)(ArgentXMock),
-        "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-argentX": makeAuthorized(false)(ArgentXMock),
+        "starknet-braavos": makeAuthorized(true)(BraavosMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -72,8 +72,8 @@ describe("getLastConnectedWallet()", () => {
   it("should return the last connected wallet when last is available", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
-        "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-argentX": makeAuthorized(true)(ArgentXMock),
+        "starknet-braavos": makeAuthorized(true)(BraavosMock),
       },
       mockStorageFunction({ "gsw-last": "braavos" }),
     )
@@ -106,8 +106,8 @@ describe("getLastConnectedWallet()", () => {
   it("should default disable", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
-        "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-argentX": makeAuthorized(true)(ArgentXMock),
+        "starknet-braavos": makeAuthorized(true)(BraavosMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -123,8 +123,8 @@ describe("getLastConnectedWallet()", () => {
   it("should disable with clearLastWallet", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makePreAuthorized(true)(ArgentXMock),
-        "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+        "starknet-argentX": makeAuthorized(true)(ArgentXMock),
+        "starknet-braavos": makeAuthorized(true)(BraavosMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",

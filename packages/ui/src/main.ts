@@ -56,15 +56,15 @@ export const connect = async ({
   modalTheme,
   ...restOptions
 }: ConnectOptions = {}): Promise<StarknetWindowObject | null> => {
-  const preAuthorizedWallets = await sn.getPreAuthorizedWallets({
+  const authorizedWallets = await sn.getAuthorizedWallets({
     ...restOptions,
   })
 
   const lastWallet = await sn.getLastConnectedWallet()
   if (modalMode === "neverAsk") {
     const wallet =
-      preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
-      preAuthorizedWallets[0] // at this point pre-authorized is already sorted
+      authorizedWallets.find((w) => w.id === lastWallet?.id) ??
+      authorizedWallets[0] // at this point authorized is already sorted
 
     // return `wallet` even if it's null/undefined since we aren't allowed
     // to show any "connect" related UI
@@ -78,7 +78,7 @@ export const connect = async ({
     lastWallet
   ) {
     const wallet =
-      preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
+      authorizedWallets.find((w) => w.id === lastWallet?.id) ??
       (installedWallets.length === 1 ? installedWallets[0] : undefined)
     if (wallet) {
       return enableWithVersion(wallet)
@@ -97,7 +97,7 @@ export const connect = async ({
 
   return show({
     lastWallet,
-    preAuthorizedWallets,
+    authorizedWallets,
     installedWallets,
     discoveryWallets: discoveryWalletsByStoreVersion,
     enable: enableWithVersion,
