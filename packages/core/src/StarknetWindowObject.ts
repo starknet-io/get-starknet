@@ -199,7 +199,6 @@ export interface AddStarknetChainParameters {
   id: string
   chainId: string // A 0x-prefixed hexadecimal string
   chainName: string
-  baseUrl: string
   rpcUrls?: string[]
   blockExplorerUrls?: string[]
 
