@@ -271,7 +271,7 @@ export interface StarknetWindowObject {
   id: string
   name: string
   version: string
-  icon: string
+  icon: string | { dark: string; light: string }
   request: <T extends RpcMessage>(
     call: Omit<T, "result">,
   ) => Promise<T["result"]>
