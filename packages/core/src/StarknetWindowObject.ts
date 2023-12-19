@@ -3,6 +3,7 @@ import type {
   AccountInterface as AccountInterfaceV4,
   ProviderInterface as ProviderInterfaceV4,
 } from "starknet4"
+import type { MetaMaskSnapWallet } from '@consensys/get-starknet';
 
 export type AccountChangeEventHandler = (accounts: string[]) => void
 
@@ -10,13 +11,13 @@ export type NetworkChangeEventHandler = (network?: string) => void
 
 export type WalletEvents =
   | {
-      type: "accountsChanged"
-      handler: AccountChangeEventHandler
-    }
+    type: "accountsChanged"
+    handler: AccountChangeEventHandler
+  }
   | {
-      type: "networkChanged"
-      handler: NetworkChangeEventHandler
-    }
+    type: "networkChanged"
+    handler: NetworkChangeEventHandler
+  }
 
 // EIP-747:
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-747.md
@@ -57,20 +58,20 @@ export interface SwitchStarknetChainParameter {
 
 export type RpcMessage =
   | {
-      type: "wallet_watchAsset"
-      params: WatchAssetParameters
-      result: boolean
-    }
+    type: "wallet_watchAsset"
+    params: WatchAssetParameters
+    result: boolean
+  }
   | {
-      type: "wallet_addStarknetChain"
-      params: AddStarknetChainParameters
-      result: boolean
-    }
+    type: "wallet_addStarknetChain"
+    params: AddStarknetChainParameters
+    result: boolean
+  }
   | {
-      type: "wallet_switchStarknetChain"
-      params: SwitchStarknetChainParameter
-      result: boolean
-    }
+    type: "wallet_switchStarknetChain"
+    params: SwitchStarknetChainParameter
+    result: boolean
+  }
 
 export interface IStarknetWindowObject {
   id: string
@@ -118,6 +119,7 @@ declare global {
     starknet?: StarknetWindowObject
     starknet_braavos?: StarknetWindowObject
     starknet_argentX?: StarknetWindowObject
+    starknet_metamask?: MetaMaskSnapWallet
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }

@@ -1,3 +1,4 @@
+import type { MetaMaskProvider } from '@consensys/get-starknet/dist/type';
 import detectEthereumProvider from '@metamask/detect-provider';
 
 async function hasSnapSupport(provider: any) {
@@ -16,7 +17,7 @@ async function bootstrapMetamaskBridge() {
     return;
   }
 
-  const provider = await detectEthereumProvider()
+  const provider = await detectEthereumProvider<MetaMaskProvider>()
   if (!provider) {
     return;
   }
@@ -26,7 +27,7 @@ async function bootstrapMetamaskBridge() {
     return;
   }
 
-  const MetaMaskSnapWallet = await import('starknet-metamask')
+  const {MetaMaskSnapWallet} = await import('@consensys/get-starknet')
   window["starknet_metamask"] = new MetaMaskSnapWallet(provider)
 }
 

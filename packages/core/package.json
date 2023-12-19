@@ -48,6 +48,7 @@
     }
   },
   "dependencies": {
+    "@consensys/get-starknet": "1.0.0-dev-998a4b7-202312151810",
     "@metamask/detect-provider": "^2.0.0"
   }
 }
