@@ -218,7 +218,6 @@ export interface SwitchStarknetChainParameters {
 export type RpcMessage =
   | {
       type: "wallet_getPermissions"
-      params: never
       result: Permission[]
     }
   | {
