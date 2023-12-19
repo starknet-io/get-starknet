@@ -242,7 +242,6 @@ export type RpcMessage =
     }
   | {
       type: "wallet_requestChainId"
-      params: never
       result: StarknetChainId // returns the chain ID of the current network
     }
   | {
