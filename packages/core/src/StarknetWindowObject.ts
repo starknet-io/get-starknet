@@ -215,6 +215,14 @@ export interface SwitchStarknetChainParameters {
   chainId: string // A 0x-prefixed hexadecimal string
 }
 
+// see https://community.starknet.io/t/snip-deployment-interface-between-dapps-and-wallets/101923
+export interface GetDeploymentDataResult {
+  address: FELT
+  class_hash: FELT
+  salt: FELT
+  calldata: FELT[]
+}
+
 export type RpcMessage =
   | {
       type: "wallet_getPermissions"
@@ -243,6 +251,10 @@ export type RpcMessage =
   | {
       type: "wallet_requestChainId"
       result: StarknetChainId // returns the chain ID of the current network
+    }
+  | {
+      type: "wallet_deploymentData"
+      result: GetDeploymentDataResult
     }
   | {
       type: "starknet_addInvokeTransaction"
