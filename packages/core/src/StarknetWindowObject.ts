@@ -217,10 +217,12 @@ export interface SwitchStarknetChainParameters {
 
 // see https://community.starknet.io/t/snip-deployment-interface-between-dapps-and-wallets/101923
 export interface GetDeploymentDataResult {
-  address: FELT
-  class_hash: FELT
-  salt: FELT
-  calldata: FELT[]
+  address: FELT // the expected address, used to double-check the returned data
+  class_hash: FELT // The class hash of the contract to deploy
+  salt: FELT // The salt used for the computation of the account address
+  calldata: FELT[] // An array of felts
+  sigdata?: FELT[] // An optional array of felts to be added in the signature
+  version: 0 | 1 // Cairo version (an integer)
 }
 
 export type RpcMessage =
