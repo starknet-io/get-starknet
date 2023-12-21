@@ -278,6 +278,10 @@ export type RpcMessage =
       params: TypedData
       result: string[]
     }
+  | {
+      type: "starknet_supportedSpecs"
+      result: string[] // supported starknet specs' tags (see https://github.com/starkware-libs/starknet-specs)
+    }
 
 export interface StarknetWindowObject {
   id: string
