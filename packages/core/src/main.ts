@@ -7,10 +7,12 @@ import { IStorageWrapper, LocalStorageWrapper } from "./localStorageStore"
 import { pipe } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
-import { MetaMaskSnapWallet } from "./wallet/metamask_snap"
-import { MetaMaskSnap } from "./wallet/metamask_snap/snap"
 import { scanObjectForWallets } from "./wallet/scan"
 import { Sort, sortBy } from "./wallet/sort"
+import {
+  type MetaMaskProvider,
+  MetaMaskSnapWallet,
+} from "@consensys/get-starknet"
 
 export type {
   AccountChangeEventHandler,
@@ -68,17 +70,59 @@ interface GetStarknetResult {
   disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
 }
 
+async function getProvider(window: {
+  ethereum?: {
+    detected?: MetaMaskProvider[]
+    providers?: MetaMaskProvider[]
+  }
+}) {
+  const { ethereum } = window
+  if (!ethereum) {
+    return null
+  }
+
+  let providers: Array<MetaMaskProvider> = []
+  //ethereum.detected or ethereum.providers may exist when more than 1 wallet installed
+  if (ethereum.hasOwnProperty("detected") && ethereum["detected"]) {
+    providers = ethereum["detected"]
+  } else if (ethereum.hasOwnProperty("providers") && ethereum["providers"]) {
+    providers = ethereum["providers"]
+  } else {
+    providers = [ethereum as MetaMaskProvider]
+  }
+
+  //delect provider by sending request
+  for (const provider of providers) {
+    if (provider && (await isSupportSnap(provider))) {
+      return provider
+    }
+  }
+  return null
+}
+
+async function isSupportSnap(provider: MetaMaskProvider) {
+  try {
+    await provider.request({
+      method: "wallet_getSnaps",
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function injectMetamaskSnapWallet(
   windowObject: Record<string, any>,
 ) {
   if (windowObject && windowObject.hasOwnProperty("starknet_metamask")) {
     return
   }
-  const provider = await MetaMaskSnap.GetProvider(windowObject)
+  const provider = await getProvider(windowObject)
   if (provider) {
     const metaMaskSnapWrapper = new MetaMaskSnapWallet(provider)
     windowObject["starknet_metamask"] = metaMaskSnapWrapper
   }
+  console.log(windowObject["starknet_metamask"])
 }
 
 export function getStarknet(
@@ -97,6 +141,7 @@ export function getStarknet(
         windowObject,
         isWalletObject,
       )
+      console.log("availableWallets", availableWallets)
       return pipe<StarknetWindowObject[]>(
         (_) => filterBy(_, options),
         (_) => sortBy(_, options.sort),

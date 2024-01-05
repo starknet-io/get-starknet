@@ -1,5 +1,0 @@
-export const CHAIN_ID_MAINNET = "0x534e5f4d41494e"
-export const CHAIN_ID_TESTNET = "0x534e5f474f45524c49"
-export const UDC_ADDRESS =
-  "0x041a78e741e5af2fec34b695679bc6891742439f7afb8484ecd7766661ad02bf"
-export const UDC_DECLARE_CONTRACT_ENTRYPOINT = "deployContract"
