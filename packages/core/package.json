@@ -29,6 +29,10 @@
     "dev": "vite build --watch",
     "test": "vitest"
   },
+  "dependencies": {
+    "@consensys/get-starknet": "1.0.0-dev-998a4b7-202312151810",
+    "@metamask/detect-provider": "^2.0.0"
+  },
   "devDependencies": {
     "c8": "^7.12.0",
     "happy-dom": "^6.0.4",
@@ -46,9 +50,5 @@
     "starknet": {
       "optional": false
     }
-  },
-  "dependencies": {
-    "@consensys/get-starknet": "1.0.0-dev-998a4b7-202312151810",
-    "@metamask/detect-provider": "^2.0.0"
   }
 }

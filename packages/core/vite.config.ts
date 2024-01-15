@@ -17,7 +17,7 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: "core",
     },
-    target: 'es2020'
+    target: "es2020",
   },
   plugins: [
     dts({
@@ -32,5 +32,5 @@ export default defineConfig({
       exclude: ["**/node_modules/**", "**/*.mock.ts"],
     },
   },
-  optimizeDeps: { esbuildOptions: { target: 'es2020' } }
+  optimizeDeps: { esbuildOptions: { target: "es2020" } },
 })

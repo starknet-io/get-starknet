@@ -76,7 +76,7 @@ export function getStarknet(
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
 
-  injectMetamaskBridge();
+  injectMetamaskBridge()
 
   return {
     getAvailableWallets: async (options = {}) => {

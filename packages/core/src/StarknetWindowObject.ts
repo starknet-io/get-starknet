@@ -10,13 +10,13 @@ export type NetworkChangeEventHandler = (network?: string) => void
 
 export type WalletEvents =
   | {
-    type: "accountsChanged"
-    handler: AccountChangeEventHandler
-  }
+      type: "accountsChanged"
+      handler: AccountChangeEventHandler
+    }
   | {
-    type: "networkChanged"
-    handler: NetworkChangeEventHandler
-  }
+      type: "networkChanged"
+      handler: NetworkChangeEventHandler
+    }
 
 // EIP-747:
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-747.md
@@ -57,20 +57,20 @@ export interface SwitchStarknetChainParameter {
 
 export type RpcMessage =
   | {
-    type: "wallet_watchAsset"
-    params: WatchAssetParameters
-    result: boolean
-  }
+      type: "wallet_watchAsset"
+      params: WatchAssetParameters
+      result: boolean
+    }
   | {
-    type: "wallet_addStarknetChain"
-    params: AddStarknetChainParameters
-    result: boolean
-  }
+      type: "wallet_addStarknetChain"
+      params: AddStarknetChainParameters
+      result: boolean
+    }
   | {
-    type: "wallet_switchStarknetChain"
-    params: SwitchStarknetChainParameter
-    result: boolean
-  }
+      type: "wallet_switchStarknetChain"
+      params: SwitchStarknetChainParameter
+      result: boolean
+    }
 
 export interface IStarknetWindowObject {
   id: string
