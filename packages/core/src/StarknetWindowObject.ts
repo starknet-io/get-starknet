@@ -3,7 +3,6 @@ import type {
   AccountInterface as AccountInterfaceV4,
   ProviderInterface as ProviderInterfaceV4,
 } from "starknet4"
-import type { MetaMaskSnapWallet } from '@consensys/get-starknet';
 
 export type AccountChangeEventHandler = (accounts: string[]) => void
 
@@ -119,7 +118,7 @@ declare global {
     starknet?: StarknetWindowObject
     starknet_braavos?: StarknetWindowObject
     starknet_argentX?: StarknetWindowObject
-    starknet_metamask?: MetaMaskSnapWallet
+    starknet_metamask?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }
