@@ -13,6 +13,7 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: "ui",
     },
+    target: 'es2020'
   },
   plugins: [
     svelte({ emitCss: false }),
@@ -21,4 +22,5 @@ export default defineConfig({
       insertTypesEntry: true,
     }),
   ],
+  optimizeDeps: { esbuildOptions: { target: 'es2020' } }
 })
