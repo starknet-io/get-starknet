@@ -26,6 +26,7 @@ export type {
   TypedData,
   WalletEvents,
   WatchAssetParameters,
+  GetDeploymentDataResult,
 } from "./StarknetWindowObject"
 
 export { Permission } from "./StarknetWindowObject"
