@@ -22,7 +22,12 @@ export type {
   RequestAccountsParameters,
   StarknetChainId,
   SwitchStarknetChainParameters,
+  GetDeploymentDataResult,
+  WatchAssetParameters,
+  TypedData,
 } from "./rpcMessage"
+
+export type { WalletEvents } from "./walletEvents"
 
 export { Permission } from "./rpcMessage"
 
