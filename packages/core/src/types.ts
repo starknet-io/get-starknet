@@ -1,11 +1,9 @@
-import { IStorageWrapper } from "./localStorageStore"
-import { Sort } from "./wallet/sort"
-import { FilterList } from "./wallet/filter"
-import {
-  RequestAccountsParameters,
-  StarknetWindowObject,
-} from "./StarknetWindowObject"
+import { StarknetWindowObject } from "./StarknetWindowObject"
 import { WalletProvider } from "./discovery"
+import { IStorageWrapper } from "./localStorageStore"
+import { RequestAccountsParameters } from "./rpcMessage"
+import { FilterList } from "./wallet/filter"
+import { Sort } from "./wallet/sort"
 
 export type { WalletProvider } from "./discovery"
 
