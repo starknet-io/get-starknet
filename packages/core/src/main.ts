@@ -25,9 +25,18 @@ export type {
   GetDeploymentDataResult,
   WatchAssetParameters,
   TypedData,
+  RequestFn,
+  RpcMessage,
+  IsParamsOptional,
+  RpcTypeToMessageMap,
 } from "./rpcMessage"
 
-export type { WalletEvents } from "./walletEvents"
+export type {
+  WalletEvents,
+  AccountChangeEventHandler,
+  NetworkChangeEventHandler,
+  WalletEventHandlers,
+} from "./walletEvents"
 
 export { Permission } from "./rpcMessage"
 
