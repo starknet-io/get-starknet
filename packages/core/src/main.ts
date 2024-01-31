@@ -1,6 +1,7 @@
-import { Permission, type StarknetWindowObject } from "./StarknetWindowObject"
+import { type StarknetWindowObject } from "./StarknetWindowObject"
 import discovery, { type WalletProvider } from "./discovery"
 import { LocalStorageWrapper } from "./localStorageStore"
+import { Permission } from "./rpcMessage"
 import type { GetStarknetOptions, GetStarknetResult } from "./types"
 import { pipe } from "./utils"
 import { filterBy, filterByAuthorized } from "./wallet/filter"
@@ -8,8 +9,9 @@ import { isWalletObj } from "./wallet/isWalletObject"
 import { scanObjectForWallets } from "./wallet/scan"
 import { sortBy } from "./wallet/sort"
 
+export type { StarknetWindowObject } from "./StarknetWindowObject"
+
 export type {
-  AccountChangeEventHandler,
   AddDeclareTransactionParameters,
   AddDeclareTransactionResult,
   AddDeployAccountTransactionParameters,
@@ -17,19 +19,26 @@ export type {
   AddInvokeTransactionParameters,
   AddInvokeTransactionResult,
   AddStarknetChainParameters,
-  NetworkChangeEventHandler,
   RequestAccountsParameters,
-  RpcMessage,
   StarknetChainId,
-  StarknetWindowObject,
   SwitchStarknetChainParameters,
-  TypedData,
-  WalletEvents,
-  WatchAssetParameters,
   GetDeploymentDataResult,
-} from "./StarknetWindowObject"
+  WatchAssetParameters,
+  TypedData,
+  RequestFn,
+  RpcMessage,
+  IsParamsOptional,
+  RpcTypeToMessageMap,
+} from "./rpcMessage"
 
-export { Permission } from "./StarknetWindowObject"
+export type {
+  WalletEvents,
+  AccountChangeEventHandler,
+  NetworkChangeEventHandler,
+  WalletEventHandlers,
+} from "./walletEvents"
+
+export { Permission } from "./rpcMessage"
 
 export type {
   DisconnectOptions,
@@ -104,13 +113,15 @@ export function getStarknet(
     enable: async (wallet, options) => {
       await wallet.request({
         type: "wallet_requestAccounts",
-        params: options,
+        params: {
+          silentMode: options?.silentMode,
+        },
       })
 
       // check for permissions
-      const permissions = (await wallet.request({
+      const permissions = await wallet.request({
         type: "wallet_getPermissions",
-      })) as Permission[]
+      })
       if (!permissions?.includes(Permission.Accounts)) {
         throw new Error("Failed to connect to wallet")
       }

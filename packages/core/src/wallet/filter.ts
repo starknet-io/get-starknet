@@ -1,5 +1,6 @@
-import { Permission, type StarknetWindowObject } from "../StarknetWindowObject"
+import { type StarknetWindowObject } from "../StarknetWindowObject"
 import type { WalletProvider } from "../discovery"
+import { Permission } from "../rpcMessage"
 
 export type FilterList = string[]
 interface FilterByOptions {
@@ -35,9 +36,7 @@ export const filterByAuthorized = async (
     wallets.map((w) =>
       w
         .request({ type: "wallet_getPermissions" })
-        .then((result) =>
-          (result as Permission[])?.includes(Permission.Accounts),
-        )
+        .then((result) => result.includes(Permission.Accounts))
         .catch(() => false),
     ),
   )
