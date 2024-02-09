@@ -1,6 +1,8 @@
 # get-starknet
 
 [![npm](https://img.shields.io/npm/v/get-starknet.svg)](https://www.npmjs.com/package/get-starknet)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=StarkNet)](https://twitter.com/Starknet)
+[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.com/invite/qypnmzkhbc)
 
 ## Goals
 
