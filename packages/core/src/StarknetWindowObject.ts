@@ -55,6 +55,15 @@ export interface SwitchStarknetChainParameter {
   chainId: string // A 0x-prefixed hexadecimal string
 }
 
+// SNIP: https://community.starknet.io/t/snip-deployment-interface-between-dapps-and-wallets/101923
+interface GetDeploymentDataResult {
+  address: string // Represented as 'felt252'
+  class_hash: string // Represented as 'felt252'
+  salt: string // Represented as 'felt252'
+  calldata: string[] // Array of 'felt252', length := calldata_len
+  sigdata?: string[] // Array of 'felt252', should be prepended to signature as extra data
+}
+
 export type RpcMessage =
   | {
       type: "wallet_watchAsset"
@@ -70,6 +79,11 @@ export type RpcMessage =
       type: "wallet_switchStarknetChain"
       params: SwitchStarknetChainParameter
       result: boolean
+    }
+  | {
+      type: "wallet_deploymentData"
+      params: never
+      result: GetDeploymentDataResult
     }
 
 export interface IStarknetWindowObject {
