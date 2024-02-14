@@ -29,6 +29,7 @@ export type {
   RpcMessage,
   IsParamsOptional,
   RpcTypeToMessageMap,
+  RequestFnCall,
 } from "./rpcMessage"
 
 export type {
