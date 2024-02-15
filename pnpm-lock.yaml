@@ -39,7 +39,7 @@ importers:
   example:
     dependencies:
       get-starknet:
-        specifier: workspace:^3.0.1
+        specifier: workspace:^4.0.0-next.0
         version: link:../packages/ui
       react:
         specifier: ^18.2.0
@@ -80,7 +80,7 @@ importers:
         version: 3.0.0
       vite-plugin-dts:
         specifier: ^1.4.0
-        version: 1.4.0(vite@3.0.0)
+        version: 1.4.0(@types/node@20.3.1)(vite@3.0.0)
       vitest:
         specifier: ^0.19.1
         version: 0.19.1(c8@7.12.0)(happy-dom@6.0.4)
@@ -91,7 +91,7 @@ importers:
         specifier: ^2.11.0
         version: 2.11.0
       get-starknet-core:
-        specifier: workspace:^3.0.1
+        specifier: workspace:^4.0.0-next.0
         version: link:../core
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
@@ -943,42 +943,12 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@microsoft/api-extractor-model@7.27.3:
-    resolution: {integrity: sha512-fSFvw7otYHduOkyshjTbapKKgwF8bgquVHvgF8VgeKtMYvqXkoaj7W6VcM7PNY7E2bbblhUgC4XNdqZLD4SJGw==}
-    dependencies:
-      '@microsoft/tsdoc': 0.14.2
-      '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 3.59.4
-    transitivePeerDependencies:
-      - '@types/node'
-    dev: true
-
   /@microsoft/api-extractor-model@7.27.3(@types/node@20.3.1):
     resolution: {integrity: sha512-fSFvw7otYHduOkyshjTbapKKgwF8bgquVHvgF8VgeKtMYvqXkoaj7W6VcM7PNY7E2bbblhUgC4XNdqZLD4SJGw==}
     dependencies:
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
       '@rushstack/node-core-library': 3.59.4(@types/node@20.3.1)
-    transitivePeerDependencies:
-      - '@types/node'
-    dev: true
-
-  /@microsoft/api-extractor@7.36.0:
-    resolution: {integrity: sha512-P+kYgJFDXIr+UNzhRMhlpM/dderi6ab4lxn35vdhfAIMPtGCSXIJxrrtpTOQmQW8CZtmoZX06LYoUsKCc1zjow==}
-    hasBin: true
-    dependencies:
-      '@microsoft/api-extractor-model': 7.27.3
-      '@microsoft/tsdoc': 0.14.2
-      '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 3.59.4
-      '@rushstack/rig-package': 0.4.0
-      '@rushstack/ts-command-line': 4.15.1
-      colors: 1.2.5
-      lodash: 4.17.21
-      resolve: 1.22.2
-      semver: 7.3.8
-      source-map: 0.6.1
-      typescript: 5.0.4
     transitivePeerDependencies:
       - '@types/node'
     dev: true
@@ -1043,23 +1013,6 @@ packages:
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
-    dev: true
-
-  /@rushstack/node-core-library@3.59.4:
-    resolution: {integrity: sha512-YAKJDC6Mz/KA1D7bvB88WaRX3knt/ZuLzkRu5G9QADGSjLtvTWzCNCytRF2PCSaaHOZaZsWul4F1KQdgFgUDqA==}
-    peerDependencies:
-      '@types/node': '*'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-    dependencies:
-      colors: 1.2.5
-      fs-extra: 7.0.1
-      import-lazy: 4.0.0
-      jju: 1.4.0
-      resolve: 1.22.2
-      semver: 7.3.8
-      z-schema: 5.0.5
     dev: true
 
   /@rushstack/node-core-library@3.59.4(@types/node@20.3.1):
@@ -4924,25 +4877,6 @@ packages:
     dependencies:
       '@microsoft/api-extractor': 7.36.0(@types/node@20.3.1)
       '@rushstack/node-core-library': 3.59.4(@types/node@20.3.1)
-      chalk: 4.1.2
-      debug: 4.3.4
-      fast-glob: 3.2.12
-      fs-extra: 10.1.0
-      ts-morph: 14.0.0
-      vite: 3.0.0
-    transitivePeerDependencies:
-      - '@types/node'
-      - supports-color
-    dev: true
-
-  /vite-plugin-dts@1.4.0(vite@3.0.0):
-    resolution: {integrity: sha512-RyDCjQzVxUeDqF+Rl1hQT+t/rKmvfvo04gaGV/l3597FpeIWGKtNF1S4x509Kx1AfHOjLa1JdmjVgnSEIv+lpw==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      vite: '>=2.4.4'
-    dependencies:
-      '@microsoft/api-extractor': 7.36.0
-      '@rushstack/node-core-library': 3.59.4
       chalk: 4.1.2
       debug: 4.3.4
       fast-glob: 3.2.12

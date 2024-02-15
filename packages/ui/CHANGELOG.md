@@ -1,5 +1,16 @@
 # get-starknet
 
+## 4.0.0-next.0
+
+### Major Changes
+
+- 4a477fd: new wallet snip
+
+### Patch Changes
+
+- Updated dependencies [4a477fd]
+  - get-starknet-core@4.0.0-next.0
+
 ## 3.0.1
 
 ### Patch Changes
