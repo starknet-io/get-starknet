@@ -1,5 +1,13 @@
 # get-starknet
 
+## 4.0.0-next.2
+
+### Patch Changes
+
+- c5fd8a0: prerelease
+- Updated dependencies [c5fd8a0]
+  - get-starknet-core@4.0.0-next.2
+
 ## 4.0.0-next.1
 
 ### Patch Changes
