@@ -1,5 +1,12 @@
 # get-starknet-example
 
+## 2.1.3-next.0
+
+### Patch Changes
+
+- Updated dependencies [4a477fd]
+  - get-starknet@4.0.0-next.0
+
 ## 2.1.2
 
 ### Patch Changes

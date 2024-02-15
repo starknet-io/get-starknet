@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 4.0.0-next.0
+
+### Major Changes
+
+- 4a477fd: new wallet snip
+
 ## 3.2.0
 
 ### Minor Changes
