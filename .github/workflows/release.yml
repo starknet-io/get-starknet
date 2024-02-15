@@ -40,7 +40,7 @@ jobs:
           version: pnpm run version
           commit: "chore: pre-release version bump"
           title: "Pre-release version bump"
-          publish: pnpm publish --tag next --no-git-checks
+          publish: pnpm run publish:next
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,6 +51,6 @@ jobs:
           version: pnpm run version
           commit: "chore: release version bump"
           title: "Release version bump"
-          publish: pnpm publish
+          publish: pnpm run publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
