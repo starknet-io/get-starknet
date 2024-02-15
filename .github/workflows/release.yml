@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-      - next
+      - develop
 
 jobs:
   version:
@@ -33,7 +33,7 @@ jobs:
         run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
 
       - name: Create Pre-release
-        if: github.ref == 'refs/heads/next'
+        if: github.ref == 'refs/heads/develop'
         uses: changesets/action@v1
         with:
           version: pnpm run version
