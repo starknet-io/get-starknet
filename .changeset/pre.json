@@ -6,5 +6,5 @@
     "get-starknet-core": "3.2.0",
     "get-starknet": "3.0.1"
   },
-  "changesets": ["famous-cougars-bathe"]
+  "changesets": ["famous-cougars-bathe", "rude-tigers-warn"]
 }

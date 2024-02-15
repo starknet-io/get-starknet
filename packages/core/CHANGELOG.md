@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 4.0.0-next.1
+
+### Patch Changes
+
+- a9bf7d3: pre-release
+
 ## 4.0.0-next.0
 
 ### Major Changes
