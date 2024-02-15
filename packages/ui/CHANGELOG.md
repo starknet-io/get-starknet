@@ -1,5 +1,13 @@
 # get-starknet
 
+## 4.0.0-next.1
+
+### Patch Changes
+
+- a9bf7d3: pre-release
+- Updated dependencies [a9bf7d3]
+  - get-starknet-core@4.0.0-next.1
+
 ## 4.0.0-next.0
 
 ### Major Changes
