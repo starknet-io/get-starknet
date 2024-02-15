@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "get-starknet-example": "2.1.2",
+    "get-starknet-core": "3.2.0",
+    "get-starknet": "3.0.1"
+  },
+  "changesets": []
+}

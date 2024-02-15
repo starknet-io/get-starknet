@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - next
 
 jobs:
   version:
@@ -22,21 +23,33 @@ jobs:
           node-version: 16
           cache: "pnpm"
       - name: Setup npmrc
-        run:
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN
-          }}" >> .npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" >> .npmrc
       - name: install dependencies
         run: pnpm install
       - name: run tests
         run: pnpm test
       - name: copy readme to every package
         run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
-      - name: create and publish versions
+
+      - name: Create Pre-release
+        if: github.ref == 'refs/heads/next'
         uses: changesets/action@v1
         with:
           version: pnpm run version
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm run publish
+          commit: "chore: pre-release version bump"
+          title: "Pre-release version bump"
+          publish: pnpm publish --tag next
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        if: github.ref == 'refs/heads/master'
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version
+          commit: "chore: release version bump"
+          title: "Release version bump"
+          publish: pnpm publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
