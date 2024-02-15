@@ -1,5 +1,6 @@
-import { StarknetWindowObject } from "../StarknetWindowObject"
-import { WalletProvider } from "../discovery"
+import { type StarknetWindowObject } from "../StarknetWindowObject"
+import type { WalletProvider } from "../discovery"
+import { Permission } from "../rpcMessage"
 
 export type FilterList = string[]
 interface FilterByOptions {
@@ -28,11 +29,16 @@ export function filterBy<T extends StarknetWindowObject | WalletProvider>(
  * filters given wallets array, return only preAuthorized instances
  * @param wallets
  */
-export const filterByPreAuthorized = async (
+export const filterByAuthorized = async (
   wallets: StarknetWindowObject[],
 ): Promise<StarknetWindowObject[]> => {
   const preAuthResponses = await Promise.all(
-    wallets.map((w) => w.isPreauthorized().catch(() => false)),
+    wallets.map((w) =>
+      w
+        .request({ type: "wallet_getPermissions" })
+        .then((result) => result.includes(Permission.Accounts))
+        .catch(() => false),
+    ),
   )
   return wallets.filter((_, i) => preAuthResponses[i])
 }

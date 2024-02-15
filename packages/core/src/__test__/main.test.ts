@@ -3,9 +3,9 @@ import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
   BraavosMock,
+  makeAuthorized,
   UnknownWalletAMock,
   UnknownWalletBMock,
-  makePreAuthorized,
 } from "./wallet.mock"
 import { describe, expect, it } from "vitest"
 
@@ -105,25 +105,25 @@ describe("getAvailableWallets()", () => {
   })
 })
 
-describe("getPreAuthorizedWallets()", () => {
-  it("should return all preauthorized wallets", async () => {
+describe("getAuthorizedWallets()", () => {
+  it("should return all authorized wallets", async () => {
     const sn = getWallet({
-      "starknet-argent": makePreAuthorized(true)(ArgentXMock),
-      "starknet-braavos": makePreAuthorized(true)(BraavosMock),
+      "starknet-argent": makeAuthorized(true)(ArgentXMock),
+      "starknet-braavos": makeAuthorized(true)(BraavosMock),
     })
-    const preauthorizedWallets = await sn.getPreAuthorizedWallets()
-    expect(preauthorizedWallets.length).toBe(2)
-    expect(preauthorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
-    expect(preauthorizedWallets.map((w) => w.id)).contains(BraavosMock.id)
+    const authorizedWallets = await sn.getAuthorizedWallets()
+    expect(authorizedWallets.length).toBe(2)
+    expect(authorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
+    expect(authorizedWallets.map((w) => w.id)).contains(BraavosMock.id)
   })
-  it("should return one preauthorized wallet", async () => {
+  it("should return one authorized wallet", async () => {
     const sn = getWallet({
-      "starknet-argent": makePreAuthorized(true)(ArgentXMock),
-      "starknet-braavos": makePreAuthorized(false)(BraavosMock),
+      "starknet-argent": makeAuthorized(true)(ArgentXMock),
+      "starknet-braavos": makeAuthorized(false)(BraavosMock),
     })
-    const preauthorizedWallets = await sn.getPreAuthorizedWallets()
-    expect(preauthorizedWallets.length).toBe(1)
-    expect(preauthorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
+    const authorizedWallets = await sn.getAuthorizedWallets()
+    expect(authorizedWallets.length).toBe(1)
+    expect(authorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
   })
 })
 
