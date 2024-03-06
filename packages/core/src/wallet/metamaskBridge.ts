@@ -3,7 +3,7 @@ import {
   RpcMessage,
 } from "../StarknetWindowObject"
 import wallets, { WalletProvider } from "../discovery"
-import type { MetaMaskProvider } from "@consensys/get-starknet/dist/type"
+import type { MetaMaskProvider } from "@consensys/get-starknet"
 import detectEthereumProvider from "@metamask/detect-provider"
 import type { ProviderInterface } from "starknet"
 

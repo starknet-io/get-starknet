@@ -67,8 +67,8 @@ importers:
   packages/core:
     dependencies:
       '@consensys/get-starknet':
-        specifier: 1.0.0-dev-998a4b7-202312151810
-        version: 1.0.0-dev-998a4b7-202312151810
+        specifier: 1.0.0-dev-fc04076-202312205118
+        version: 1.0.0-dev-fc04076-202312205118
       '@metamask/detect-provider':
         specifier: ^2.0.0
         version: 2.0.0
@@ -869,8 +869,8 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@consensys/get-starknet@1.0.0-dev-998a4b7-202312151810:
-    resolution: {integrity: sha512-CzywgXiQTkhgrcYs2uMtMGU8IebbP1x8Z1z6mvd9MQYEFG/6UTQ/u6u86RcopXYt41MJOry5kYtjZMcYLSRAhA==}
+  /@consensys/get-starknet@1.0.0-dev-fc04076-202312205118:
+    resolution: {integrity: sha512-s2GoDFR/sPedfhQsv0F7Y8AwQEWTOVueTlmd4Ks8C5/FwHE9GoY+Vh3lNW49YJYhFVkXvjPzK4bb8270kPv6Uw==}
     dependencies:
       starknet: 5.18.0
     transitivePeerDependencies:
