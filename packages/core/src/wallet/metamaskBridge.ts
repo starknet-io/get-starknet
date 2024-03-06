@@ -27,7 +27,7 @@ class EmptyMetaMaskProvider implements DisconnectedStarknetWindowObject {
   }
   async enable(options?: { starknetVersion?: "v4" | "v5" }): Promise<string[]> {
     const { MetaMaskSnapWallet } = await import("@consensys/get-starknet")
-    const metaMaskSnapWallet = new MetaMaskSnapWallet(this.metamaskProvider)
+    const metaMaskSnapWallet = new MetaMaskSnapWallet(this.metamaskProvider, "*")
 
     Object.assign(this, metaMaskSnapWallet)
     this.constructor.prototype = metaMaskSnapWallet.constructor.prototype
