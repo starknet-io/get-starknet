@@ -1,49 +1,72 @@
-import {
-  DisconnectedStarknetWindowObject,
+import type {
+  IStarknetWindowObject,
   RpcMessage,
+  StarknetWindowObject,
+  WalletEvents,
 } from "../StarknetWindowObject"
 import wallets, { WalletProvider } from "../discovery"
-import type { MetaMaskProvider } from "@consensys/get-starknet"
+import type { MetaMaskProvider, MetaMaskSnapWallet } from "@consensys/get-starknet"
 import detectEthereumProvider from "@metamask/detect-provider"
-import type { ProviderInterface } from "starknet"
 
-class EmptyMetaMaskProvider implements DisconnectedStarknetWindowObject {
-  id: string
-  name: string
-  icon: string
-  version = "0.0.0"
-  isConnected = false as const
-  provider: undefined | ProviderInterface
-  constructor(
-    private metamaskProvider: MetaMaskProvider,
-    walletInfo: WalletProvider,
-  ) {
-    this.id = walletInfo.id
-    this.name = walletInfo.name
-    this.icon = walletInfo.icon
-  }
-  request<T extends RpcMessage>(): Promise<T["result"]> {
-    throw new Error("Wallet not enabled")
-  }
-  async enable(options?: { starknetVersion?: "v4" | "v5" }): Promise<string[]> {
-    const { MetaMaskSnapWallet } = await import("@consensys/get-starknet")
-    const metaMaskSnapWallet = new MetaMaskSnapWallet(this.metamaskProvider, "*")
 
-    Object.assign(this, metaMaskSnapWallet)
-    this.constructor.prototype = metaMaskSnapWallet.constructor.prototype
+function createMetaMaskProviderWrapper(metamaskProvider: MetaMaskProvider, walletInfo: WalletProvider): StarknetWindowObject {
+  let metaMaskSnapWallet: MetaMaskSnapWallet | undefined;
+  const metaMaskProviderWrapper: IStarknetWindowObject = {
+    id: walletInfo.id,
+    name: walletInfo.name,
+    icon: walletInfo.icon,
+    get version() {
+      return metaMaskSnapWallet?.version ?? "0.0.0"
+    },
+    get isConnected() {
+      return metaMaskSnapWallet?.isConnected ?? false;
+    },
+    get provider() {
+      return metaMaskSnapWallet?.provider
+    },
+    get account() {
+      return metaMaskSnapWallet?.account;
+    },
+    get selectedAddress() {
+      return metaMaskSnapWallet?.selectedAddress;
+    },
+    get chainId() {
+      return metaMaskSnapWallet?.chainId;
+    },
+    request<T extends RpcMessage>(call: Omit<T, 'result'>): Promise<T["result"]> {
+      if (!metaMaskSnapWallet) {
+        throw new Error("Wallet not enabled")
+      }
+      return metaMaskSnapWallet.request(call);
+    },
+    async enable(): Promise<string[]> {
+      const { MetaMaskSnapWallet } = await import("@consensys/get-starknet")
+      metaMaskSnapWallet = new MetaMaskSnapWallet(metamaskProvider, "*")
 
-    return await this.enable(options)
+      return await metaMaskSnapWallet.enable()
+    },
+    isPreauthorized() {
+      return metaMaskSnapWallet?.isPreauthorized() ?? Promise.resolve(false)
+    },
+    on<E extends WalletEvents>(event: E["type"], handleEvent: E["handler"],): void {
+      if (!metaMaskSnapWallet) {
+        throw new Error("Wallet not enabled");
+      }
+      // @ts-ignore: Metamask currently doesn't support on method
+      return metaMaskSnapWallet.on(event, handleEvent);
+    },
+    off<E extends WalletEvents>(event: E["type"], handleEvent: E["handler"],) {
+      if (!metaMaskSnapWallet) {
+        throw new Error("Wallet not enabled");
+      }
+      // @ts-ignore: Metamask currently doesn't support off method
+      return metaMaskSnapWallet.off(event, handleEvent);
+    }
   }
-  isPreauthorized() {
-    return Promise.resolve(false)
-  }
-  on() {
-    throw new Error("Wallet not enabled")
-  }
-  off() {
-    throw new Error("Wallet not enabled")
-  }
+
+  return metaMaskProviderWrapper as StarknetWindowObject;
 }
+
 
 async function waitForEthereumProvider(
   options: { timeout?: number; retries?: number } = {},
@@ -107,7 +130,7 @@ async function injectMetamaskBridge() {
     return
   }
 
-  window.starknet_metamask = new EmptyMetaMaskProvider(
+  window.starknet_metamask = createMetaMaskProviderWrapper(
     provider,
     metamaskWalletInfo,
   )

@@ -94,6 +94,7 @@ export interface IStarknetWindowObject {
   provider?: ProviderInterface | ProviderInterfaceV4
   selectedAddress?: string
   chainId?: string
+  isConnected: boolean
 }
 
 export interface ConnectedStarknetWindowObject extends IStarknetWindowObject {
