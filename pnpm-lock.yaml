@@ -67,7 +67,7 @@ importers:
   packages/core:
     dependencies:
       '@consensys/get-starknet':
-        specifier: 1.0.0-dev-fc04076-202312205118
+        specifier: ^1.0.0-dev-fc04076-202312205118
         version: 1.0.0-dev-fc04076-202312205118
       '@metamask/detect-provider':
         specifier: ^2.0.0
