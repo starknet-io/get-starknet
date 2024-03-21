@@ -3,10 +3,10 @@ import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
   BraavosMock,
-  makeAuthorized,
-  makeConnected,
   UnknownWalletAMock,
   UnknownWalletBMock,
+  makeAuthorized,
+  makeConnected,
 } from "./wallet.mock"
 import { describe, expect, it } from "vitest"
 
