@@ -28,7 +28,6 @@ jobs:
       - name: install dependencies
         run: pnpm install
       - name: run tests
-        if: github.ref == 'refs/heads/master'
         run: pnpm test
       - name: copy readme to every package
         run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
