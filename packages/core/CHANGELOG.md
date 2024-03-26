@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 4.0.0-next.3
+
+### Patch Changes
+
+- 9c3b389: fix tests
+
 ## 4.0.0-next.2
 
 ### Patch Changes
