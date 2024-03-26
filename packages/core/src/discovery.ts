@@ -17,7 +17,7 @@ const wallets: WalletProvider[] = [
       chrome:
         "https://chrome.google.com/webstore/detail/argent-x-starknet-wallet/dlcobpjiigpikoobohmabehhmhfoodbb",
       firefox: "https://addons.mozilla.org/en-US/firefox/addon/argent-x",
-      edge: "https://microsoftedge.microsoft.com/addons/detail/argent-x/ajcicjlkibolbeaaagejfhnofogocgcj"
+      edge: "https://microsoftedge.microsoft.com/addons/detail/argent-x/ajcicjlkibolbeaaagejfhnofogocgcj",
     },
   },
   {
