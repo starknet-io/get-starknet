@@ -1,6 +1,5 @@
-import { StarknetWindowObject } from "../StarknetWindowObject"
 import wallets from "../discovery"
-import { Permission } from "../rpcMessage"
+import type { Permission, StarknetWindowObject } from "starknet-types"
 
 type WalletMock = Pick<StarknetWindowObject, "id" | "name" | "icon" | "request">
 

@@ -1,17 +1,15 @@
-import { type StarknetWindowObject } from "./StarknetWindowObject"
 import discovery, { type WalletProvider } from "./discovery"
 import { LocalStorageWrapper } from "./localStorageStore"
-import { Permission } from "./rpcMessage"
 import type { GetStarknetOptions, GetStarknetResult } from "./types"
 import { pipe } from "./utils"
 import { filterBy, filterByAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
 import { scanObjectForWallets } from "./wallet/scan"
 import { sortBy } from "./wallet/sort"
-
-export type { StarknetWindowObject } from "./StarknetWindowObject"
+import { Permission, type StarknetWindowObject } from "starknet-types"
 
 export type {
+  StarknetWindowObject,
   AddDeclareTransactionParameters,
   AddDeclareTransactionResult,
   AddDeployAccountTransactionParameters,
@@ -30,16 +28,12 @@ export type {
   IsParamsOptional,
   RpcTypeToMessageMap,
   RequestFnCall,
-} from "./rpcMessage"
-
-export type {
-  WalletEvents,
   AccountChangeEventHandler,
   NetworkChangeEventHandler,
   WalletEventHandlers,
-} from "./walletEvents"
-
-export { Permission } from "./rpcMessage"
+  Permission,
+  WalletEvents,
+} from "starknet-types"
 
 export type {
   DisconnectOptions,
@@ -55,6 +49,12 @@ const defaultOptions: GetStarknetOptions = {
   windowObject: ssrSafeWindow,
   isWalletObject: isWalletObj,
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
+}
+
+declare global {
+  interface Window {
+    [key: `starknet_${string}`]: StarknetWindowObject | undefined
+  }
 }
 
 export function getStarknet(
