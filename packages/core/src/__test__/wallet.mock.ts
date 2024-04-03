@@ -1,5 +1,5 @@
 import wallets from "../discovery"
-import type { Permission, StarknetWindowObject } from "starknet-types"
+import { Permission, type StarknetWindowObject } from "starknet-types"
 
 type WalletMock = Pick<StarknetWindowObject, "id" | "name" | "icon" | "request">
 
