@@ -20,7 +20,6 @@ export type {
   AddInvokeTransactionResult,
   AddStarknetChainParameters,
   RequestAccountsParameters,
-  StarknetChainId,
   SwitchStarknetChainParameters,
   GetDeploymentDataResult,
   WatchAssetParameters,
@@ -39,7 +38,10 @@ export type {
   WalletEventHandlers,
 } from "./walletEvents"
 
-export { Permission } from "./rpcMessage"
+export { StarknetChainId, Permission } from "./rpcMessage"
+
+export { scanObjectForWallets } from "./wallet/scan"
+export { isWalletObj } from "./wallet/isWalletObject"
 
 export type {
   DisconnectOptions,
