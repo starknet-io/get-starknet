@@ -1,6 +1,6 @@
-import { StarknetWindowObject } from "../StarknetWindowObject"
 import { WalletProvider } from "../discovery"
 import { shuffle } from "../utils"
+import { type StarknetWindowObject } from "starknet-types"
 
 export type Sort = string[] | "random" | null | undefined
 

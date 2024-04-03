@@ -1,9 +1,11 @@
-import { StarknetWindowObject } from "./StarknetWindowObject"
 import { WalletProvider } from "./discovery"
 import { IStorageWrapper } from "./localStorageStore"
-import { RequestAccountsParameters } from "./rpcMessage"
 import { FilterList } from "./wallet/filter"
 import { Sort } from "./wallet/sort"
+import type {
+  RequestAccountsParameters,
+  StarknetWindowObject,
+} from "starknet-types"
 
 export type { WalletProvider } from "./discovery"
 

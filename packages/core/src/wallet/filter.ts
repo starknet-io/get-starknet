@@ -1,6 +1,5 @@
-import { type StarknetWindowObject } from "../StarknetWindowObject"
 import type { WalletProvider } from "../discovery"
-import { Permission } from "../rpcMessage"
+import { Permission, type StarknetWindowObject } from "starknet-types"
 
 export type FilterList = string[]
 interface FilterByOptions {
