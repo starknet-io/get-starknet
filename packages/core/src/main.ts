@@ -3,9 +3,14 @@ import { LocalStorageWrapper } from "./localStorageStore"
 import type { GetStarknetOptions, GetStarknetResult } from "./types"
 import { pipe } from "./utils"
 import { filterBy, filterByAuthorized } from "./wallet/filter"
-import { isWalletObj } from "./wallet/isWalletObject"
+import {
+  isFullWallet,
+  isVirtualWallet,
+  isWalletObject,
+} from "./wallet/isWalletObject"
 import { scanObjectForWallets } from "./wallet/scan"
 import { sortBy } from "./wallet/sort"
+import { initiateVirtualWallets } from "./wallet/virtualWallets"
 import { Permission, type StarknetWindowObject } from "starknet-types"
 
 export type {
@@ -36,7 +41,7 @@ export type {
 export { StarknetChainId, Permission } from "starknet-types"
 
 export { scanObjectForWallets } from "./wallet/scan"
-export { isWalletObj } from "./wallet/isWalletObject"
+export { isWalletObject } from "./wallet/isWalletObject"
 
 export type {
   DisconnectOptions,
@@ -50,7 +55,7 @@ const ssrSafeWindow = typeof window !== "undefined" ? window : {}
 
 const defaultOptions: GetStarknetOptions = {
   windowObject: ssrSafeWindow,
-  isWalletObject: isWalletObj,
+  isWalletObject,
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
 }
 
@@ -68,6 +73,8 @@ export function getStarknet(
     ...options,
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
+
+  initiateVirtualWallets()
 
   return {
     getAvailableWallets: async (options = {}) => {
@@ -114,7 +121,16 @@ export function getStarknet(
 
       return firstAuthorizedWallet
     },
-    enable: async (wallet, options) => {
+    enable: async (inputWallet, options) => {
+      let wallet: StarknetWindowObject
+      if (isVirtualWallet(inputWallet)) {
+        wallet = await inputWallet.loadWallet()
+      } else if (isFullWallet(inputWallet)) {
+        wallet = inputWallet
+      } else {
+        throw new Error("Invalid wallet object")
+      }
+
       await wallet.request({
         type: "wallet_requestAccounts",
         params: {
