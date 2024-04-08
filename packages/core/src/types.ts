@@ -72,7 +72,6 @@ export interface GetStarknetResult {
 
 declare global {
   interface Window {
-    [key: `starknet_${string}`]: StarknetWindowObject | undefined
     [key: string]: unknown
   }
 }

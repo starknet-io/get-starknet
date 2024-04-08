@@ -59,12 +59,6 @@ const defaultOptions: GetStarknetOptions = {
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
 }
 
-declare global {
-  interface Window {
-    [key: `starknet_${string}`]: StarknetWindowObject | undefined
-  }
-}
-
 export function getStarknet(
   options: Partial<GetStarknetOptions> = {},
 ): GetStarknetResult {
