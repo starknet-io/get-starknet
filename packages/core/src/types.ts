@@ -27,14 +27,18 @@ export interface DisconnectOptions {
 }
 
 export interface VirtualWallet {
+  id: string
   name: string
+  icon: string
   windowKey: string
   loadWallet: () => Promise<StarknetWindowObject>
   hasSupport: () => Promise<boolean>
 }
 
 export const virtualWalletKeys = ensureKeysArray<VirtualWallet>({
+  id: true,
   name: true,
+  icon: true,
   windowKey: true,
   loadWallet: true,
   hasSupport: true,
