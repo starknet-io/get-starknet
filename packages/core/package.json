@@ -30,7 +30,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "starknet-types": "^0.0.4"
+    "starknet-types": "^0.0.4",
+    "@module-federation/runtime": "^0.1.2"
   },
   "devDependencies": {
     "c8": "^7.12.0",
