@@ -30,8 +30,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@consensys/get-starknet": "^1.0.0-dev-fc04076-202312205118",
-    "@metamask/detect-provider": "^2.0.0"
+    "@module-federation/runtime": "^0.1.2"
   },
   "devDependencies": {
     "c8": "^7.12.0",
