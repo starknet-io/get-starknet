@@ -96,6 +96,7 @@ async function detectMetamaskSupport() {
 
 function createMetaMaskProviderWrapper(
   walletInfo: WalletProvider,
+  provider: unknown,
 ): StarknetWindowObject {
   let metaMaskSnapWallet: IStarknetWindowObject | undefined
   const metaMaskProviderWrapper: IStarknetWindowObject = {
@@ -129,29 +130,30 @@ function createMetaMaskProviderWrapper(
       return metaMaskSnapWallet.request(call)
     },
     async enable(): Promise<string[]> {
-      await init({
-        name: "MetaMaskStarknetSnapWallet",
-        remotes: [
-          {
-            name: "MetaMaskStarknetSnapWallet",
-            alias: "MetaMaskStarknetSnapWallet",
-            entry:
-              "https://s3.eu-central-1.amazonaws.com/dev.snaps.consensys.io/get-starknet/remoteEntry.js",
-          },
-        ],
-      })
+      if (!metaMaskSnapWallet) {
+        await init({
+          name: "MetaMaskStarknetSnapWallet",
+          remotes: [
+            {
+              name: "MetaMaskStarknetSnapWallet",
+              alias: "MetaMaskStarknetSnapWallet",
+              entry:
+                "https://s3.eu-central-1.amazonaws.com/dev.snaps.consensys.io/get-starknet/remoteEntry.js",
+            },
+          ],
+        })
 
-      const result = await loadRemote("MetaMaskStarknetSnapWallet/index")
+        const result = await loadRemote("MetaMaskStarknetSnapWallet/index")
 
-      const { MetaMaskSnapWallet, MetaMaskSnap } = result as {
-        MetaMaskSnapWallet: any
-        MetaMaskSnap: any
+        const { MetaMaskSnapWallet } = result as {
+          MetaMaskSnapWallet: any
+          MetaMaskSnap: any
+        }
+
+        metaMaskSnapWallet = new MetaMaskSnapWallet(provider, "*")
       }
 
-      const provider = await MetaMaskSnap.GetProvider(window)
-      const wallet = new MetaMaskSnapWallet(provider, "*")
-
-      return await wallet.enable()
+      return await metaMaskSnapWallet!.enable()
     },
     isPreauthorized() {
       return metaMaskSnapWallet?.isPreauthorized() ?? Promise.resolve(false)
@@ -192,8 +194,10 @@ async function injectMetamaskBridge() {
   if (!metamaskWalletInfo) {
     return
   }
-
-  window.starknet_metamask = createMetaMaskProviderWrapper(metamaskWalletInfo)
+  window.starknet_metamask = createMetaMaskProviderWrapper(
+    metamaskWalletInfo,
+    provider,
+  )
 }
 
 export { injectMetamaskBridge }
