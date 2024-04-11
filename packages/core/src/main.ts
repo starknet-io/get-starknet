@@ -10,7 +10,10 @@ import {
 } from "./wallet/isWalletObject"
 import { scanObjectForWallets } from "./wallet/scan"
 import { sortBy } from "./wallet/sort"
-import { initiateVirtualWallets } from "./wallet/virtualWallets"
+import {
+  initiateVirtualWallets,
+  resolveVirtualWallet,
+} from "./wallet/virtualWallets"
 import { Permission, type StarknetWindowObject } from "starknet-types"
 
 export type {
@@ -118,7 +121,7 @@ export function getStarknet(
     enable: async (inputWallet, options) => {
       let wallet: StarknetWindowObject
       if (isVirtualWallet(inputWallet)) {
-        wallet = await inputWallet.loadWallet()
+        wallet = await resolveVirtualWallet(inputWallet)
       } else if (isFullWallet(inputWallet)) {
         wallet = inputWallet
       } else {
