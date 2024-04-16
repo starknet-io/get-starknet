@@ -31,8 +31,10 @@ export interface VirtualWallet {
   name: string
   icon: string
   windowKey: string
-  loadWallet: () => Promise<StarknetWindowObject>
-  hasSupport: () => Promise<boolean>
+  loadWallet: (
+    windowObject: Record<string, unknown>,
+  ) => Promise<StarknetWindowObject>
+  hasSupport: (windowObject: Record<string, unknown>) => Promise<boolean>
 }
 
 export const virtualWalletKeys = ensureKeysArray<VirtualWallet>({

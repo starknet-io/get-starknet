@@ -71,7 +71,7 @@ export function getStarknet(
   }
   const lastConnectedStore = storageFactoryImplementation("gsw-last")
 
-  initiateVirtualWallets()
+  initiateVirtualWallets(ssrSafeWindow)
 
   return {
     getAvailableWallets: async (options = {}) => {
@@ -121,7 +121,7 @@ export function getStarknet(
     enable: async (inputWallet, options) => {
       let wallet: StarknetWindowObject
       if (isVirtualWallet(inputWallet)) {
-        wallet = await resolveVirtualWallet(inputWallet)
+        wallet = await resolveVirtualWallet(ssrSafeWindow, inputWallet)
       } else if (isFullWallet(inputWallet)) {
         wallet = inputWallet
       } else {

@@ -4,21 +4,24 @@ import { metaMaskVirtualWallet } from "./metaMaskVirtualWallet"
 
 const virtualWallets: VirtualWallet[] = [metaMaskVirtualWallet]
 
-function initiateVirtualWallets() {
+function initiateVirtualWallets(windowObject: Record<string, unknown>) {
   virtualWallets.forEach(async (virtualWallet) => {
-    const hasSupport = await virtualWallet.hasSupport()
+    const hasSupport = await virtualWallet.hasSupport(windowObject)
     if (hasSupport) {
-      window[virtualWallet.windowKey] = virtualWallet
+      windowObject[virtualWallet.windowKey] = virtualWallet
     }
   })
 }
 
 const virtualWalletsMap: Record<string, StarknetWindowObject> = {}
 
-async function resolveVirtualWallet(virtualWallet: VirtualWallet) {
+async function resolveVirtualWallet(
+  windowObject: Record<string, unknown>,
+  virtualWallet: VirtualWallet,
+) {
   let wallet: StarknetWindowObject = virtualWalletsMap[virtualWallet.id]
   if (!wallet) {
-    wallet = await virtualWallet.loadWallet()
+    wallet = await virtualWallet.loadWallet(windowObject)
     virtualWalletsMap[virtualWallet.id] = wallet
   }
 
