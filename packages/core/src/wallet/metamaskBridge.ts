@@ -6,27 +6,34 @@ import type {
   WalletEvents,
 } from "../StarknetWindowObject"
 import wallets, { WalletProvider } from "../discovery"
-
 interface MetaMaskProvider {
   isMetaMask: boolean
   request(options: { method: string }): Promise<void>
 }
 
-declare global {
-  interface Window {
-    ethereum?: MetaMaskProvider
-  }
+function isMetaMaskProvider(obj: unknown): obj is MetaMaskProvider {
+  return (
+    obj !== null &&
+    typeof obj === "object" &&
+    obj.hasOwnProperty("isMetaMask") &&
+    obj.hasOwnProperty("request")
+  )
 }
 
-function detectMetaMaskProvider({ timeout = 3000 } = {}) {
+function detectMetaMaskProvider(
+  windowObject: Record<string, unknown>,
+  { timeout = 3000 } = {},
+) {
   let handled = false
   return new Promise<MetaMaskProvider | null>((resolve) => {
-    if (window.ethereum) {
+    if (windowObject.ethereum) {
       handleEthereum()
     } else {
-      window.addEventListener("ethereum#initialized", handleEthereum, {
-        once: true,
-      })
+      if (typeof windowObject.addEventListener === "function") {
+        windowObject.addEventListener("ethereum#initialized", handleEthereum, {
+          once: true,
+        })
+      }
       setTimeout(() => {
         handleEthereum()
       }, timeout)
@@ -36,9 +43,11 @@ function detectMetaMaskProvider({ timeout = 3000 } = {}) {
         return
       }
       handled = true
-      window.removeEventListener("ethereum#initialized", handleEthereum)
-      const { ethereum } = window
-      if (ethereum && ethereum.isMetaMask) {
+      if (typeof windowObject.removeEventListener === "function") {
+        windowObject.removeEventListener("ethereum#initialized", handleEthereum)
+      }
+      const { ethereum } = windowObject
+      if (isMetaMaskProvider(ethereum)) {
         resolve(ethereum)
       } else {
         resolve(null)
@@ -48,13 +57,14 @@ function detectMetaMaskProvider({ timeout = 3000 } = {}) {
 }
 
 async function waitForMetaMaskProvider(
+  windowObject: Record<string, unknown>,
   options: { timeout?: number; retries?: number } = {},
 ): Promise<MetaMaskProvider | null> {
   const { timeout = 3000, retries = 0 } = options
 
   let provider: MetaMaskProvider | null = null
   try {
-    provider = await detectMetaMaskProvider({ timeout })
+    provider = await detectMetaMaskProvider(windowObject, { timeout })
   } catch {
     // Silent error - do nothing
   }
@@ -71,26 +81,8 @@ async function waitForMetaMaskProvider(
   return provider
 }
 
-async function hasSnapSupport(provider: MetaMaskProvider) {
-  try {
-    await provider.request({ method: "wallet_getSnaps" })
-    return true
-  } catch {
-    return false
-  }
-}
-
-async function detectMetamaskSupport() {
-  const provider = await waitForMetaMaskProvider({ retries: 3 })
-  if (!provider) {
-    return null
-  }
-
-  const snapSupport = await hasSnapSupport(provider)
-  if (!snapSupport) {
-    return null
-  }
-
+async function detectMetamaskSupport(windowObject: Record<string, unknown>) {
+  const provider = await waitForMetaMaskProvider(windowObject, { retries: 3 })
   return provider
 }
 
@@ -180,13 +172,8 @@ function createMetaMaskProviderWrapper(
   return metaMaskProviderWrapper as StarknetWindowObject
 }
 
-async function injectMetamaskBridge() {
+async function injectMetamaskBridge(windowObject: Record<string, unknown>) {
   if (window.hasOwnProperty("starknet_metamask")) {
-    return
-  }
-
-  const provider = await detectMetamaskSupport()
-  if (!provider) {
     return
   }
 
@@ -194,6 +181,12 @@ async function injectMetamaskBridge() {
   if (!metamaskWalletInfo) {
     return
   }
+
+  const provider = await detectMetamaskSupport(windowObject)
+  if (!provider) {
+    return
+  }
+
   window.starknet_metamask = createMetaMaskProviderWrapper(
     metamaskWalletInfo,
     provider,
