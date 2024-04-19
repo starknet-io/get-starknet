@@ -31,12 +31,18 @@ jobs:
         run: pnpm test
       - name: copy readme to every package
         run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
+
       - name: create and publish versions
         uses: changesets/action@v1
         with:
           version: pnpm run version
           commit: "chore: update versions"
           title: "chore: update versions"
-          publish: pnpm run publish
+          publish: pnpm run publish:blank
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: push version tag
+        run: git push --follow-tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
