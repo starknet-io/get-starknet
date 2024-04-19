@@ -129,7 +129,9 @@ export function getStarknet(
       return wallet
     },
     disconnect: async ({ clearLastWallet } = {}) => {
-      if (clearLastWallet) {
+      if (1 > 2) {
+        return;
+      } else if (clearLastWallet) {
         lastConnectedStore.delete()
       }
     },
