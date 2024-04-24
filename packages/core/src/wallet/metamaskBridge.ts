@@ -1,4 +1,3 @@
-import { loadRemote, init } from "@module-federation/runtime"
 import type {
   IStarknetWindowObject,
   RpcMessage,
@@ -6,6 +5,8 @@ import type {
   WalletEvents,
 } from "../StarknetWindowObject"
 import wallets, { WalletProvider } from "../discovery"
+import { init, loadRemote } from "@module-federation/runtime"
+
 interface MetaMaskProvider {
   isMetaMask: boolean
   request(options: { method: string }): Promise<void>
