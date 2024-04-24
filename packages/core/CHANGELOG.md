@@ -1,12 +1,5 @@
 # get-starknet-core
 
-## 3.2.1
-
-### Patch Changes
-
-- 9207c26: Support OKX wallet
-- 9207c26: Support MetaMask Starknet snap
-
 ## 3.2.0
 
 ### Minor Changes
