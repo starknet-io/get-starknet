@@ -94,6 +94,7 @@ export interface IStarknetWindowObject {
   provider?: ProviderInterface | ProviderInterfaceV4
   selectedAddress?: string
   chainId?: string
+  isConnected: boolean
 }
 
 export interface ConnectedStarknetWindowObject extends IStarknetWindowObject {
@@ -118,6 +119,7 @@ declare global {
     starknet?: StarknetWindowObject
     starknet_braavos?: StarknetWindowObject
     starknet_argentX?: StarknetWindowObject
+    starknet_metamask?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }
