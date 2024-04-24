@@ -101,7 +101,7 @@ importers:
         specifier: ^2.11.0
         version: 2.11.0
       get-starknet-core:
-        specifier: workspace:^3.2.1
+        specifier: workspace:^3.3.0
         version: link:../core
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
