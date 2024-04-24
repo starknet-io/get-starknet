@@ -1,5 +1,18 @@
 # get-starknet
 
+## 3.3.0
+
+### Minor Changes
+
+- 042997b: Support OKX wallet
+- 042997b: Support MetaMask Starknet snap
+
+### Patch Changes
+
+- Updated dependencies [042997b]
+- Updated dependencies [042997b]
+  - get-starknet-core@3.3.0
+
 ## 3.2.1
 
 ### Patch Changes
