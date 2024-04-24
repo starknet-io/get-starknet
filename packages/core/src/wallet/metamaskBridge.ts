@@ -130,7 +130,7 @@ function createMetaMaskProviderWrapper(
               name: "MetaMaskStarknetSnapWallet",
               alias: "MetaMaskStarknetSnapWallet",
               entry:
-                "https://s3.eu-central-1.amazonaws.com/dev.snaps.consensys.io/get-starknet/remoteEntry.js",
+                "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js",
             },
           ],
         })
