@@ -53,7 +53,8 @@ const wallets: WalletProvider[] = [
         "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
       firefox: "https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/",
       edge: "https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US",
-  }
+    },
+  },
 ]
 
 export default wallets
