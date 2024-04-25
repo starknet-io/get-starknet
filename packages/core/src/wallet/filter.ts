@@ -35,7 +35,7 @@ export const filterByAuthorized = async (
     wallets.map((w) =>
       w
         .request({ type: "wallet_getPermissions" })
-        .then((result) => result.includes(Permission.Accounts))
+        .then((result: Permission[]) => result.includes(Permission.Accounts))
         .catch(() => false),
     ),
   )
