@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 4.0.0-next.5
+
+### Minor Changes
+
+- 5cd8150: Spec update
+
 ## 4.0.0-next.4
 
 ### Minor Changes
