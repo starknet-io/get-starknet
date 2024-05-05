@@ -1,6 +1,6 @@
 {
   "name": "get-starknet-core",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "keywords": [
     "starknet",
     "starkware",
@@ -28,6 +28,9 @@
     "build": "vite build",
     "dev": "vite build --watch",
     "test": "vitest"
+  },
+  "dependencies": {
+    "@module-federation/runtime": "^0.1.2"
   },
   "devDependencies": {
     "c8": "^7.12.0",

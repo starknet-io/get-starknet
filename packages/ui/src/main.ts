@@ -8,7 +8,7 @@ import sn, {
 
 export type { StarknetWindowObject, DisconnectOptions } from "get-starknet-core"
 
-type StoreVersion = "chrome" | "firefox" | "edge"
+type StoreVersion = "chrome" | "firefox" | "edge" | "safari"
 
 const ssrSafeWindow = typeof window !== "undefined" ? window : null
 
@@ -28,6 +28,8 @@ function getStoreVersionFromBrowser(): StoreVersion | null {
     case "opera": // opera is chromium based
     case "vivaldi": // vivaldi is chromium based
       return "chrome"
+    case "safari":
+      return "safari"
     default:
       return null
   }
