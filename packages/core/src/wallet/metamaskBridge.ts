@@ -174,7 +174,7 @@ function createMetaMaskProviderWrapper(
 }
 
 async function injectMetamaskBridge(windowObject: Record<string, unknown>) {
-  if (window.hasOwnProperty("starknet_metamask")) {
+  if (windowObject.hasOwnProperty("starknet_metamask")) {
     return
   }
 
