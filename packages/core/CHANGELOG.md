@@ -1,5 +1,12 @@
 # get-starknet-core
 
+## 3.4.0
+
+### Minor Changes
+
+- Added Argent Mobile to the L2 Wallet Connect popup and rearranged the wallet
+  order in the L1 popup.
+
 ## 3.3.0
 
 ### Minor Changes
