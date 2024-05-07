@@ -118,7 +118,7 @@ function createMetaMaskProviderWrapper(
       call: Omit<T, "result">,
     ): Promise<T["result"]> {
       if (!metaMaskSnapWallet) {
-        throw new Error("Wallet not enabled")
+        throw new Error("Wallet not enabled!")
       }
       return metaMaskSnapWallet.request(call)
     },
