@@ -1,8 +1,9 @@
-name: Release Develop
+name: Release
 
 on:
   push:
     branches:
+      - master
       - develop
 
 jobs:
@@ -38,12 +39,24 @@ jobs:
       - name: copy readme to every package
         run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
 
-      - name: Create Release
+      - name: Create Master Release
+        if: github.ref == 'refs/heads/master'
         uses: changesets/action@v1
         with:
           version: pnpm run version
           commit: "chore: version bump"
-          title: "Develop version bump"
+          title: "Master branch version bump"
+          publish: pnpm run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Develop Release
+        if: github.ref == 'refs/heads/develop'
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version
+          commit: "chore: version bump"
+          title: "Develop branch version bump"
           publish: pnpm run publish:next
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
