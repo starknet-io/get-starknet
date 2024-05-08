@@ -1,6 +1,6 @@
 {
   "name": "get-starknet",
-  "version": "4.0.0-next.2",
+  "version": "4.0.0",
   "keywords": [
     "starknet",
     "starkware",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "bowser": "^2.11.0",
-    "get-starknet-core": "workspace:^4.0.0-next.2"
+    "get-starknet-core": "workspace:^4.0.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",

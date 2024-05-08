@@ -1,4 +1,5 @@
 name: Release
+
 on:
   push:
     branches:
@@ -11,45 +12,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@v2.2.2
+
+      - uses: pnpm/action-setup@v4
         with:
           version: 8
+
       - name: setup node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
+
       - name: Setup npmrc
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" >> .npmrc
+
       - name: install dependencies
         run: pnpm install
+
       - name: run tests
         run: pnpm test
+
       - name: copy readme to every package
         run: echo "./packages/core/ ./packages/ui/" | xargs -n 1 cp README.md
 
-      - name: Create Pre-release
-        if: github.ref == 'refs/heads/develop'
-        uses: changesets/action@v1
-        with:
-          version: pnpm run version
-          commit: "chore: pre-release version bump"
-          title: "Pre-release version bump"
-          publish: pnpm run publish:next
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release
+      - name: Create Master Release
         if: github.ref == 'refs/heads/master'
         uses: changesets/action@v1
         with:
           version: pnpm run version
-          commit: "chore: release version bump"
-          title: "Release version bump"
+          commit: "chore: version bump"
+          title: "Master branch version bump"
           publish: pnpm run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Develop Release
+        if: github.ref == 'refs/heads/develop'
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version
+          commit: "chore: version bump"
+          title: "Develop branch version bump"
+          publish: pnpm run publish:next
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
