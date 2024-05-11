@@ -1,9 +1,10 @@
-name: PR
+name: PR integration
+
 on:
   pull_request:
     branches:
-      - develop
       - master
+      - develop
 
 jobs:
   version:
@@ -11,20 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@v2.2.2
+
+      - uses: pnpm/action-setup@v4
         with:
           version: 8
+
       - name: setup node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
           cache: "pnpm"
+
       - name: install dependencies
         run: pnpm install
-      - name: run tests
-        run: pnpm test
+
       - name: check formatting
         run: pnpm format:check
+
+      - name: run tests
+        run: pnpm test
