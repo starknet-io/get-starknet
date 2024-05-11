@@ -12,14 +12,12 @@ export type {
   StarknetWindowObject,
   AddDeclareTransactionParameters,
   AddDeclareTransactionResult,
-  AddDeployAccountTransactionParameters,
-  AddDeployAccountTransactionResult,
   AddInvokeTransactionParameters,
   AddInvokeTransactionResult,
   AddStarknetChainParameters,
   RequestAccountsParameters,
   SwitchStarknetChainParameters,
-  GetDeploymentDataResult,
+  AccountDeploymentData,
   WatchAssetParameters,
   TypedData,
   RequestFn,
@@ -33,7 +31,7 @@ export type {
   WalletEvents,
 } from "starknet-types"
 
-export { StarknetChainId, Permission } from "starknet-types"
+export { Permission } from "starknet-types"
 
 export { scanObjectForWallets } from "./wallet/scan"
 export { isWalletObj } from "./wallet/isWalletObject"
@@ -118,12 +116,12 @@ export function getStarknet(
       await wallet.request({
         type: "wallet_requestAccounts",
         params: {
-          silentMode: options?.silentMode,
+          silent_mode: options?.silent_mode,
         },
       })
 
       // check for permissions
-      const permissions = await wallet.request({
+      const permissions: Permission[] = await wallet.request({
         type: "wallet_getPermissions",
       })
       if (!permissions?.includes(Permission.Accounts)) {

@@ -67,8 +67,8 @@ importers:
   packages/core:
     dependencies:
       starknet-types:
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.7.1
+        version: 0.7.1
     devDependencies:
       c8:
         specifier: ^7.12.0
@@ -4345,8 +4345,8 @@ packages:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
     dev: true
 
-  /starknet-types@0.0.4:
-    resolution: {integrity: sha512-PklqFeSp9gMqbzW5IbO8l1s3xsNZYkNG/x/gsytgYCIl6H/cqiwCZolVTneyTibvrdHOQ8kP3PXwfdsypudYqw==}
+  /starknet-types@0.7.1:
+    resolution: {integrity: sha512-aXLUpJyDXICV84pD33kwrOyuUrtacTIF9rfxtBVTerNo5RjIHaZj5TKCvZ0gQzTzZEcS37mbb4w67YumKKbZwA==}
     dev: false
 
   /stream-transform@2.1.3:
