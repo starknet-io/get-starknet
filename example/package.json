@@ -6,7 +6,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prod": "vite"
   },
   "dependencies": {
     "get-starknet": "workspace:^3.0.1",

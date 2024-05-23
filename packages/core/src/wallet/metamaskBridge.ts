@@ -7,6 +7,13 @@ import type {
 import wallets, { WalletProvider } from "../discovery"
 import { init, loadRemote } from "@module-federation/runtime"
 
+const remoteEntryUrl =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:8082/remoteEntry.js"
+    : "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js"
+
+console.log(remoteEntryUrl)
+
 interface MetaMaskProvider {
   isMetaMask: boolean
   request(options: { method: string }): Promise<void>
@@ -130,8 +137,7 @@ function createMetaMaskProviderWrapper(
             {
               name: "MetaMaskStarknetSnapWallet",
               alias: "MetaMaskStarknetSnapWallet",
-              entry:
-                "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js",
+              entry: remoteEntryUrl,
             },
           ],
         })
