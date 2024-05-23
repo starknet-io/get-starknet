@@ -12,8 +12,6 @@ const remoteEntryUrl =
     ? "http://localhost:8082/remoteEntry.js"
     : "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js"
 
-console.log(remoteEntryUrl)
-
 interface MetaMaskProvider {
   isMetaMask: boolean
   request(options: { method: string }): Promise<void>
@@ -31,36 +29,34 @@ function isMetaMaskProvider(obj: unknown): obj is MetaMaskProvider {
 function detectMetaMaskProvider(
   windowObject: Record<string, unknown>,
   { timeout = 3000 } = {},
-) {
-  let handled = false
+): Promise<MetaMaskProvider | null> {
   return new Promise<MetaMaskProvider | null>((resolve) => {
-    if (windowObject.ethereum) {
-      handleEthereum()
-    } else {
-      if (typeof windowObject.addEventListener === "function") {
-        windowObject.addEventListener("ethereum#initialized", handleEthereum, {
-          once: true,
-        })
+    let handled = false
+
+    const handleEIP6963Provider = (event: CustomEvent) => {
+      const { provider } = event.detail
+      if (isMetaMaskProvider(provider)) {
+        resolve(provider)
+        handled = true
       }
-      setTimeout(() => {
-        handleEthereum()
-      }, timeout)
     }
-    function handleEthereum() {
-      if (handled) {
-        return
-      }
-      handled = true
-      if (typeof windowObject.removeEventListener === "function") {
-        windowObject.removeEventListener("ethereum#initialized", handleEthereum)
-      }
-      const { ethereum } = windowObject
-      if (isMetaMaskProvider(ethereum)) {
-        resolve(ethereum)
-      } else {
+
+    if (typeof windowObject.addEventListener === "function") {
+      windowObject.addEventListener(
+        "eip6963:announceProvider",
+        handleEIP6963Provider,
+        { once: true },
+      )
+    }
+
+    setTimeout(() => {
+      if (!handled) {
         resolve(null)
       }
-    }
+    }, timeout)
+
+    // Notify event listeners and other parts of the dapp that a provider is requested.
+    windowObject.dispatchEvent(new Event("eip6963:requestProvider"))
   })
 }
 
