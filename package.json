@@ -8,7 +8,6 @@
     "format": "prettier --ignore-path .gitignore --plugin-search-dir=. --write '**/*.{js,cjs,ts,tsx,svelte,md,yml,json}'",
     "format:check": "prettier --ignore-path .gitignore --plugin-search-dir=. --check '**/*.{js,cjs,ts,tsx,svelte,md,yml,json}'",
     "prepare": "pnpm run build && husky install",
-    "prod": "pnpm run -r --parallel prod",
     "publish": "pnpm publish -r --no-git-checks",
     "test": "CI=true pnpm run -r test",
     "version": "changeset version && pnpm install --lockfile-only"

@@ -8,9 +8,8 @@ import wallets, { WalletProvider } from "../discovery"
 import { init, loadRemote } from "@module-federation/runtime"
 
 const remoteEntryUrl =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:8082/remoteEntry.js"
-    : "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js"
+  import.meta.env.VITE_MM_FED_URL ??
+  "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js"
 
 interface MetaMaskProvider {
   isMetaMask: boolean

@@ -25,14 +25,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build --mode production",
-    "dev": "vite build --watch --mode development",
-    "prod": "vite build --watch --mode production",
+    "build": "vite build",
+    "dev": "vite build --watch",
     "test": "vitest"
   },
   "dependencies": {
-    "@module-federation/runtime": "^0.1.2",
-    "dotenv": "^16.4.5"
+    "@module-federation/runtime": "^0.1.2"
   },
   "devDependencies": {
     "c8": "^7.12.0",
