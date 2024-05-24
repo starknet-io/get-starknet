@@ -27,8 +27,7 @@
   "scripts": {
     "build": "vite build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "dev": "vite build --watch",
-    "prod": "vite build --watch"
+    "dev": "vite build --watch"
   },
   "dependencies": {
     "bowser": "^2.11.0",
