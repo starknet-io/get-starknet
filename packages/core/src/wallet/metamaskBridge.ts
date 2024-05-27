@@ -29,9 +29,8 @@ function detectMetaMaskProvider(
   windowObject: Record<string, unknown>,
   { timeout = 3000 } = {},
 ): Promise<MetaMaskProvider | null> {
+  let handled = false
   return new Promise<MetaMaskProvider | null>((resolve) => {
-    let handled = false
-
     const handleEIP6963Provider = (event: CustomEvent) => {
       const { provider } = event.detail
       if (isMetaMaskProvider(provider)) {
