@@ -32,8 +32,7 @@ function detectMetaMaskProvider(
   let handled = false
   return new Promise<MetaMaskProvider | null>((resolve) => {
     const handleEIP6963Provider = (event: CustomEvent) => {
-      const { provider } = event.detail
-      const { info } = event.detail
+      const { info, provider } = event.detail
       const rdnsCheck =
         info.rdns === "io.metamask" || info.rdns === "io.metamask.flask"
       if (rdnsCheck && isMetaMaskProvider(provider)) {
@@ -56,7 +55,9 @@ function detectMetaMaskProvider(
     }, timeout)
 
     // Notify event listeners and other parts of the dapp that a provider is requested.
-    windowObject.dispatchEvent(new Event("eip6963:requestProvider"))
+    if (typeof windowObject.dispatchEvent === "function") {
+      windowObject.dispatchEvent(new Event("eip6963:requestProvider"))
+    }
   })
 }
 
