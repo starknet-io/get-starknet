@@ -33,7 +33,10 @@ function detectMetaMaskProvider(
   return new Promise<MetaMaskProvider | null>((resolve) => {
     const handleEIP6963Provider = (event: CustomEvent) => {
       const { provider } = event.detail
-      if (isMetaMaskProvider(provider)) {
+      const { info } = event.detail
+      const rdnsCheck =
+        info.rdns === "io.metamask" || info.rdns === "io.metamask.flask"
+      if (rdnsCheck && isMetaMaskProvider(provider)) {
         resolve(provider)
         handled = true
       }
@@ -43,7 +46,6 @@ function detectMetaMaskProvider(
       windowObject.addEventListener(
         "eip6963:announceProvider",
         handleEIP6963Provider,
-        { once: true },
       )
     }
 
