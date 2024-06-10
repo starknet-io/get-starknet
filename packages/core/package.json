@@ -30,7 +30,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "starknet-types": "^0.7.1"
+    "@starknet-io/types-js": "^0.7.7"
   },
   "devDependencies": {
     "c8": "^7.12.0",

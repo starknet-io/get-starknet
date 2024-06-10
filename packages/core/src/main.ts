@@ -6,7 +6,7 @@ import { filterBy, filterByAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
 import { scanObjectForWallets } from "./wallet/scan"
 import { sortBy } from "./wallet/sort"
-import { Permission, type StarknetWindowObject } from "starknet-types"
+import { Permission, type StarknetWindowObject } from "@starknet-io/types-js"
 
 export type {
   StarknetWindowObject,
@@ -29,9 +29,9 @@ export type {
   NetworkChangeEventHandler,
   WalletEventHandlers,
   WalletEvents,
-} from "starknet-types"
+} from "@starknet-io/types-js"
 
-export { Permission } from "starknet-types"
+export { Permission } from "@starknet-io/types-js"
 
 export { scanObjectForWallets } from "./wallet/scan"
 export { isWalletObj } from "./wallet/isWalletObject"
@@ -124,7 +124,7 @@ export function getStarknet(
       const permissions: Permission[] = await wallet.request({
         type: "wallet_getPermissions",
       })
-      if (!permissions?.includes(Permission.Accounts)) {
+      if (!permissions?.includes(Permission.ACCOUNTS)) {
         throw new Error("Failed to connect to wallet")
       }
       lastConnectedStore.set(wallet.id)

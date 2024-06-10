@@ -66,9 +66,9 @@ importers:
 
   packages/core:
     dependencies:
-      starknet-types:
-        specifier: ^0.7.1
-        version: 0.7.1
+      '@starknet-io/types-js':
+        specifier: ^0.7.7
+        version: 0.7.7
     devDependencies:
       c8:
         specifier: ^7.12.0
@@ -1052,6 +1052,10 @@ packages:
       colors: 1.2.5
       string-argv: 0.3.2
     dev: true
+
+  /@starknet-io/types-js@0.7.7:
+    resolution: {integrity: sha512-WLrpK7LIaIb8Ymxu6KF/6JkGW1sso988DweWu7p5QY/3y7waBIiPvzh27D9bX5KIJNRDyOoOVoHVEKYUYWZ/RQ==}
+    dev: false
 
   /@sveltejs/vite-plugin-svelte@1.0.1(svelte@3.49.0)(vite@3.0.0):
     resolution: {integrity: sha512-PorCgUounn0VXcpeJu+hOweZODKmGuLHsLomwqSj+p26IwjjGffmYQfVHtiTWq+NqaUuuHWWG7vPge6UFw4Aeg==}
@@ -4344,10 +4348,6 @@ packages:
   /sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
     dev: true
-
-  /starknet-types@0.7.1:
-    resolution: {integrity: sha512-aXLUpJyDXICV84pD33kwrOyuUrtacTIF9rfxtBVTerNo5RjIHaZj5TKCvZ0gQzTzZEcS37mbb4w67YumKKbZwA==}
-    dev: false
 
   /stream-transform@2.1.3:
     resolution: {integrity: sha512-9GHUiM5hMiCi6Y03jD2ARC1ettBXkQBoQAe7nJsPknnI0ow10aXjTnew8QtYQmLjzn974BnmWEAJgCY6ZP1DeQ==}
