@@ -120,6 +120,7 @@ declare global {
     starknet_braavos?: StarknetWindowObject
     starknet_argentX?: StarknetWindowObject
     starknet_metamask?: StarknetWindowObject
+    stakenet_trustwallet?: StarknetWindowObject
     [key: `starknet_${string}`]: StarknetWindowObject | undefined
   }
 }
