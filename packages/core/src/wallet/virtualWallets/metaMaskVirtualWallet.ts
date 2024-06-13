@@ -18,35 +18,35 @@ function isMetaMaskProvider(obj: unknown): obj is MetaMaskProvider {
 function detectMetaMaskProvider(
   windowObject: Record<string, unknown>,
   { timeout = 3000 } = {},
-) {
+): Promise<MetaMaskProvider | null> {
   let handled = false
   return new Promise<MetaMaskProvider | null>((resolve) => {
-    if (windowObject.ethereum) {
-      handleEthereum()
-    } else {
-      if (typeof windowObject.addEventListener === "function") {
-        windowObject.addEventListener("ethereum#initialized", handleEthereum, {
-          once: true,
-        })
+    const handleEIP6963Provider = (event: CustomEvent) => {
+      const { info, provider } = event.detail
+      const rdnsCheck =
+        info.rdns === "io.metamask" || info.rdns === "io.metamask.flask"
+      if (rdnsCheck && isMetaMaskProvider(provider)) {
+        resolve(provider)
+        handled = true
       }
-      setTimeout(() => {
-        handleEthereum()
-      }, timeout)
     }
-    function handleEthereum() {
-      if (handled) {
-        return
-      }
-      handled = true
-      if (typeof windowObject.removeEventListener === "function") {
-        windowObject.removeEventListener("ethereum#initialized", handleEthereum)
-      }
-      const { ethereum } = windowObject
-      if (isMetaMaskProvider(ethereum)) {
-        resolve(ethereum)
-      } else {
+
+    if (typeof windowObject.addEventListener === "function") {
+      windowObject.addEventListener(
+        "eip6963:announceProvider",
+        handleEIP6963Provider,
+      )
+    }
+
+    setTimeout(() => {
+      if (!handled) {
         resolve(null)
       }
+    }, timeout)
+
+    // Notify event listeners and other parts of the dapp that a provider is requested.
+    if (typeof windowObject.dispatchEvent === "function") {
+      windowObject.dispatchEvent(new Event("eip6963:requestProvider"))
     }
   })
 }
