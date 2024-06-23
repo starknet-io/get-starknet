@@ -1,5 +1,5 @@
 {
-  "name": "get-starknet",
+  "name": "@starknet-io/get-starknet",
   "version": "4.0.0",
   "keywords": [
     "starknet",
