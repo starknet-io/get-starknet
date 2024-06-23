@@ -1,4 +1,4 @@
-import type { StarknetWindowObject } from "starknet-types"
+import type { StarknetWindowObject } from "@starknet-io/types-js"
 
 export function scanObjectForWallets(
   obj: Record<string, any>,

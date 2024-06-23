@@ -1,5 +1,5 @@
 import wallets from "../discovery"
-import { Permission, type StarknetWindowObject } from "starknet-types"
+import { Permission, type StarknetWindowObject } from "@starknet-io/types-js"
 
 type WalletMock = Pick<StarknetWindowObject, "id" | "name" | "icon" | "request">
 
@@ -47,7 +47,7 @@ export function makeAuthorized(authorized: boolean) {
       request: async (request) => {
         switch (request.type) {
           case "wallet_getPermissions":
-            return authorized ? [Permission.Accounts] : []
+            return authorized ? [Permission.ACCOUNTS] : []
           default:
             return wallet.request(request)
         }
@@ -62,7 +62,7 @@ export function makeConnected(isConnected: boolean) {
       request: async ({ type }) => {
         switch (type) {
           case "wallet_getPermissions":
-            return isConnected ? [Permission.Accounts] : []
+            return isConnected ? [Permission.ACCOUNTS] : []
           default:
             return []
         }
