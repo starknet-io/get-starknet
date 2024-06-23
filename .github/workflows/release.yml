@@ -27,7 +27,6 @@ jobs:
           cache: "pnpm"
 
       - name: Setup npmrc
-        if: github.ref == 'refs/heads/master'
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN_DEVELOP }}" >> .npmrc
 
