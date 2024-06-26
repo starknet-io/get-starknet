@@ -1,5 +1,5 @@
 import type { WalletProvider } from "../discovery"
-import { Permission, type StarknetWindowObject } from "starknet-types"
+import { Permission, type StarknetWindowObject } from "@starknet-io/types-js"
 
 export type FilterList = string[]
 interface FilterByOptions {
@@ -34,13 +34,14 @@ export const filterByAuthorized = async (
   const preAuthResponses = await Promise.all(
     wallets.map(async (wallet) => {
       try {
-        const result = await wallet.request({ type: "wallet_getPermissions" })
-        return result.includes(Permission.Accounts)
+        const result: Permission[] = await wallet.request({
+          type: "wallet_getPermissions",
+        })
+        return result.includes(Permission.ACCOUNTS)
       } catch {
         return false
       }
-    }
-    ),
+    }),
   )
   return wallets.filter((_, i) => preAuthResponses[i])
 }

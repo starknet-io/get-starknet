@@ -14,20 +14,18 @@ import {
   initiateVirtualWallets,
   resolveVirtualWallet,
 } from "./wallet/virtualWallets"
-import { Permission, type StarknetWindowObject } from "starknet-types"
+import { Permission, type StarknetWindowObject } from "@starknet-io/types-js"
 
 export type {
   StarknetWindowObject,
   AddDeclareTransactionParameters,
   AddDeclareTransactionResult,
-  AddDeployAccountTransactionParameters,
-  AddDeployAccountTransactionResult,
   AddInvokeTransactionParameters,
   AddInvokeTransactionResult,
   AddStarknetChainParameters,
   RequestAccountsParameters,
   SwitchStarknetChainParameters,
-  GetDeploymentDataResult,
+  AccountDeploymentData,
   WatchAssetParameters,
   TypedData,
   RequestFn,
@@ -39,9 +37,7 @@ export type {
   NetworkChangeEventHandler,
   WalletEventHandlers,
   WalletEvents,
-} from "starknet-types"
-
-export { StarknetChainId, Permission } from "starknet-types"
+} from "@starknet-io/types-js"
 
 export { scanObjectForWallets } from "./wallet/scan"
 export { isWalletObject } from "./wallet/isWalletObject"
@@ -131,15 +127,15 @@ export function getStarknet(
       await wallet.request({
         type: "wallet_requestAccounts",
         params: {
-          silentMode: options?.silentMode,
+          silent_mode: options?.silent_mode,
         },
       })
 
       // check for permissions
-      const permissions = await wallet.request({
+      const permissions: Permission[] = await wallet.request({
         type: "wallet_getPermissions",
       })
-      if (!permissions?.includes(Permission.Accounts)) {
+      if (!permissions?.includes(Permission.ACCOUNTS)) {
         throw new Error("Failed to connect to wallet")
       }
       lastConnectedStore.set(wallet.id)

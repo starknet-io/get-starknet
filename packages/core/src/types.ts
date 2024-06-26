@@ -6,7 +6,7 @@ import { Sort } from "./wallet/sort"
 import type {
   RequestAccountsParameters,
   StarknetWindowObject,
-} from "starknet-types"
+} from "@starknet-io/types-js"
 
 export type { WalletProvider } from "./discovery"
 
