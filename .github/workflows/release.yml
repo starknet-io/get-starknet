@@ -28,7 +28,7 @@ jobs:
 
       - name: Setup npmrc
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN_DEVELOP }}" >> .npmrc
 
       - name: install dependencies
         run: pnpm install

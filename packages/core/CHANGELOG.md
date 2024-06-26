@@ -1,4 +1,4 @@
-# get-starknet-core
+# @starknet-io/get-starknet-core
 
 ## 4.0.0-next.5
 

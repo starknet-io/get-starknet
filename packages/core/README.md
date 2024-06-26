@@ -49,7 +49,7 @@ import {
   getDiscoveryWallets,
   getLastConnectedWallet,
   getPreAuthorizedWallets,
-} from "get-starknet-core"
+} from "@starknet-io/get-starknet-core"
 
 interface GetStarknetResult {
   // Returns all wallets available in the window object

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { WalletProviderWithStoreVersion } from "."
-  import type { StarknetWindowObject } from "get-starknet-core"
+  import type { StarknetWindowObject } from "@starknet-io/get-starknet-core"
   import { onMount } from "svelte"
 
   const ssrSafeWindow = typeof window !== "undefined" ? window : null

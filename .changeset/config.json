@@ -3,7 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [["get-starknet-core", "get-starknet"]],
+  "linked": [["@starknet-io/get-starknet-core", "@starknet-io/get-starknet"]],
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",

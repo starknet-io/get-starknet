@@ -4,7 +4,7 @@ import {
   type DisconnectOptions,
   connect,
   disconnect,
-} from "get-starknet"
+} from "@starknet-io/get-starknet"
 import { useState } from "react"
 
 function App() {

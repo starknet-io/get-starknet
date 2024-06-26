@@ -1,5 +1,8 @@
 import Modal from "./Modal.svelte"
-import type { StarknetWindowObject, WalletProvider } from "get-starknet-core"
+import type {
+  StarknetWindowObject,
+  WalletProvider,
+} from "@starknet-io/get-starknet-core"
 
 export interface WalletProviderWithStoreVersion
   extends Omit<WalletProvider, "downloads"> {

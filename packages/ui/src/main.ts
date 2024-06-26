@@ -1,13 +1,16 @@
 import show, { type WalletProviderWithStoreVersion } from "./modal"
-import Bowser from "bowser"
 import sn, {
   type DisconnectOptions,
   type GetWalletOptions,
   type RequestAccountsParameters,
   type StarknetWindowObject,
-} from "get-starknet-core"
+} from "@starknet-io/get-starknet-core"
+import Bowser from "bowser"
 
-export type { StarknetWindowObject, DisconnectOptions } from "get-starknet-core"
+export type {
+  StarknetWindowObject,
+  DisconnectOptions,
+} from "@starknet-io/get-starknet-core"
 
 type StoreVersion = "chrome" | "firefox" | "edge"
 

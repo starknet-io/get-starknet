@@ -38,8 +38,8 @@ importers:
 
   example:
     dependencies:
-      get-starknet:
-        specifier: workspace:^4.0.0-next.0
+      '@starknet-io/get-starknet':
+        specifier: workspace:*
         version: link:../packages/ui
       react:
         specifier: ^18.2.0
@@ -94,12 +94,12 @@ importers:
 
   packages/ui:
     dependencies:
+      '@starknet-io/get-starknet-core':
+        specifier: workspace:*
+        version: link:../core
       bowser:
         specifier: ^2.11.0
         version: 2.11.0
-      get-starknet-core:
-        specifier: workspace:^4.0.0
-        version: link:../core
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^1.0.1
