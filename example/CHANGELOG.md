@@ -1,4 +1,4 @@
-# get-starknet-example
+# @starknet-io/get-starknet-example
 
 ## 2.1.3-next.0
 
