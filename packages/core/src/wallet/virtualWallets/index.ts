@@ -1,6 +1,6 @@
-import type { StarknetWindowObject } from "starknet-types"
 import type { VirtualWallet } from "../../types"
 import { metaMaskVirtualWallet } from "./metaMaskVirtualWallet"
+import type { StarknetWindowObject } from "starknet-types"
 
 const virtualWallets: VirtualWallet[] = [metaMaskVirtualWallet]
 

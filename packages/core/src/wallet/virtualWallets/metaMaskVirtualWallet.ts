@@ -1,5 +1,5 @@
-import { loadRemote, init } from "@module-federation/runtime"
 import { VirtualWallet } from "../../types"
+import { init, loadRemote } from "@module-federation/runtime"
 
 interface MetaMaskProvider {
   isMetaMask: boolean

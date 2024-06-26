@@ -1,4 +1,4 @@
-import { virtualWalletKeys, fullWalletKeys } from "../types"
+import { fullWalletKeys, virtualWalletKeys } from "../types"
 
 function createWalletGuard<T>(keys: (keyof T)[]) {
   return function hasKeys(obj: unknown): obj is T {
