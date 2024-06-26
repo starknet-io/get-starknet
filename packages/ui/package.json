@@ -30,8 +30,8 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "bowser": "^2.11.0",
-    "get-starknet-core": "workspace:^4.0.0"
+    "@starknet-io/get-starknet-core": "workspace:*",
+    "bowser": "^2.11.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
