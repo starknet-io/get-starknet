@@ -30,6 +30,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@module-federation/runtime": "^0.1.2",
     "@starknet-io/types-js": "^0.7.7"
   },
   "devDependencies": {

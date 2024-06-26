@@ -1,3 +1,5 @@
+import { metaMaskVirtualWallet } from "./wallet/virtualWallets/metaMaskVirtualWallet"
+
 export type WalletProvider = {
   id: string
   name: string
@@ -29,6 +31,17 @@ const wallets: WalletProvider[] = [
         "https://chrome.google.com/webstore/detail/braavos-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma",
       firefox: "https://addons.mozilla.org/en-US/firefox/addon/braavos-wallet",
       edge: "https://microsoftedge.microsoft.com/addons/detail/braavos-wallet/hkkpjehhcnhgefhbdcgfkeegglpjchdc",
+    },
+  },
+  {
+    id: metaMaskVirtualWallet.id,
+    name: metaMaskVirtualWallet.name,
+    icon: metaMaskVirtualWallet.icon,
+    downloads: {
+      chrome:
+        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
+      firefox: "https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/",
+      edge: "https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US",
     },
   },
 ]

@@ -32,12 +32,16 @@ export const filterByAuthorized = async (
   wallets: StarknetWindowObject[],
 ): Promise<StarknetWindowObject[]> => {
   const preAuthResponses = await Promise.all(
-    wallets.map((w) =>
-      w
-        .request({ type: "wallet_getPermissions" })
-        .then((result: Permission[]) => result.includes(Permission.ACCOUNTS))
-        .catch(() => false),
-    ),
+    wallets.map(async (wallet) => {
+      try {
+        const result: Permission[] = await wallet.request({
+          type: "wallet_getPermissions",
+        })
+        return result.includes(Permission.ACCOUNTS)
+      } catch {
+        return false
+      }
+    }),
   )
   return wallets.filter((_, i) => preAuthResponses[i])
 }

@@ -1,5 +1,6 @@
 import { WalletProvider } from "./discovery"
 import { IStorageWrapper } from "./localStorageStore"
+import { ensureKeysArray } from "./utils"
 import { FilterList } from "./wallet/filter"
 import { Sort } from "./wallet/sort"
 import type {
@@ -11,7 +12,7 @@ export type { WalletProvider } from "./discovery"
 
 export interface GetStarknetOptions {
   windowObject: Record<string, any>
-  isWalletObject: (wallet: any) => boolean
+  isWalletObject: (wallet: unknown) => boolean
   storageFactoryImplementation: (name: string) => IStorageWrapper
 }
 
@@ -25,6 +26,36 @@ export interface DisconnectOptions {
   clearLastWallet?: boolean
 }
 
+export interface VirtualWallet {
+  id: string
+  name: string
+  icon: string
+  windowKey: string
+  loadWallet: (
+    windowObject: Record<string, unknown>,
+  ) => Promise<StarknetWindowObject>
+  hasSupport: (windowObject: Record<string, unknown>) => Promise<boolean>
+}
+
+export const virtualWalletKeys = ensureKeysArray<VirtualWallet>({
+  id: true,
+  name: true,
+  icon: true,
+  windowKey: true,
+  loadWallet: true,
+  hasSupport: true,
+})
+
+export const fullWalletKeys = ensureKeysArray<StarknetWindowObject>({
+  id: true,
+  name: true,
+  version: true,
+  icon: true,
+  request: true,
+  on: true,
+  off: true,
+})
+
 export interface GetStarknetResult {
   getAvailableWallets: (
     options?: GetWalletOptions,
@@ -35,8 +66,14 @@ export interface GetStarknetResult {
   getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]> // Returns all wallets in existence (from discovery file)
   getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
   enable: (
-    wallet: StarknetWindowObject,
+    wallet: StarknetWindowObject | VirtualWallet,
     options?: RequestAccountsParameters,
   ) => Promise<StarknetWindowObject> // Connects to a wallet
   disconnect: (options?: DisconnectOptions) => Promise<void> // Disconnects from a wallet
+}
+
+declare global {
+  interface Window {
+    [key: string]: unknown
+  }
 }

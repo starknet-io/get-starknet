@@ -66,6 +66,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@module-federation/runtime':
+        specifier: ^0.1.2
+        version: 0.1.2
       '@starknet-io/types-js':
         specifier: ^0.7.7
         version: 0.7.7
@@ -989,6 +992,16 @@ packages:
   /@microsoft/tsdoc@0.14.2:
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
     dev: true
+
+  /@module-federation/runtime@0.1.2:
+    resolution: {integrity: sha512-KdTL2aR48p+hOdMuim5osN15xkxzm1ccyXnvqR6TSl61r+chq7qFhU124JQYDU/SSkmbRm7Fb53IaaXo/PjKQw==}
+    dependencies:
+      '@module-federation/sdk': 0.1.2
+    dev: false
+
+  /@module-federation/sdk@0.1.2:
+    resolution: {integrity: sha512-G9af5sV/yyz5EpHOpg+y5gtDxomT6T1c7KETMs9k76GOcHKGBAoqiC8RJimgncN6O2wPhiBKEvNjf9VxrrX+gw==}
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

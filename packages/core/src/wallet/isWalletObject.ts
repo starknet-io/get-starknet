@@ -1,18 +1,22 @@
-export const isWalletObj = (wallet: any): boolean => {
-  try {
+import { fullWalletKeys, virtualWalletKeys } from "../types"
+
+function createWalletGuard<T>(keys: (keyof T)[]) {
+  return function hasKeys(obj: unknown): obj is T {
     return (
-      wallet &&
-      [
-        // wallet's must have methods/members, see IStarknetWindowObject
-        "request",
-        "on",
-        "off",
-        "version",
-        "id",
-        "name",
-        "icon",
-      ].every((key) => key in wallet)
+      obj !== null && typeof obj === "object" && keys.every((key) => key in obj)
     )
+  }
+}
+
+const isFullWallet = createWalletGuard(fullWalletKeys)
+
+const isVirtualWallet = createWalletGuard(virtualWalletKeys)
+
+function isWalletObject(wallet: unknown): boolean {
+  try {
+    return isFullWallet(wallet) || isVirtualWallet(wallet)
   } catch (err) {}
   return false
 }
+
+export { isVirtualWallet, isFullWallet, isWalletObject }
