@@ -7,12 +7,37 @@ import type {
 import wallets, { WalletProvider } from "../discovery"
 import { init, loadRemote } from "@module-federation/runtime"
 
+async function fetchMetaMaskSnapWallet(windowObject: Record<string, unknown>) {
+  await init({
+    name: "MetaMaskStarknetSnapWallet",
+    remotes: [
+      {
+        name: "MetaMaskStarknetSnapWallet",
+        alias: "MetaMaskStarknetSnapWallet",
+        entry:
+          "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js", //"http://localhost:8082/remoteEntry.js",
+      },
+    ],
+  })
+
+  const result = await loadRemote("MetaMaskStarknetSnapWallet/index")
+
+  const { MetaMaskSnapWallet } = result as {
+    MetaMaskSnapWallet: any
+    MetaMaskSnap: any
+  }
+
+  const metaMaskSnapWallet = new MetaMaskSnapWallet("*")
+  await (metaMaskSnapWallet as any).init(windowObject)
+  return metaMaskSnapWallet as IStarknetWindowObject
+}
+
 function createMetaMaskProviderWrapper(
   walletInfo: WalletProvider,
   windowObject: Record<string, unknown>,
 ): StarknetWindowObject {
   let metaMaskSnapWallet: IStarknetWindowObject | undefined
-  let isEnabling = false
+  let fetchPromise: Promise<IStarknetWindowObject> | undefined = undefined
   const metaMaskProviderWrapper: IStarknetWindowObject = {
     id: walletInfo.id,
     name: walletInfo.name,
@@ -44,52 +69,13 @@ function createMetaMaskProviderWrapper(
       return metaMaskSnapWallet.request(call)
     },
     async enable(): Promise<string[]> {
-      if (isEnabling) {
-        // If enable is already being called, return a promise that waits for the current enable call to finish
-        return new Promise((resolve, reject) => {
-          const checkInterval = setInterval(() => {
-            if (!isEnabling) {
-              clearInterval(checkInterval)
-              if (metaMaskSnapWallet) {
-                resolve(metaMaskSnapWallet.enable())
-              } else {
-                reject(new Error("Wallet not enabled"))
-              }
-            }
-          }, 100)
-        })
+      if (!metaMaskSnapWallet) {
+        fetchPromise = fetchPromise || fetchMetaMaskSnapWallet(windowObject)
+        metaMaskSnapWallet = await fetchPromise
       }
-      isEnabling = true // Set the guard flag
-      try {
-        if (!metaMaskSnapWallet) {
-          await init({
-            name: "MetaMaskStarknetSnapWallet",
-            remotes: [
-              {
-                name: "MetaMaskStarknetSnapWallet",
-                alias: "MetaMaskStarknetSnapWallet",
-                entry:
-                  "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js", //"http://localhost:8082/remoteEntry.js",
-              },
-            ],
-          })
 
-          const result = await loadRemote("MetaMaskStarknetSnapWallet/index")
-
-          const { MetaMaskSnapWallet } = result as {
-            MetaMaskSnapWallet: any
-            MetaMaskSnap: any
-          }
-
-          metaMaskSnapWallet = new MetaMaskSnapWallet("*")
-          await (metaMaskSnapWallet as any).init(windowObject)
-        }
-
-        const accounts = await metaMaskSnapWallet!.enable()
-        return accounts
-      } finally {
-        isEnabling = false // Reset the guard flag
-      }
+      const accounts = await metaMaskSnapWallet!.enable()
+      return accounts
     },
     isPreauthorized() {
       return metaMaskSnapWallet?.isPreauthorized() ?? Promise.resolve(false)
