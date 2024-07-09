@@ -24,62 +24,57 @@ function isMetaMaskProvider(obj: unknown): obj is MetaMaskProvider {
 function detectMetaMaskProvider(
   windowObject: Record<string, unknown>,
   { timeout = 3000 } = {},
-) {
+): Promise<MetaMaskProvider | null> {
   let handled = false
   return new Promise<MetaMaskProvider | null>((resolve) => {
-    if (windowObject.ethereum) {
-      handleEthereum()
-    } else {
-      if (typeof windowObject.addEventListener === "function") {
-        windowObject.addEventListener("ethereum#initialized", handleEthereum, {
-          once: true,
-        })
+    const handleEIP6963Provider = (event: CustomEvent) => {
+      const { info, provider } = event.detail
+      if (
+        ["io.metamask", "io.metamask.flask"].includes(info.rdns) &&
+        isMetaMaskProvider(provider)
+      ) {
+        resolve(provider)
+        handled = true
       }
-      setTimeout(() => {
-        handleEthereum()
-      }, timeout)
     }
-    function handleEthereum() {
-      if (handled) {
-        return
-      }
-      handled = true
-      if (typeof windowObject.removeEventListener === "function") {
-        windowObject.removeEventListener("ethereum#initialized", handleEthereum)
-      }
-      const { ethereum } = windowObject
-      if (isMetaMaskProvider(ethereum)) {
-        resolve(ethereum)
-      } else {
+
+    if (typeof windowObject.addEventListener === "function") {
+      windowObject.addEventListener(
+        "eip6963:announceProvider",
+        handleEIP6963Provider,
+      )
+    }
+
+    setTimeout(() => {
+      if (!handled) {
         resolve(null)
       }
+    }, timeout)
+
+    // Notify event listeners and other parts of the dapp that a provider is requested.
+    if (typeof windowObject.dispatchEvent === "function") {
+      windowObject.dispatchEvent(new Event("eip6963:requestProvider"))
     }
   })
 }
 
 async function waitForMetaMaskProvider(
   windowObject: Record<string, unknown>,
-  options: { timeout?: number; retries?: number } = {},
+  { timeout = 3000, retries = 0 } = {},
 ): Promise<MetaMaskProvider | null> {
-  const { timeout = 3000, retries = 0 } = options
-
-  let provider: MetaMaskProvider | null = null
-  try {
-    provider = await detectMetaMaskProvider(windowObject, { timeout })
-  } catch {
-    // Silent error - do nothing
-  }
-
-  if (provider) {
-    return provider
-  }
-
-  if (retries === 0) {
-    return null
-  }
-
-  provider = await waitForMetaMaskProvider({ timeout, retries: retries - 1 })
-  return provider
+  return detectMetaMaskProvider(windowObject, { timeout })
+    .catch(function () {
+      return null
+    })
+    .then(function (provider) {
+      if (provider || retries === 0) {
+        return provider
+      }
+      return waitForMetaMaskProvider(windowObject, {
+        timeout,
+        retries: retries - 1,
+      })
+    })
 }
 
 async function detectMetamaskSupport(windowObject: Record<string, unknown>) {
@@ -87,11 +82,36 @@ async function detectMetamaskSupport(windowObject: Record<string, unknown>) {
   return provider
 }
 
+async function fetchMetaMaskSnapWallet(provider: unknown) {
+  await init({
+    name: "MetaMaskStarknetSnapWallet",
+    remotes: [
+      {
+        name: "MetaMaskStarknetSnapWallet",
+        alias: "MetaMaskStarknetSnapWallet",
+        entry:
+          "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js", //"http://localhost:8082/remoteEntry.js",
+      },
+    ],
+  })
+
+  const result = await loadRemote("MetaMaskStarknetSnapWallet/index")
+
+  const { MetaMaskSnapWallet } = result as {
+    MetaMaskSnapWallet: any
+    MetaMaskSnap: any
+  }
+
+  const metaMaskSnapWallet = new MetaMaskSnapWallet(provider, "*")
+  return metaMaskSnapWallet as IStarknetWindowObject
+}
+
 function createMetaMaskProviderWrapper(
   walletInfo: WalletProvider,
   provider: unknown,
 ): StarknetWindowObject {
   let metaMaskSnapWallet: IStarknetWindowObject | undefined
+  let fetchPromise: Promise<IStarknetWindowObject> | undefined = undefined
   const metaMaskProviderWrapper: IStarknetWindowObject = {
     id: walletInfo.id,
     name: walletInfo.name,
@@ -124,29 +144,12 @@ function createMetaMaskProviderWrapper(
     },
     async enable(): Promise<string[]> {
       if (!metaMaskSnapWallet) {
-        await init({
-          name: "MetaMaskStarknetSnapWallet",
-          remotes: [
-            {
-              name: "MetaMaskStarknetSnapWallet",
-              alias: "MetaMaskStarknetSnapWallet",
-              entry:
-                "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js",
-            },
-          ],
-        })
-
-        const result = await loadRemote("MetaMaskStarknetSnapWallet/index")
-
-        const { MetaMaskSnapWallet } = result as {
-          MetaMaskSnapWallet: any
-          MetaMaskSnap: any
-        }
-
-        metaMaskSnapWallet = new MetaMaskSnapWallet(provider, "*")
+        fetchPromise = fetchPromise || fetchMetaMaskSnapWallet(provider)
+        metaMaskSnapWallet = await fetchPromise
       }
 
-      return await metaMaskSnapWallet!.enable()
+      const accounts = await metaMaskSnapWallet!.enable()
+      return accounts
     },
     isPreauthorized() {
       return metaMaskSnapWallet?.isPreauthorized() ?? Promise.resolve(false)
@@ -188,7 +191,7 @@ async function injectMetamaskBridge(windowObject: Record<string, unknown>) {
     return
   }
 
-  window.starknet_metamask = createMetaMaskProviderWrapper(
+  windowObject.starknet_metamask = createMetaMaskProviderWrapper(
     metamaskWalletInfo,
     provider,
   )
