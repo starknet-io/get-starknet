@@ -39,7 +39,7 @@ importers:
   example:
     dependencies:
       get-starknet:
-        specifier: workspace:^3.0.1
+        specifier: workspace:^3.3.2
         version: link:../packages/ui
       react:
         specifier: ^18.2.0
@@ -101,7 +101,7 @@ importers:
         specifier: ^2.11.0
         version: 2.11.0
       get-starknet-core:
-        specifier: workspace:^3.3.0
+        specifier: workspace:^3.3.2
         version: link:../core
     devDependencies:
       '@sveltejs/vite-plugin-svelte':

@@ -1,5 +1,13 @@
 # get-starknet
 
+## 3.3.2
+
+### Patch Changes
+
+- 53469c7: Implement eip 6963 support
+- Updated dependencies [53469c7]
+  - get-starknet-core@3.3.2
+
 ## 3.3.0
 
 ### Minor Changes
