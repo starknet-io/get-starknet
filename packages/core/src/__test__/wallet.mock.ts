@@ -34,6 +34,11 @@ export const OKXMock: WalletMock = {
   isPreauthorized: async () => false,
 }
 
+export const BitgetMock: WalletMock = {
+  ...wallets.find((w) => w.id === "bitget")!,
+  isPreauthorized: async () => false,
+}
+
 export function makePreAuthorized(isPreauthorized: boolean) {
   return (wallet: WalletMock) => ({
     ...wallet,
