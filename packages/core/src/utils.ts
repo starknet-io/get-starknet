@@ -23,3 +23,6 @@ export function ensureKeysArray<T extends object>(keysGuard: {
 }) {
   return Object.keys(keysGuard) as (keyof T)[]
 }
+
+export const ssrSafeWindow: Window | null =
+  typeof window !== "undefined" ? window : null

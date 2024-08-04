@@ -8,7 +8,11 @@ import type {
   StarknetWindowObject,
 } from "@starknet-io/types-js"
 
-export type { WalletProvider } from "./discovery"
+export type {
+  BrowserStoreVersion,
+  OperatingSystemStoreVersion,
+  WalletProvider,
+} from "./discovery"
 
 export interface GetStarknetOptions {
   windowObject: Record<string, any>
