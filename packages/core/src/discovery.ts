@@ -1,12 +1,36 @@
+import { ssrSafeWindow } from "./utils"
+
+export type OperatingSystemStoreVersion = "ios" | "android"
+export type BrowserStoreVersion = "chrome" | "firefox" | "edge" | "safari"
+
+type DownloadsRecord<
+  SV extends OperatingSystemStoreVersion | BrowserStoreVersion,
+  DL extends string,
+> = Record<SV, DL>
+
 export type WalletProvider = {
   id: string
   name: string
   icon: string
   downloads:
-    | { chrome?: `https://chrome.google.com/webstore/detail/${string}` }
-    | { firefox?: `https://addons.mozilla.org/en-US/firefox/addon/${string}` }
-    | { edge?: `https://microsoftedge.microsoft.com/addons/detail/${string}` }
-    | { safari?: `https://apps.apple.com/us/app/${string}` }
+    | DownloadsRecord<
+        "chrome",
+        `https://chrome.google.com/webstore/detail/${string}`
+      >
+    | DownloadsRecord<
+        "firefox",
+        `https://addons.mozilla.org/en-US/firefox/addon/${string}`
+      >
+    | DownloadsRecord<
+        "edge",
+        `https://microsoftedge.microsoft.com/addons/detail/${string}`
+      >
+    | DownloadsRecord<"safari", `https://apps.apple.com/us/app/${string}`>
+    | DownloadsRecord<"ios", `https://apps.apple.com/us/app/${string}`>
+    | DownloadsRecord<
+        "android",
+        `https://play.google.com/store/apps/details?id=${string}`
+      >
 }
 
 const wallets: WalletProvider[] = [
@@ -30,7 +54,9 @@ const wallets: WalletProvider[] = [
         "https://chrome.google.com/webstore/detail/braavos-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma",
       firefox: "https://addons.mozilla.org/en-US/firefox/addon/braavos-wallet",
       edge: "https://microsoftedge.microsoft.com/addons/detail/braavos-wallet/hkkpjehhcnhgefhbdcgfkeegglpjchdc",
-    },
+      ios: `https://link.braavos.app/dapp/${ssrSafeWindow?.location?.host}`,
+      android: `https://link.braavos.app/dapp/${ssrSafeWindow?.location?.host}`,
+    } as Record<BrowserStoreVersion | OperatingSystemStoreVersion, any>,
   },
   {
     id: "okxwallet",

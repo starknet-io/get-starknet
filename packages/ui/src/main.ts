@@ -1,18 +1,18 @@
 import show, { type WalletProviderWithStoreVersion } from "./modal"
 import Bowser from "bowser"
 import sn, {
+  type BrowserStoreVersion,
   type DisconnectOptions,
   type GetWalletOptions,
+  type OperatingSystemStoreVersion,
   type StarknetWindowObject,
+  type WalletProvider,
+  ssrSafeWindow,
 } from "get-starknet-core"
 
 export type { StarknetWindowObject, DisconnectOptions } from "get-starknet-core"
 
-type StoreVersion = "chrome" | "firefox" | "edge" | "safari"
-
-const ssrSafeWindow = typeof window !== "undefined" ? window : null
-
-function getStoreVersionFromBrowser(): StoreVersion | null {
+function getBrowserStoreVersionFromBrowser(): BrowserStoreVersion | null {
   const browserName = Bowser.getParser(ssrSafeWindow?.navigator.userAgent)
     .getBrowserName()
     ?.toLowerCase()
@@ -35,10 +35,25 @@ function getStoreVersionFromBrowser(): StoreVersion | null {
   }
 }
 
+function getOperatingSystemStoreVersionFromBrowser(): OperatingSystemStoreVersion | null {
+  const os =
+    Bowser.getParser(ssrSafeWindow?.navigator.userAgent)
+      .getOS()
+      ?.name?.toLowerCase() ?? null
+  switch (os) {
+    case "ios":
+    case "android":
+      return os
+    default:
+      return null
+  }
+}
+
 export interface ConnectOptions extends GetWalletOptions {
   modalMode?: "alwaysAsk" | "canAsk" | "neverAsk"
   modalTheme?: "light" | "dark" | "system"
-  storeVersion?: StoreVersion
+  storeVersion?: BrowserStoreVersion
+  osVersion?: OperatingSystemStoreVersion
 }
 
 const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
@@ -50,7 +65,8 @@ const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
 
 export const connect = async ({
   modalMode = "canAsk",
-  storeVersion = getStoreVersionFromBrowser(),
+  storeVersion = getBrowserStoreVersionFromBrowser(),
+  osVersion = getOperatingSystemStoreVersionFromBrowser(),
   modalTheme,
   ...restOptions
 }: ConnectOptions = {}): Promise<StarknetWindowObject | null> => {
@@ -85,13 +101,26 @@ export const connect = async ({
 
   const discoveryWallets = await sn.getDiscoveryWallets(restOptions)
 
-  const discoveryWalletsByStoreVersion: WalletProviderWithStoreVersion[] =
-    discoveryWallets
-      .filter((w) => Boolean(w.downloads[storeVersion]))
-      .map(({ downloads, ...w }) => ({
-        ...w,
-        download: downloads[storeVersion],
-      }))
+  const discoveryWalletsByStoreVersion = discoveryWallets.reduce<
+    WalletProviderWithStoreVersion[]
+  >((results, w) => {
+    const download =
+      // prioritize OS url
+      w.downloads[osVersion] ||
+      // fallback to browser url
+      w.downloads[storeVersion]
+    if (download) {
+      const store = Object.keys(w.downloads).find(
+        (key) => w.downloads[key] === download,
+      ) as keyof WalletProvider["downloads"]
+
+      const isMobileStore = store === "android" || store === "ios"
+      const name = isMobileStore ? `${w.name} Mobile` : `Install ${w.name}`
+
+      results.push({ ...w, name, download })
+    }
+    return results
+  }, [])
 
   return show({
     lastWallet,

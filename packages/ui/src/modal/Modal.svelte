@@ -143,7 +143,7 @@
                 cb(null)
               }
             }}>
-            Install {discoveryWallet.name}
+            {discoveryWallet.name}
             <img
               alt={discoveryWallet.name}
               src={discoveryWallet.icon}
