@@ -4,7 +4,7 @@ import {
 } from "./StarknetWindowObject"
 import discovery, { WalletProvider } from "./discovery"
 import { IStorageWrapper, LocalStorageWrapper } from "./localStorageStore"
-import { pipe } from "./utils"
+import { pipe, ssrSafeWindow } from "./utils"
 import { FilterList, filterBy, filterByPreAuthorized } from "./wallet/filter"
 import { isWalletObj } from "./wallet/isWalletObject"
 import { injectMetamaskBridge } from "./wallet/metamaskBridge"
@@ -24,7 +24,11 @@ export type {
   DisconnectedStarknetWindowObject,
   IStarknetWindowObject,
 } from "./StarknetWindowObject"
-export type { WalletProvider } from "./discovery"
+export type {
+  WalletProvider,
+  BrowserStoreVersion,
+  OperatingSystemStoreVersion,
+} from "./discovery"
 
 export interface GetStarknetOptions {
   windowObject: Record<string, any>
@@ -32,10 +36,8 @@ export interface GetStarknetOptions {
   storageFactoryImplementation: (name: string) => IStorageWrapper
 }
 
-const ssrSafeWindow = typeof window !== "undefined" ? window : {}
-
 const defaultOptions: GetStarknetOptions = {
-  windowObject: ssrSafeWindow,
+  windowObject: ssrSafeWindow ?? {},
   isWalletObject: isWalletObj,
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
 }
@@ -138,5 +140,7 @@ export function getStarknet(
     },
   }
 }
+
+export { ssrSafeWindow } from "./utils"
 
 export default getStarknet()

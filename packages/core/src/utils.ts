@@ -18,3 +18,6 @@ export function pipe<T>(
 ): (arg: T) => Promise<T> {
   return (arg: T) => fns.reduce((acc, fn) => acc.then(fn), Promise.resolve(arg))
 }
+
+export const ssrSafeWindow: Window | null =
+  typeof window !== "undefined" ? window : null
