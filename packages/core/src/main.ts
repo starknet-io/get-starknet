@@ -1,7 +1,7 @@
 import discovery, { type WalletProvider } from "./discovery"
 import { LocalStorageWrapper } from "./localStorageStore"
 import type { GetStarknetOptions, GetStarknetResult } from "./types"
-import { pipe } from "./utils"
+import { pipe, ssrSafeWindow } from "./utils"
 import { filterBy, filterByAuthorized } from "./wallet/filter"
 import {
   isFullWallet,
@@ -43,17 +43,19 @@ export { scanObjectForWallets } from "./wallet/scan"
 export { isWalletObject } from "./wallet/isWalletObject"
 
 export type {
+  BrowserStoreVersion,
   DisconnectOptions,
   GetStarknetOptions,
   GetStarknetResult,
   GetWalletOptions,
+  OperatingSystemStoreVersion,
   WalletProvider,
 } from "./types"
 
-const ssrSafeWindow = typeof window !== "undefined" ? window : {}
+export { ssrSafeWindow } from "./utils"
 
 const defaultOptions: GetStarknetOptions = {
-  windowObject: ssrSafeWindow,
+  windowObject: ssrSafeWindow ?? {},
   isWalletObject,
   storageFactoryImplementation: (name: string) => new LocalStorageWrapper(name),
 }
