@@ -1,5 +1,13 @@
 # get-starknet-example
 
+## 2.1.4
+
+### Patch Changes
+
+- bd3e8ec: added mobile os store links support
+- Updated dependencies [bd3e8ec]
+  - get-starknet@3.3.3
+
 ## 2.1.3
 
 ### Patch Changes

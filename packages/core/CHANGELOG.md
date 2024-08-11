@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.3.3
+
+### Patch Changes
+
+- bd3e8ec: added mobile os store links support
+
 ## 3.3.2
 
 ### Patch Changes
