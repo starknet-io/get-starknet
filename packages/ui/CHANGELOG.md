@@ -1,5 +1,13 @@
 # @starknet-io/get-starknet
 
+## 4.0.1
+
+### Patch Changes
+
+- 0cd43d0: added mobile os store links support
+- Updated dependencies [0cd43d0]
+  - @starknet-io/get-starknet-core@4.0.1
+
 ## 4.0.0-next.2
 
 ### Patch Changes
