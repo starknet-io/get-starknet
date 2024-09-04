@@ -12,6 +12,7 @@
 
 ## Installation
 
+### Installing get-starknet V3
 ```
 # using npm
 npm install get-starknet starknet@next
@@ -22,6 +23,20 @@ yarn add get-starknet starknet@next
 # using pnpm
 pnpm add get-starknet starknet@next
 ```
+
+### Installing get-starknet V4
+```
+# using npm
+npm install @starknet-io/get-starknet starknet@next
+
+# using yarn
+yarn add @starknet-io/get-starknet starknet@next
+
+# using pnpm
+pnpm add @starknet-io/get-starknet starknet@next
+```
+
+Read more about the new Starknet Wallet<>Dapp API in the [post](https://community.starknet.io/t/new-starknet-wallet-dapp-api/114295)
 
 ## Usage for dApp developers
 
