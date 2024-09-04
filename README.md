@@ -10,18 +10,21 @@
 - ⚙️ Customizable and extensible
 - 🌍 Open source and controlled by the community
 
+
 ## Installation
 
 ```
 # using npm
-npm install get-starknet starknet@next
+npm install @starknet-io/get-starknet starknet@next
 
 # using yarn
-yarn add get-starknet starknet@next
+yarn add @starknet-io/get-starknet starknet@next
 
 # using pnpm
-pnpm add get-starknet starknet@next
+pnpm add @starknet-io/get-starknet starknet@next
 ```
+
+Read more about the new Starkent Dapp<>Wallet API in the [post](https://community.starknet.io/t/new-starknet-wallet-dapp-api/114295)
 
 ## Usage for dApp developers
 
