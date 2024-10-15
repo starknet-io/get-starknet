@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.3.4
+
+### Patch Changes
+
+- 2ae401b: Support Keplr wallet
+
 ## 3.3.3
 
 ### Patch Changes
