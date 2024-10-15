@@ -143,7 +143,7 @@ describe("getDiscoveryWallets()", () => {
   it("should return all discovery wallets", async () => {
     const sn = getWallet({})
     const discoveryWallets = await sn.getDiscoveryWallets()
-    expect(discoveryWallets.length).toBe(4)
+    expect(discoveryWallets.length).toBe(5)
     expect(discoveryWallets.map((w) => w.id)).contains(ArgentXMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(BraavosMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(OKXMock.id)
