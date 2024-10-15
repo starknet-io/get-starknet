@@ -3,8 +3,8 @@ import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
   BraavosMock,
-  OKXMock,
   KeplrMock,
+  OKXMock,
   UnknownWalletAMock,
   UnknownWalletBMock,
   makePreAuthorized,
