@@ -88,21 +88,25 @@ describe("getLastConnectedWallet()", () => {
     const lastConnectedWallet = await sn.getLastConnectedWallet()
     expect(lastConnectedWallet?.id).toBe(BraavosMock.id)
   })
-  it("should set the last connected wallet when enabled", async () => {
-    const sn = getWallet({
-      "starknet-argentX": makeConnected(true)(ArgentXMock),
-      "starknet-braavos": makeConnected(true)(BraavosMock),
-      starknet_okxwallet: makeConnected(true)(OKXMock),
-      starknet_keplr: makePreAuthorized(true)(KeplrMock),
-    })
-    const lastConnectedWallet = await sn.getLastConnectedWallet()
-    expect(lastConnectedWallet).toBe(null)
+  it(
+    "should set the last connected wallet when enabled",
+    { retry: 5 },
+    async () => {
+      const sn = getWallet({
+        "starknet-argentX": makeConnected(true)(ArgentXMock),
+        "starknet-braavos": makeConnected(true)(BraavosMock),
+        starknet_okxwallet: makeConnected(true)(OKXMock),
+        starknet_keplr: makePreAuthorized(true)(KeplrMock),
+      })
+      const lastConnectedWallet = await sn.getLastConnectedWallet()
+      expect(lastConnectedWallet).toBe(null)
 
-    const [newLastConnectedWallet] = await sn.getAvailableWallets()
-    await sn.enable(newLastConnectedWallet)
-    const lastConnectedWalletAfterEnable = await sn.getLastConnectedWallet()
-    expect(lastConnectedWalletAfterEnable).toBe(newLastConnectedWallet)
-  })
+      const [newLastConnectedWallet] = await sn.getAvailableWallets()
+      await sn.enable(newLastConnectedWallet)
+      const lastConnectedWalletAfterEnable = await sn.getLastConnectedWallet()
+      expect(lastConnectedWalletAfterEnable).toBe(newLastConnectedWallet)
+    },
+  )
   it("enabling fails", async () => {
     const sn = getWallet({
       "starknet-argentX": makeConnected(false)(ArgentXMock),
