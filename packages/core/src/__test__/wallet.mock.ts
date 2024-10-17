@@ -50,6 +50,36 @@ export const BraavosMock: StarknetWindowObject = {
   off: () => {},
 }
 
+export const OKXMock: StarknetWindowObject = {
+  ...wallets.find((w) => w.id === "okxwallet")!,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
+}
+
+export const KeplrMock: StarknetWindowObject = {
+  ...wallets.find((w) => w.id === "keplr")!,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
+}
+
 export function makeAuthorized(authorized: boolean) {
   return (wallet: StarknetWindowObject) =>
     ({

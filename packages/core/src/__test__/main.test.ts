@@ -3,6 +3,8 @@ import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
   BraavosMock,
+  KeplrMock,
+  OKXMock,
   UnknownWalletAMock,
   UnknownWalletBMock,
   makeAuthorized,
@@ -31,11 +33,15 @@ describe("getAvailableWallets()", () => {
       },
       starknet: ArgentXMock,
       "starknet-braavos": BraavosMock,
+      starknet_okxwallet: OKXMock,
+      starknet_keplr: KeplrMock,
     })
     const availableWallets = await sn.getAvailableWallets()
-    expect(availableWallets.length).toBe(2)
+    expect(availableWallets.length).toBe(4)
     expect(availableWallets).toContainEqual(ArgentXMock)
     expect(availableWallets).toContainEqual(BraavosMock)
+    expect(availableWallets).toContainEqual(OKXMock)
+    expect(availableWallets).toContainEqual(KeplrMock)
   })
   it("should return one injected wallet", async () => {
     const sn = getWallet({
@@ -110,16 +116,22 @@ describe("getAuthorizedWallets()", () => {
     const sn = getWallet({
       "starknet-argent": makeAuthorized(true)(ArgentXMock),
       "starknet-braavos": makeAuthorized(true)(BraavosMock),
+      starknet_okxwallet: makeAuthorized(true)(OKXMock),
+      starknet_keplr: makeAuthorized(true)(KeplrMock),
     })
-    const authorizedWallets = await sn.getAuthorizedWallets()
-    expect(authorizedWallets.length).toBe(2)
-    expect(authorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
-    expect(authorizedWallets.map((w) => w.id)).contains(BraavosMock.id)
+    const preauthorizedWallets = await sn.getAuthorizedWallets()
+    expect(preauthorizedWallets.length).toBe(4)
+    expect(preauthorizedWallets.map((w) => w.id)).contains(ArgentXMock.id)
+    expect(preauthorizedWallets.map((w) => w.id)).contains(BraavosMock.id)
+    expect(preauthorizedWallets.map((w) => w.id)).contains(OKXMock.id)
+    expect(preauthorizedWallets.map((w) => w.id)).contains(KeplrMock.id)
   })
   it("should return one authorized wallet", async () => {
     const sn = getWallet({
       "starknet-argent": makeAuthorized(true)(ArgentXMock),
       "starknet-braavos": makeAuthorized(false)(BraavosMock),
+      starknet_okxwallet: makeAuthorized(false)(OKXMock),
+      starknet_keplr: makeAuthorized(false)(KeplrMock),
     })
     const authorizedWallets = await sn.getAuthorizedWallets()
     expect(authorizedWallets.length).toBe(1)
@@ -131,8 +143,10 @@ describe("getDiscoveryWallets()", () => {
   it("should return all discovery wallets", async () => {
     const sn = getWallet({})
     const discoveryWallets = await sn.getDiscoveryWallets()
-    expect(discoveryWallets.length).toBe(3)
+    expect(discoveryWallets.length).toBe(5)
     expect(discoveryWallets.map((w) => w.id)).contains(ArgentXMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(BraavosMock.id)
+    expect(discoveryWallets.map((w) => w.id)).contains(OKXMock.id)
+    expect(discoveryWallets.map((w) => w.id)).contains(KeplrMock.id)
   })
 })

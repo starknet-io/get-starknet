@@ -3,6 +3,8 @@ import { mockStorageFunction } from "./storage.mock"
 import {
   ArgentXMock,
   BraavosMock,
+  KeplrMock,
+  OKXMock,
   UnknownWalletAMock,
   UnknownWalletBMock,
   makeAuthorized,
@@ -48,6 +50,8 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makeAuthorized(false)(ArgentXMock),
         "starknet-braavos": makeAuthorized(false)(BraavosMock),
+        starknet_okxwallet: makeAuthorized(false)(OKXMock),
+        starknet_keplr: makeAuthorized(false)(KeplrMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -61,6 +65,8 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makeAuthorized(false)(ArgentXMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
+        starknet_okxwallet: makeAuthorized(false)(OKXMock),
+        starknet_keplr: makeAuthorized(false)(KeplrMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -74,6 +80,8 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makeAuthorized(true)(ArgentXMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
+        starknet_okxwallet: makeAuthorized(true)(OKXMock),
+        starknet_keplr: makeAuthorized(true)(KeplrMock),
       },
       mockStorageFunction({ "gsw-last": "braavos" }),
     )
@@ -84,6 +92,8 @@ describe("getLastConnectedWallet()", () => {
     const sn = getWallet({
       "starknet-argentX": makeConnected(true)(ArgentXMock),
       "starknet-braavos": makeConnected(true)(BraavosMock),
+      starknet_okxwallet: makeConnected(true)(OKXMock),
+      starknet_keplr: makeAuthorized(true)(KeplrMock),
     })
     const lastConnectedWallet = await sn.getLastConnectedWallet()
     expect(lastConnectedWallet).toBe(null)
@@ -108,6 +118,8 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makeAuthorized(true)(ArgentXMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
+        starknet_okxwallet: makeAuthorized(true)(OKXMock),
+        starknet_keplr: makeAuthorized(true)(KeplrMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
@@ -125,6 +137,8 @@ describe("getLastConnectedWallet()", () => {
       {
         "starknet-argentX": makeAuthorized(true)(ArgentXMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
+        starknet_okxwallet: makeAuthorized(true)(OKXMock),
+        starknet_keplr: makeAuthorized(true)(KeplrMock),
       },
       mockStorageFunction({
         "gsw-last": "braavos",
