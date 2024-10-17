@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.2
+
+### Patch Changes
+
+- 40ceb05: Add keplr wallet
+
 ## 4.0.1
 
 ### Patch Changes
