@@ -103,7 +103,7 @@ const metaMaskVirtualWallet: VirtualWallet & Eip6963SupportedWallet = {
           name: "MetaMaskStarknetSnapWallet",
           alias: "MetaMaskStarknetSnapWallet",
           entry:
-            "https://dev.snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js", //"http://localhost:8082/remoteEntry.js",
+            "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js", //"http://localhost:8082/remoteEntry.js",
         },
       ],
     })
