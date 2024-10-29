@@ -1,5 +1,12 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.3
+
+### Patch Changes
+
+- 93f3705: Fix MetaMask provider detection and handling in get-starknet v4
+  integration.
+
 ## 4.0.2
 
 ### Patch Changes
