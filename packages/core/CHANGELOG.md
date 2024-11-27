@@ -1,5 +1,13 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.4
+
+### Patch Changes
+
+- d2fee96: Fix loading MetaMask Virtual Wallet dynamically in WalletAccount and
+  add support for RPC APIs (wallet_supportedWalletApi and wallet_supportedSpecs)
+  in get-starknet v4 integration.
+
 ## 4.0.3
 
 ### Patch Changes
