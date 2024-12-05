@@ -13,6 +13,7 @@ import { sortBy } from "./wallet/sort"
 import {
   initiateVirtualWallets,
   resolveVirtualWallet,
+  virtualWallets,
 } from "./wallet/virtualWallets"
 import { Permission, type StarknetWindowObject } from "@starknet-io/types-js"
 
@@ -115,6 +116,14 @@ export function getStarknet(
       }
 
       return firstAuthorizedWallet
+    },
+    discoverVirtualWallets: async () => {
+      virtualWallets.forEach(async (virtualWallet) => {
+        const hasSupport = await virtualWallet.hasSupport(windowObject)
+        if (hasSupport) {
+          windowObject[virtualWallet.windowKey] = virtualWallet
+        }
+      })
     },
     enable: async (inputWallet, options) => {
       let wallet: StarknetWindowObject

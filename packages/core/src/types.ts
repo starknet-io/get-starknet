@@ -69,6 +69,7 @@ export interface GetStarknetResult {
   ) => Promise<StarknetWindowObject[]> // Returns only preauthorized wallets available in the window object
   getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]> // Returns all wallets in existence (from discovery file)
   getLastConnectedWallet: () => Promise<StarknetWindowObject | null | undefined> // Returns the last wallet connected when it's still connected
+  discoverVirtualWallets: () => Promise<void> // Discovers the virtual wallets by calling their hasSupport methods
   enable: (
     wallet: StarknetWindowObject | VirtualWallet,
     options?: RequestAccountsParameters,
