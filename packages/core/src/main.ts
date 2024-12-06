@@ -117,13 +117,15 @@ export function getStarknet(
 
       return firstAuthorizedWallet
     },
-    discoverVirtualWallets: async () => {
-      virtualWallets.forEach(async (virtualWallet) => {
-        const hasSupport = await virtualWallet.hasSupport(windowObject)
-        if (hasSupport) {
-          windowObject[virtualWallet.windowKey] = virtualWallet
-        }
-      })
+    discoverVirtualWallets: async (): Promise<void> => {
+      await Promise.all(
+        virtualWallets.map(async (virtualWallet) => {
+          const hasSupport = await virtualWallet.hasSupport(windowObject)
+          if (hasSupport) {
+            windowObject[virtualWallet.windowKey] = virtualWallet
+          }
+        }),
+      )
     },
     enable: async (inputWallet, options) => {
       let wallet: StarknetWindowObject
