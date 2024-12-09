@@ -6,9 +6,11 @@ const virtualWallets: VirtualWallet[] = [metaMaskVirtualWallet]
 
 function initiateVirtualWallets(windowObject: Record<string, unknown>) {
   virtualWallets.forEach(async (virtualWallet) => {
-    const hasSupport = await virtualWallet.hasSupport(windowObject)
-    if (hasSupport) {
-      windowObject[virtualWallet.windowKey] = virtualWallet
+    if (!(virtualWallet.windowKey in windowObject)) {
+      const hasSupport = await virtualWallet.hasSupport(windowObject)
+      if (hasSupport) {
+        windowObject[virtualWallet.windowKey] = virtualWallet
+      }
     }
   })
 }
@@ -28,4 +30,4 @@ async function resolveVirtualWallet(
   return wallet
 }
 
-export { initiateVirtualWallets, resolveVirtualWallet }
+export { initiateVirtualWallets, resolveVirtualWallet, virtualWallets }
