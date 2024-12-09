@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-example
 
+## 4.0.5
+
+### Patch Changes
+
+- @starknet-io/get-starknet@4.0.5
+
 ## 4.0.4
 
 ### Patch Changes
