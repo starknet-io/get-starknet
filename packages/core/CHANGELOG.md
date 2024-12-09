@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.5
+
+### Patch Changes
+
+- 0263b88: Decouple Virtual Wallet Discovery for async workflow
+
 ## 4.0.4
 
 ### Patch Changes
