@@ -117,8 +117,7 @@ class MetaMaskVirtualWallet
   async loadWallet(
     windowObject: Record<string, unknown>,
   ): Promise<StarknetWindowObject> {
-    // Using `this.#loadSwoSafe` to prevent the wallet is loading in a racing condition
-
+    // Using `this.#loadSwoSafe` to prevent the wallet is loading in a racing condition.
     await this.#loadSwoSafe(windowObject)
     // Whenever trgger function call to  `request` / `on` / `off`,
     // it will load the wallet into the `this.swo` object and forward the function call to the `this.swo` object.
