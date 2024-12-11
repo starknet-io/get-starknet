@@ -1,6 +1,11 @@
 import { VirtualWallet } from "../../types"
 import { init, loadRemote } from "@module-federation/runtime"
-import { RpcMessage, StarknetWindowObject } from "@starknet-io/types-js"
+import {
+  RequestFnCall,
+  RpcMessage,
+  StarknetWindowObject,
+  WalletEventHandlers,
+} from "@starknet-io/types-js"
 import { Mutex } from "async-mutex"
 
 interface MetaMaskProvider {
@@ -87,17 +92,8 @@ export type Eip6963SupportedWallet = {
   provider: MetaMaskProvider | null
 }
 
-export type EmptyVirtualWallet = {
-  swo: StarknetWindowObject | null
-  on(): void
-  off(): void
-  request<Data extends RpcMessage>(
-    call: Omit<Data, "result">,
-  ): Promise<Data["result"]>
-}
-
 class MetaMaskVirtualWallet
-  implements VirtualWallet, Eip6963SupportedWallet, EmptyVirtualWallet
+  implements VirtualWallet, Eip6963SupportedWallet, StarknetWindowObject
 {
   id: string = "metamask"
   name: string = "MetaMask"
@@ -106,12 +102,38 @@ class MetaMaskVirtualWallet
   provider: MetaMaskProvider | null = null
   swo: StarknetWindowObject | null = null
   lock: Mutex
+  version: string = "v2.0.0"
 
   constructor() {
     this.lock = new Mutex()
   }
 
+  /**
+   * Load and resolve the `StarknetWindowObject`.
+   *
+   * @param windowObject The window object.
+   * @returns A promise to resolve a `StarknetWindowObject`.
+   */
   async loadWallet(
+    windowObject: Record<string, unknown>,
+  ): Promise<StarknetWindowObject> {
+    // Using `this.#loadSwoSafe` to prevent the wallet is loading in a racing condition
+
+    await this.#loadSwoSafe(windowObject)
+    // Whenever trgger function call to  `request` / `on` / `off`,
+    // it will load the wallet into the `this.swo` object and forward the function call to the `this.swo` object.
+    // Therefore the `MetaMaskVirtualWallet` object actually act as a proxy to the `this.swo` object.
+    // Thus, to standardize the behavior, we should return the `MetaMaskVirtualWallet` object here, instead of the `this.swo` object.
+    return this
+  }
+
+  /**
+   * Load the remote `StarknetWindowObject` with module federation.
+   *
+   * @param windowObject The window object.
+   * @returns A promise to resolve a `StarknetWindowObject`.
+   */
+  async #loadSwo(
     windowObject: Record<string, unknown>,
   ): Promise<StarknetWindowObject> {
     if (!this.provider) {
@@ -125,7 +147,7 @@ class MetaMaskVirtualWallet
           name: "MetaMaskStarknetSnapWallet",
           alias: "MetaMaskStarknetSnapWallet",
           entry:
-            "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js", //"http://localhost:8082/remoteEntry.js",
+            "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js",
         },
       ],
     })
@@ -149,44 +171,100 @@ class MetaMaskVirtualWallet
     )
   }
 
+  /**
+   * Verify if the hosting machine is support the Wallet or not without loading the wallet itself.
+   *
+   * @param windowObject The window object.
+   * @returns A promise to resolve a boolean value to indicate the support status.
+   */
   async hasSupport(windowObject: Record<string, unknown>) {
     this.provider = await detectMetamaskSupport(windowObject)
     return this.provider !== null
   }
 
+  /**
+   * Proxy the RPC request to the `this.swo` object.
+   * Load the `this.swo` if not loaded.
+   *
+   * @param call The RPC API arguments.
+   * @returns A promise to resolve a response of the proxy RPC API.
+   */
   async request<Data extends RpcMessage>(
-    arg: Omit<Data, "result">,
+    call: Omit<Data, "result">,
   ): Promise<Data["result"]> {
-    const { type } = arg
-    // `wallet_supportedWalletApi` and `wallet_supportedSpecs` should enabled even if the wallet is not loaded/connected
-    switch (type) {
-      case "wallet_supportedWalletApi":
-        return ["0.7"] as unknown as Data["result"]
-      case "wallet_supportedSpecs":
-        return ["0.7"] as unknown as Data["result"]
-      default:
-        return this.#handleRequest(arg)
-    }
-  }
-
-  async #handleRequest<Data extends RpcMessage>(
-    arg: Omit<RpcMessage, "result">,
-  ): Promise<Data["result"]> {
-    // Using lock to ensure the load wallet operation is not fall into a racing condirtion
-    return this.lock.runExclusive(async () => {
-      // Using `this.swo` to prevent the wallet is loaded multiple times
-      if (!this.swo) {
-        this.swo = await this.loadWallet(window)
-      }
-      // forward the request to the actual connect wallet object
-      // it will also trigger the Snap to install if not installed
-      return this.swo.request(arg) as unknown as Data["result"]
+    return this.#loadSwoSafe().then((swo: StarknetWindowObject) => {
+      // Forward the request to the `this.swo` object.
+      // Except RPC `wallet_supportedSpecs` and `wallet_getPermissions`, others API will trigger the Snap to install if not installed
+      return swo.request(
+        call as unknown as RequestFnCall<Data["type"]>,
+      ) as unknown as Data["result"]
     })
   }
 
-  // MetaMask Snap Wallet does not support `on` and `off` method
-  on() {}
-  off() {}
+  /**
+   * Subscribe the `accountsChanged` or `networkChanged` event.
+   * Proxy the subscription to the `this.swo` object.
+   * Load the `this.swo` if not loaded.
+   *
+   * @param event - The event name.
+   * @param handleEvent - The event handler function.
+   */
+  on<Event extends keyof WalletEventHandlers>(
+    event: Event,
+    handleEvent: WalletEventHandlers[Event],
+  ): void {
+    this.#loadSwoSafe().then((swo: StarknetWindowObject) =>
+      swo.on(event, handleEvent),
+    )
+  }
+
+  /**
+   * Un-subscribe the `accountsChanged` or `networkChanged` event for a given handler.
+   * Proxy the un-subscribe request to the `this.swo` object.
+   * Load the `this.swo` if not loaded.
+   *
+   * @param event - The event name.
+   * @param handleEvent - The event handler function.
+   */
+  off<Event extends keyof WalletEventHandlers>(
+    event: Event,
+    handleEvent: WalletEventHandlers[Event],
+  ): void {
+    this.#loadSwoSafe().then((swo: StarknetWindowObject) =>
+      swo.off(event, handleEvent),
+    )
+  }
+
+  /**
+   * Load the `StarknetWindowObject` safely with lock.
+   * And prevent the loading operation fall into a racing condirtion.
+   *
+   * @returns A promise to resolve a `StarknetWindowObject`.
+   */
+  async #loadSwoSafe(
+    windowObject: Record<string, unknown> = window,
+  ): Promise<StarknetWindowObject> {
+    return this.lock.runExclusive(async () => {
+      // Using `this.swo` to prevent the wallet is loaded multiple times
+      if (!this.swo) {
+        this.swo = await this.#loadSwo(windowObject)
+        this.#bindSwoProperties()
+      }
+      return this.swo
+    })
+  }
+
+  /**
+   * Bind properties to `MetaMaskVirtualWallet` from `this.swo`.
+   */
+  #bindSwoProperties(): void {
+    if (this.swo) {
+      this.version = this.swo.version
+      this.name = this.swo.name
+      this.id = this.swo.id
+      this.icon = this.swo.icon as string
+    }
+  }
 }
 const metaMaskVirtualWallet = new MetaMaskVirtualWallet()
 
