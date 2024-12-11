@@ -193,7 +193,7 @@ class MetaMaskVirtualWallet
   ): Promise<Data["result"]> {
     return this.#loadSwoSafe().then((swo: StarknetWindowObject) => {
       // Forward the request to the `this.swo` object.
-      // Except RPC `wallet_supportedSpecs` and `wallet_getPermissions`, others API will trigger the Snap to install if not installed
+      // Except RPCs `wallet_supportedSpecs` and `wallet_getPermissions`, other RPCs will trigger the Snap to install if not installed.
       return swo.request(
         call as unknown as RequestFnCall<Data["type"]>,
       ) as unknown as Data["result"]
