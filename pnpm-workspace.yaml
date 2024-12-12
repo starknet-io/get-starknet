@@ -1,2 +1,5 @@
 packages:
   - "packages/wallets"
+  - "packages/wallet-standard"
+  - "packages/discovery"
+  - "docs"

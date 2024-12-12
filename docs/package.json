@@ -1,0 +1,30 @@
+{
+  "name": "get-starknet",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vocs dev",
+    "build": "vocs build",
+    "preview": "vocs preview",
+    "format:check": "biome format .",
+    "format": "biome format --write .",
+    "lint:check": "biome lint .",
+    "lint": "biome lint --write ."
+  },
+  "dependencies": {
+    "@get-starknet/discovery": "workspace:*",
+    "@get-starknet/wallet-standard": "workspace:*",
+    "@get-starknet/wallets": "workspace:*",
+    "@tanstack/react-query": "^5.62.7",
+    "@types/react": "^18.2.0",
+    "lucide-react": "^0.468.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.7.2",
+    "vocs": "latest"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.16",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}
