@@ -24,7 +24,8 @@ store.subscribe((wallets) => {
 After you injected your wallet into the page, you should announce it to all Wallet Standard subscribers.
 This is done by calling the `registerWallet` function from the `@wallet-standard/base` package.
 
-This example assumes you are using the `StarknetInjectedWallet` adapter provided by Get Starknet.
+This example assumes you are using the `StarknetInjectedWallet` adapter provided by Get Starknet, but if
+your wallet implements Wallet Standard natively you can simply call `registerWallet` with your wallet.
 
 ```ts
 import { registerWallet } from "@wallet-standard/base";
