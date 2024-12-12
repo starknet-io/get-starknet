@@ -1,25 +1,29 @@
 import type { IdentifierString } from "@wallet-standard/base";
+import { Hex } from "ox";
 
-/** Starknet mainnet. */
-export const STARKNET_MAINNET_CHAIN = "starknet:mainnet";
+export type ChainId = `0x${string}`;
 
-/** Starknet sepolia. */
-export const STARKNET_SEPOLIA_CHAIN = "starknet:sepolia";
+export const STARKNET_CHAIN_PREFIX = "starknet:";
 
-/** Starknet devnet, e.g. starknet-devnet-rs or katana. */
-export const STARKNET_DEVNET_CHAIN = "starknet:devnet";
+export type StarknetChain = `${typeof STARKNET_CHAIN_PREFIX}${ChainId}`;
 
-export const STARKNET_CHAINS = [
-  STARKNET_MAINNET_CHAIN,
-  STARKNET_SEPOLIA_CHAIN,
-  STARKNET_DEVNET_CHAIN,
-] as const satisfies IdentifierString[];
-
-export type StarknetChain = (typeof STARKNET_CHAINS)[number];
+export const WELL_KNOWN_STARKNET_CHAINS = [] as const satisfies StarknetChain[];
 
 /** Check if a chain is a known Starknet chain. */
 export function isStarknetChain(
   chain: IdentifierString,
 ): chain is StarknetChain {
-  return STARKNET_CHAINS.includes(chain as StarknetChain);
+  const parts = chain.split(":");
+  if (parts.length !== 2 || parts[0] !== "starknet") {
+    return false;
+  }
+
+  return Hex.validate(parts[1]);
+}
+
+/** Returns the 0x prefixed chain id. */
+export function getStarknetChainId(chain: StarknetChain): ChainId {
+  const [, id] = chain.split(":");
+  Hex.assert(id);
+  return id as ChainId;
 }

@@ -1,0 +1,47 @@
+# Wallet Standard
+
+The `@get-starknet/wallet-standard` package provides an implementation of [Wallet Standard](https://github.com/wallet-standard/wallet-standard) for Starknet.
+
+## Functions
+
+The `isStarknetWallet` function is used to check if a wallet implements the Starknet Wallet Standard.
+
+```ts
+import type { Wallet } from "@wallet-standard/base";
+import { isStarknetWallet, type WalletWithStarknetFeatures } from "@get-starknet/wallet-standard/features";
+
+const wallet: Wallet = getWallet();
+
+if (isStarknetWallet(wallet)) {
+  // Wallet implements the Starknet Wallet Standard
+  // Wallet is now a `WalletWithStarknetFeatures`
+
+  // Connect wallet
+  wallet.features["standard:connect"].connect({ silent: false });
+
+  // Make a Starknet API request
+  wallet.features["starknet:walletApi"].request({
+    type: "wallet_getPermissions",
+  });
+}
+```
+
+## Required Features
+
+The following features are required to be implemented by a Starknet Wallet:
+
+### `standard:connect`
+
+Part of `@wallet-standard/features`, requires a `connect({ silent })` method.
+
+### `standard:disconnect`
+
+Part of `@wallet-standard/features`, requires a `disconnect()` method.
+
+### `standard:events`
+
+Part of `@wallet-standard/features`, requires a `on()` method.
+
+### `starknet:walletApi`
+
+Part of `@get-starknet/wallet-standard`, requires the `request` method defined in the [Starknet Wallet API](https://community.starknet.io/t/snip-standardizing-starknet-wallet-connections-with-write-api-and-json-rpc-integration/98049).

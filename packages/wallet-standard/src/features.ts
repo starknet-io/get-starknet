@@ -1,23 +1,37 @@
 import type { RequestFn } from "@starknet-io/types-js";
 import type { Wallet, WalletWithFeatures } from "@wallet-standard/base";
+import {
+  StandardConnect,
+  StandardDisconnect,
+  type StandardEventsFeature,
+  type StandardConnectFeature,
+  type StandardDisconnectFeature,
+  StandardEvents,
+} from "@wallet-standard/features";
 
-export const StarknetWalletRequest = "starknet:walletRequest";
+export const StarknetWalletApi = "starknet:walletApi";
 
-export type StarknetWalletRequestVersion = "1.0.0";
+export type StarknetWalletApiVersion = "1.0.0";
 
 /** A Wallet Standard feature for wallets that implement Starknet's wallet API. */
 export type StarknetWalletRequestFeature = {
-  readonly [StarknetWalletRequest]: {
-    readonly version: StarknetWalletRequestVersion;
+  readonly [StarknetWalletApi]: {
+    readonly version: StarknetWalletApiVersion;
     readonly request: RequestFn;
   };
 };
 
-export type StarknetFeatures = StarknetWalletRequestFeature;
+export type StarknetFeatures = StarknetWalletRequestFeature &
+  StandardConnectFeature &
+  StandardDisconnectFeature &
+  StandardEventsFeature;
 export type WalletWithStarknetFeatures = WalletWithFeatures<StarknetFeatures>;
 
 export const RequiredStarknetFeatures = [
-  StarknetWalletRequest,
+  StarknetWalletApi,
+  StandardConnect,
+  StandardDisconnect,
+  StandardEvents,
 ] as const satisfies (keyof StarknetFeatures)[];
 
 /** Check if a wallet is a Starknet wallet. */

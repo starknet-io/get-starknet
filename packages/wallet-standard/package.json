@@ -42,6 +42,8 @@
   },
   "dependencies": {
     "@starknet-io/types-js": "^0.7.10",
-    "@wallet-standard/base": "^1.1.0"
+    "@wallet-standard/base": "^1.1.0",
+    "@wallet-standard/features": "^1.1.0",
+    "ox": "^0.4.1"
   }
 }
