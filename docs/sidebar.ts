@@ -18,6 +18,10 @@ export const sidebar = [
     link: "/injected",
   },
   {
+    text: "Virtual Wallets",
+    link: "/virtual-wallet",
+  },
+  {
     text: "Wallets",
     link: "/wallets",
   },

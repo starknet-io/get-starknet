@@ -2,9 +2,12 @@ import {
   type WalletWithStarknetFeatures,
   isStarknetWallet,
 } from "@get-starknet/wallet-standard/features";
+import type { EIP1193Adapter } from "@get-starknet/virtual-wallet";
+import { metaMaskVirtualWallet } from "@get-starknet/virtual-wallet/metamask";
 
 import { registerStandardWalletDiscovery } from "./standard-wallet";
 import { registerInjectedWalletDiscovery } from "./injected-wallet";
+import { registerEIP1193WalletFromEIP6963Discovery } from "./eip1193-wallet";
 
 export type CleanupListener = () => void;
 export type Listener = (wallets: readonly WalletWithStarknetFeatures[]) => void;
@@ -17,11 +20,19 @@ export type Store = {
 
 // Track how a wallet was discovered to prefer standard wallets over (legacy) injected wallets
 type DiscoveredStarknetWallet = {
-  discoverer: "standard" | "injected";
+  discoverer: "standard" | "injected" | "eip6963";
   wallet: WalletWithStarknetFeatures;
 };
 
-export function createStore(): Store {
+export type CreateStoreOptions = {
+  eip1193Adapters?: EIP1193Adapter[];
+};
+
+const DEFAULT_EIP1193_ADAPTERS: EIP1193Adapter[] = [metaMaskVirtualWallet];
+
+export function createStore({
+  eip1193Adapters = DEFAULT_EIP1193_ADAPTERS,
+}: CreateStoreOptions = {}): Store {
   const listeners = new Set<Listener>();
   let wallets: DiscoveredStarknetWallet[] = [];
 
@@ -49,6 +60,24 @@ export function createStore(): Store {
       }
     } else {
       wallets = [{ discoverer: "standard", wallet }, ...wallets];
+
+      emitChanges();
+    }
+
+    return () => {
+      wallets = wallets.filter((w) => w.wallet.name !== wallet.name);
+
+      emitChanges();
+    };
+  });
+
+  registerEIP1193WalletFromEIP6963Discovery(eip1193Adapters, (wallet) => {
+    if (!isStarknetWallet(wallet)) return;
+
+    const existing = wallets.find((w) => w.wallet.name === wallet.name);
+
+    if (!existing) {
+      wallets = [{ discoverer: "eip6963", wallet }, ...wallets];
 
       emitChanges();
     }

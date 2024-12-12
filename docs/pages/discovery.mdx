@@ -34,3 +34,13 @@ const wallet = new StarknetInjectedWallet(window.starknet_myWallet);
 
 registerWallet(wallet);
 ```
+
+## EIP-1193 Adapters
+
+The discovery package implements EIP-6963 to load Ethereum EIP-1193 providers.
+Developers can register zero or more [EIP-1193 Adapters](./virtual-wallet) to support virtual wallets
+such as MetaMask.
+
+This is a list of virtual wallets used by default:
+
+- [MetaMask](./virtual-wallet#metamask)

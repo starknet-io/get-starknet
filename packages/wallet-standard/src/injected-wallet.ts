@@ -12,7 +12,6 @@ import {
 } from "@wallet-standard/features";
 
 import {
-  type ChainId,
   isStarknetChain,
   STARKNET_CHAIN_PREFIX,
   type StarknetChain,
