@@ -117,12 +117,13 @@ class MetaMaskVirtualWallet
   async loadWallet(
     windowObject: Record<string, unknown>,
   ): Promise<StarknetWindowObject> {
-    // Using `this.#loadSwoSafe` to prevent the wallet is loading in a racing condition.
+    // Using `this.#loadSwoSafe` to prevent race condition when the wallet is loading.
     await this.#loadSwoSafe(windowObject)
-    // Whenever trgger function call to  `request` / `on` / `off`,
-    // it will load the wallet into the `this.swo` object and forward the function call to the `this.swo` object.
-    // Therefore the `MetaMaskVirtualWallet` object actually act as a proxy to the `this.swo` object.
-    // Thus, to standardize the behavior, we should return the `MetaMaskVirtualWallet` object here, instead of the `this.swo` object.
+    // The `MetaMaskVirtualWallet` object acts as a proxy for the `this.swo` object.
+    // When `request`, `on`, or `off` is called, the wallet is loaded into `this.swo`,
+    // and the function call is forwarded to it.
+    // To maintain consistent behaviour, the `MetaMaskVirtualWallet`
+    // object (`this`) is returned instead of `this.swo`.
     return this
   }
 
@@ -171,10 +172,10 @@ class MetaMaskVirtualWallet
   }
 
   /**
-   * Verify if the hosting machine is support the Wallet or not without loading the wallet itself.
+   * Verify if the hosting machine supports the Wallet or not without loading the wallet itself.
    *
    * @param windowObject The window object.
-   * @returns A promise to resolve a boolean value to indicate the support status.
+   * @returns A promise that resolves to a boolean value to indicate the support status.
    */
   async hasSupport(windowObject: Record<string, unknown>) {
     this.provider = await detectMetamaskSupport(windowObject)
@@ -236,7 +237,7 @@ class MetaMaskVirtualWallet
 
   /**
    * Load the `StarknetWindowObject` safely with lock.
-   * And prevent the loading operation fall into a racing condirtion.
+   * And prevent the loading operation fall into a racing condition.
    *
    * @returns A promise to resolve a `StarknetWindowObject`.
    */
