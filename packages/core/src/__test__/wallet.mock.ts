@@ -80,6 +80,21 @@ export const KeplrMock: StarknetWindowObject = {
   off: () => {},
 }
 
+export const FordefiMock: StarknetWindowObject = {
+  ...wallets.find((w) => w.id === "fordefi")!,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
+}
+
 export function makeAuthorized(authorized: boolean) {
   return (wallet: StarknetWindowObject) =>
     ({
