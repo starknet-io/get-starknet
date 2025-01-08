@@ -39,6 +39,11 @@ export const KeplrMock: WalletMock = {
   isPreauthorized: async () => false,
 }
 
+export const FordefiMock: WalletMock = {
+  ...wallets.find((w) => w.id === "fordefi")!,
+  isPreauthorized: async () => false,
+}
+
 export function makePreAuthorized(isPreauthorized: boolean) {
   return (wallet: WalletMock) => ({
     ...wallet,
