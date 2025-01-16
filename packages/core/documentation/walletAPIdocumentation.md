@@ -37,7 +37,6 @@ browser wallets.
   - [wallet_supportedWalletApi :](#wallet_supportedwalletapi-)
 - [Behavior summary table :](#behavior-summary-table-)
 - [Wallet API version :](#wallet-api-version-)
-  - [Error :s](#error-s)
 
 # Connect the wallet :
 
@@ -981,7 +980,7 @@ const resp = await myWallet.request({
 // resp = "0x534e5f5345504f4c4941"
 ```
 
-## Error :<!-- omit from toc -->s
+## Errors :<!-- omit from toc -->
 
 In case of version not supported by the Wallet, an Error is returned :
 
