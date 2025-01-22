@@ -1,5 +1,13 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.6
+
+### Patch Changes
+
+- bcd4294: refactor MetaMask Virtual Wallet to improve event handling, RPC
+  requests, and wallet initialization logic
+- 4b92b8a: Add Fordefi wallet
+
 ## 4.0.5
 
 ### Patch Changes
