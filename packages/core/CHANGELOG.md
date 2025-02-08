@@ -1,5 +1,11 @@
 # get-starknet-core
 
+## 3.3.5
+
+### Patch Changes
+
+- 9002273: Add Fordefi wallet
+
 ## 3.3.4
 
 ### Patch Changes
