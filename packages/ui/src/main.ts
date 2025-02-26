@@ -1,16 +1,21 @@
 import show, { type WalletProviderWithStoreVersion } from "./modal"
-import Bowser from "bowser"
 import sn, {
   type BrowserStoreVersion,
   type DisconnectOptions,
   type GetWalletOptions,
   type OperatingSystemStoreVersion,
+  type RequestAccountsParameters,
   type StarknetWindowObject,
   type WalletProvider,
-  ssrSafeWindow,
-} from "get-starknet-core"
+} from "@starknet-io/get-starknet-core"
+import Bowser from "bowser"
 
-export type { StarknetWindowObject, DisconnectOptions } from "get-starknet-core"
+export type {
+  StarknetWindowObject,
+  DisconnectOptions,
+} from "@starknet-io/get-starknet-core"
+
+const ssrSafeWindow = typeof window !== "undefined" ? window : null
 
 function getBrowserStoreVersionFromBrowser(): BrowserStoreVersion | null {
   const browserName = Bowser.getParser(ssrSafeWindow?.navigator.userAgent)
@@ -56,11 +61,14 @@ export interface ConnectOptions extends GetWalletOptions {
   osVersion?: OperatingSystemStoreVersion
 }
 
-const enableWithVersion = async (wallet: StarknetWindowObject | null) => {
+const enableWithVersion = async (
+  wallet: StarknetWindowObject | null,
+  options?: RequestAccountsParameters,
+) => {
   if (!wallet) {
     return null
   }
-  return sn.enable(wallet, { starknetVersion: "v5" }).catch(() => null)
+  return sn.enable(wallet, options).catch(() => null)
 }
 
 export const connect = async ({
@@ -70,19 +78,19 @@ export const connect = async ({
   modalTheme,
   ...restOptions
 }: ConnectOptions = {}): Promise<StarknetWindowObject | null> => {
-  const preAuthorizedWallets = await sn.getPreAuthorizedWallets({
+  const authorizedWallets = await sn.getAuthorizedWallets({
     ...restOptions,
   })
 
   const lastWallet = await sn.getLastConnectedWallet()
   if (modalMode === "neverAsk") {
     const wallet =
-      preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
-      preAuthorizedWallets[0] // at this point pre-authorized is already sorted
+      authorizedWallets.find((w) => w.id === lastWallet?.id) ??
+      authorizedWallets[0] // at this point authorized is already sorted
 
     // return `wallet` even if it's null/undefined since we aren't allowed
     // to show any "connect" related UI
-    return enableWithVersion(wallet)
+    return enableWithVersion(wallet, { silent_mode: true })
   }
 
   const installedWallets = await sn.getAvailableWallets(restOptions)
@@ -92,7 +100,7 @@ export const connect = async ({
     lastWallet
   ) {
     const wallet =
-      preAuthorizedWallets.find((w) => w.id === lastWallet?.id) ??
+      authorizedWallets.find((w) => w.id === lastWallet?.id) ??
       (installedWallets.length === 1 ? installedWallets[0] : undefined)
     if (wallet) {
       return enableWithVersion(wallet)
@@ -124,7 +132,7 @@ export const connect = async ({
 
   return show({
     lastWallet,
-    preAuthorizedWallets,
+    authorizedWallets,
     installedWallets,
     discoveryWallets: discoveryWalletsByStoreVersion,
     enable: enableWithVersion,

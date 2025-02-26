@@ -3,8 +3,8 @@ name: PR integration
 on:
   pull_request:
     branches:
-      - develop
       - master
+      - develop
 
 jobs:
   version:

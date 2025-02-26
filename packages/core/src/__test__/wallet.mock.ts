@@ -1,60 +1,127 @@
-import type { StarknetWindowObject } from "../StarknetWindowObject"
 import wallets from "../discovery"
+import { Permission, type StarknetWindowObject } from "@starknet-io/types-js"
 
-type WalletMock = Pick<
-  StarknetWindowObject,
-  "id" | "name" | "icon" | "isPreauthorized"
->
-
-export const UnknownWalletAMock: WalletMock = {
+export const UnknownWalletAMock: StarknetWindowObject = {
   id: "wallet-a",
   name: "Wallet A",
+  version: "0.0.0",
   icon: "https://avatars.dicebear.com/api/initials/Wallet%20A.svg",
-  isPreauthorized: async () => false,
+  request: async () => false,
+  on: () => {},
+  off: () => {},
 }
-export const UnknownWalletBMock: WalletMock = {
+export const UnknownWalletBMock: StarknetWindowObject = {
   id: "wallet-b",
   name: "Wallet B",
+  version: "0.0.0",
   icon: "https://avatars.dicebear.com/api/initials/Wallet%20B.svg",
-  isPreauthorized: async () => false,
+  request: async () => false,
+  on: () => {},
+  off: () => {},
 }
 
-export const ArgentXMock: WalletMock = {
+export const ArgentXMock: StarknetWindowObject = {
   ...wallets.find((w) => w.id === "argentX")!,
-  isPreauthorized: async () => false,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
 }
 
-export const BraavosMock: WalletMock = {
+export const BraavosMock: StarknetWindowObject = {
   ...wallets.find((w) => w.id === "braavos")!,
-  isPreauthorized: async () => false,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
 }
 
-export const OKXMock: WalletMock = {
+export const OKXMock: StarknetWindowObject = {
   ...wallets.find((w) => w.id === "okxwallet")!,
-  isPreauthorized: async () => false,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
 }
 
-export const KeplrMock: WalletMock = {
+export const KeplrMock: StarknetWindowObject = {
   ...wallets.find((w) => w.id === "keplr")!,
-  isPreauthorized: async () => false,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
 }
 
-export const FordefiMock: WalletMock = {
+export const FordefiMock: StarknetWindowObject = {
   ...wallets.find((w) => w.id === "fordefi")!,
-  isPreauthorized: async () => false,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
 }
 
-export function makePreAuthorized(isPreauthorized: boolean) {
-  return (wallet: WalletMock) => ({
-    ...wallet,
-    isPreauthorized: async () => isPreauthorized,
-  })
+export function makeAuthorized(authorized: boolean) {
+  return (wallet: StarknetWindowObject) =>
+    ({
+      ...wallet,
+      request: async (request) => {
+        switch (request.type) {
+          case "wallet_getPermissions":
+            return authorized ? [Permission.ACCOUNTS] : []
+          default:
+            return wallet.request(request)
+        }
+      },
+    } as StarknetWindowObject)
 }
 
 export function makeConnected(isConnected: boolean) {
-  return (wallet: WalletMock) => ({
-    ...makePreAuthorized(true)(wallet),
-    enable: async () => [],
-    isConnected,
-  })
+  return (wallet: StarknetWindowObject) => {
+    return {
+      ...makeAuthorized(true)(wallet),
+      request: async ({ type }) => {
+        switch (type) {
+          case "wallet_getPermissions":
+            return isConnected ? [Permission.ACCOUNTS] : []
+          default:
+            return []
+        }
+      },
+    } as StarknetWindowObject
+  }
 }
