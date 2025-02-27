@@ -32,7 +32,7 @@ You can use the built-in UI to connect to any Starknet wallet as fast as
 possible like this:
 
 ```tsx
-import { connect, disconnect } from "get-starknet"
+import { connect, disconnect } from "@starknet-io/get-starknet"
 
 return <button onClick={() => connect()}>Connect wallet</button>
 ```
@@ -52,7 +52,7 @@ import {
   getDiscoveryWallets,
   getLastConnectedWallet,
   getPreAuthorizedWallets,
-} from "get-starknet-core"
+} from "@starknet-io/get-starknet-core"
 
 interface GetStarknetResult {
   // Returns all wallets available in the window object

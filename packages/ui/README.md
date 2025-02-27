@@ -14,13 +14,13 @@
 
 ```
 # using npm
-npm install @starknet-io/get-starknet starknet@next
+npm install @starknet-io/get-starknet starknet
 
 # using yarn
-yarn add @starknet-io/get-starknet starknet@next
+yarn add @starknet-io/get-starknet starknet
 
 # using pnpm
-pnpm add @starknet-io/get-starknet starknet@next
+pnpm add @starknet-io/get-starknet starknet
 ```
 
 ## Usage for dApp developers
