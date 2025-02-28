@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.7
+
+### Patch Changes
+
+- 3095a73: Release get-starknet v4 as stable
+
 ## 4.0.6
 
 ### Patch Changes
