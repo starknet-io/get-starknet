@@ -1,9 +1,8 @@
 import Modal from "./Modal.svelte"
 import type {
-  ConnectedStarknetWindowObject,
   StarknetWindowObject,
   WalletProvider,
-} from "get-starknet-core"
+} from "@starknet-io/get-starknet-core"
 
 export interface WalletProviderWithStoreVersion
   extends Omit<WalletProvider, "downloads"> {
@@ -21,17 +20,17 @@ export default async function show({
   discoveryWallets,
   installedWallets,
   lastWallet,
-  preAuthorizedWallets,
+  authorizedWallets,
   enable,
   modalOptions,
 }: {
   lastWallet?: StarknetWindowObject
   installedWallets?: StarknetWindowObject[]
-  preAuthorizedWallets?: StarknetWindowObject[]
+  authorizedWallets?: StarknetWindowObject[]
   discoveryWallets?: WalletProviderWithStoreVersion[]
   enable?: (
     wallet: StarknetWindowObject | null,
-  ) => Promise<ConnectedStarknetWindowObject | null>
+  ) => Promise<StarknetWindowObject | null>
   modalOptions?: {
     theme?: "light" | "dark" | "system"
   }
@@ -39,15 +38,15 @@ export default async function show({
   return new Promise((resolve) => {
     // make sure wallets are not shown twice
     const fixedWallets = [lastWallet].filter(Boolean)
-    preAuthorizedWallets = excludeWallets(preAuthorizedWallets, fixedWallets)
+    authorizedWallets = excludeWallets(authorizedWallets, fixedWallets)
     installedWallets = excludeWallets(installedWallets, [
       ...fixedWallets,
-      ...preAuthorizedWallets,
+      ...authorizedWallets,
     ])
     discoveryWallets = excludeWallets(discoveryWallets, [
       ...fixedWallets,
       ...installedWallets,
-      ...preAuthorizedWallets,
+      ...authorizedWallets,
     ])
 
     const modal = new Modal({
@@ -60,7 +59,7 @@ export default async function show({
         },
         lastWallet,
         installedWallets,
-        preAuthorizedWallets,
+        authorizedWallets,
         discoveryWallets,
         theme:
           modalOptions?.theme === "system" ? null : modalOptions?.theme ?? null,

@@ -13,10 +13,15 @@ export const shuffle = <T extends any[]>(arr: T): T => {
 }
 
 type AllowPromise<T> = Promise<T> | T
-export function pipe<T>(
-  ...fns: Array<(arg: T) => AllowPromise<T>>
-): (arg: T) => Promise<T> {
-  return (arg: T) => fns.reduce((acc, fn) => acc.then(fn), Promise.resolve(arg))
+export const pipe =
+  <T>(...fns: Array<(arg: T) => AllowPromise<T>>): ((arg: T) => Promise<T>) =>
+  (arg: T) =>
+    fns.reduce<Promise<T>>((acc, fn) => acc.then(fn), Promise.resolve(arg))
+
+export function ensureKeysArray<T extends object>(keysGuard: {
+  [k in keyof T]: true
+}) {
+  return Object.keys(keysGuard) as (keyof T)[]
 }
 
 export const ssrSafeWindow: Window | null =

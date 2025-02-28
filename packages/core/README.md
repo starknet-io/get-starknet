@@ -16,13 +16,13 @@
 
 ```
 # using npm
-npm install get-starknet starknet@next
+npm install @starknet-io/get-starknet-core starknet@next
 
 # using yarn
-yarn add get-starknet starknet@next
+yarn add @starknet-io/get-starknet-core starknet@next
 
 # using pnpm
-pnpm add get-starknet starknet@next
+pnpm add @starknet-io/get-starknet-core starknet@next
 ```
 
 ## Usage for dApp developers
@@ -31,7 +31,7 @@ You can use the built-in UI to connect to any Starknet wallet as fast as
 possible like this:
 
 ```tsx
-import { connect, disconnect } from "get-starknet"
+import { connect, disconnect } from "@starknet-io/get-starknet-core"
 
 return <button onClick={() => connect()}>Connect wallet</button>
 ```
@@ -51,7 +51,7 @@ import {
   getDiscoveryWallets,
   getLastConnectedWallet,
   getPreAuthorizedWallets,
-} from "get-starknet-core"
+} from "@starknet-io/get-starknet-core"
 
 interface GetStarknetResult {
   // Returns all wallets available in the window object

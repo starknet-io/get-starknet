@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { WalletProviderWithStoreVersion } from "."
-  import type { StarknetWindowObject } from "get-starknet-core"
+  import type { StarknetWindowObject } from "@starknet-io/get-starknet-core"
   import { onMount } from "svelte"
 
   const ssrSafeWindow = typeof window !== "undefined" ? window : null
   export let lastWallet: StarknetWindowObject | null = null
   export let installedWallets: StarknetWindowObject[] = []
-  export let preAuthorizedWallets: StarknetWindowObject[] = []
+  export let authorizedWallets: StarknetWindowObject[] = []
   export let discoveryWallets: WalletProviderWithStoreVersion[] = []
   export let callback: (
     value: StarknetWindowObject | null,
@@ -50,7 +50,7 @@
 
   const wallets = [
     lastWallet,
-    ...preAuthorizedWallets,
+    ...authorizedWallets,
     ...installedWallets,
   ].filter(Boolean)
 </script>

@@ -1,4 +1,81 @@
-# get-starknet-core
+# @starknet-io/get-starknet-core
+
+## 4.0.6
+
+### Patch Changes
+
+- bcd4294: refactor MetaMask Virtual Wallet to improve event handling, RPC
+  requests, and wallet initialization logic
+- 4b92b8a: Add Fordefi wallet
+
+## 4.0.5
+
+### Patch Changes
+
+- 0263b88: Decouple Virtual Wallet Discovery for async workflow
+
+## 4.0.4
+
+### Patch Changes
+
+- d2fee96: Fix loading MetaMask Virtual Wallet dynamically in WalletAccount and
+  add support for RPC APIs (wallet_supportedWalletApi and wallet_supportedSpecs)
+  in get-starknet v4 integration.
+
+## 4.0.3
+
+### Patch Changes
+
+- 93f3705: Fix MetaMask provider detection and handling in get-starknet v4
+  integration.
+
+## 4.0.2
+
+### Patch Changes
+
+- 40ceb05: Add keplr wallet
+
+## 4.0.1
+
+### Patch Changes
+
+- 0cd43d0: added mobile os store links support
+
+## 4.0.0-next.5
+
+### Minor Changes
+
+- 5cd8150: Spec update
+
+## 4.0.0-next.4
+
+### Minor Changes
+
+- 5a31414: imported types
+
+## 4.0.0-next.3
+
+### Patch Changes
+
+- 9c3b389: fix tests
+
+## 4.0.0-next.2
+
+### Patch Changes
+
+- c5fd8a0: prerelease
+
+## 4.0.0-next.1
+
+### Patch Changes
+
+- a9bf7d3: pre-release
+
+## 4.0.0-next.0
+
+### Major Changes
+
+- 4a477fd: new wallet snip
 
 ## 3.3.5
 
