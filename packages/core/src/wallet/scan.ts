@@ -15,6 +15,7 @@ export function scanObjectForWallets(
           wallets[wallet.id] = wallet
         }
       }
+      console.log(wallets)
       return wallets
     }, {}),
   )
