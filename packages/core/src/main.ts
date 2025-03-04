@@ -165,7 +165,6 @@ export function getStarknet(
         wallet = await resolveVirtualWallet(windowObject, inputWallet)
       } else if (isFullWallet(inputWallet)) {
         wallet = inputWallet
-        console.log(wallet)
       } else if (isEvmWallet(inputWallet)) {
         const metamaskWallet = await detectMetamaskSupport(windowObject)
         if (!metamaskWallet) {
