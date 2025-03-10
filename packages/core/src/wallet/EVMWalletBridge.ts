@@ -110,9 +110,7 @@ async function waitForEVMProvider(
   })
 }
 
-//! info yu buraya kadar getirdim. provider ve info olarak döndür buradan. sonrasında main dosyasında availablewallets
-//! içerisine push larken infodaki bilgileri kullanarak pushla elle yazma
-export async function detectMetamaskSupport(
+export async function detectEVMSupport(
   windowObject: Record<string, unknown>,
 ): Promise<
   { provider: EVMWalletProvider | null; info: EVMWalletInfo | null }[]

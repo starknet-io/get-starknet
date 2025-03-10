@@ -5,7 +5,7 @@ import { pipe, ssrSafeWindow } from "./utils"
 import {
   EVMWalletInfo,
   EVMWalletProvider,
-  detectMetamaskSupport,
+  detectEVMSupport,
 } from "./wallet/EVMWalletBridge"
 import { filterBy, filterByAuthorized } from "./wallet/filter"
 import {
@@ -84,7 +84,7 @@ export function getStarknet(
   }[]
 
   async function isEVMAvailable() {
-    evmWallets = await detectMetamaskSupport(windowObject)
+    evmWallets = await detectEVMSupport(windowObject)
   }
 
   isEVMAvailable()
@@ -178,7 +178,7 @@ export function getStarknet(
         wallet = await resolveVirtualWallet(windowObject, inputWallet)
       } else if (isEvmWallet(inputWallet)) {
         // Get all detected EVM wallets
-        const evmWallets = await detectMetamaskSupport(windowObject)
+        const evmWallets = await detectEVMSupport(windowObject)
 
         // Find the matching wallet in the detected list
         const selectedWallet = evmWallets.find(
