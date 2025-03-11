@@ -6,7 +6,6 @@ interface Request extends RequestFn {
 }
 
 export interface EVMWalletProvider {
-  isMetaMask: boolean
   request: Request
   on: WalletEventListener
   off: WalletEventListener
