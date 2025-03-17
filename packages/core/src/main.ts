@@ -177,6 +177,10 @@ export function getStarknet(
       if (isVirtualWallet(inputWallet)) {
         wallet = await resolveVirtualWallet(windowObject, inputWallet)
       } else if (isEvmWallet(inputWallet)) {
+        // Get all detected EVM wallets
+        const evmWallets = await detectEVMSupport(windowObject)
+
+        // Find the matching wallet in the detected list
         const selectedWallet = evmWallets.find(
           ({ info }) => info && info.name === inputWallet.name,
         )

@@ -42,21 +42,18 @@ export interface VirtualWallet {
 }
 
 export interface EvmWallet {
-  isStatus?: boolean // Optional: Indicates the status of the provider
-  host?: string // Optional: Host URL of the Ethereum node
-  path?: string // Optional: Path to a specific endpoint or service on the host
   sendAsync?: (
     request: { method: string; params?: Array<unknown> },
     callback: (error: Error | null, response: unknown) => void,
-  ) => void // For sending asynchronous requests
+  ) => void
   send?: (
     request: { method: string; params?: Array<unknown> },
     callback: (error: Error | null, response: unknown) => void,
-  ) => void // For sending synchronous requests
+  ) => void
   request: (request: {
     method: string
     params?: Array<unknown>
-  }) => Promise<unknown> // Standard method for sending requests per EIP-1193
+  }) => Promise<unknown>
 }
 
 export const virtualWalletKeys = ensureKeysArray<VirtualWallet>({
