@@ -23,10 +23,8 @@
   "files": ["dist", "src"],
   "scripts": {
     "build": "unbuild",
-    "format:check": "biome format .",
-    "format": "biome format --write .",
-    "lint:check": "biome lint .",
-    "lint": "biome lint --write .",
+    "lint:check": "biome check .",
+    "lint": "biome check --write .",
     "test": "vitest"
   },
   "devDependencies": {

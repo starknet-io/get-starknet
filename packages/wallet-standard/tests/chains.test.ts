@@ -1,4 +1,3 @@
-import type { IdentifierString } from "@wallet-standard/base";
 import { describe, expect, it } from "vitest";
 import {
   WELL_KNOWN_STARKNET_CHAINS,

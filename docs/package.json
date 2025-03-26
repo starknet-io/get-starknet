@@ -6,15 +6,15 @@
     "dev": "vocs dev",
     "build": "vocs build",
     "preview": "vocs preview",
-    "format:check": "biome format .",
-    "format": "biome format --write .",
-    "lint:check": "biome lint .",
-    "lint": "biome lint --write ."
+    "lint:check": "biome check .",
+    "lint": "biome check --write ."
   },
   "dependencies": {
     "@starknet-io/get-starknet-discovery": "workspace:*",
+    "@starknet-io/get-starknet-modal": "workspace:*",
     "@starknet-io/get-starknet-wallet-standard": "workspace:*",
     "@starknet-io/get-starknet-wallets": "workspace:*",
+    "@tailwindcss/vite": "^4.0.17",
     "@tanstack/react-query": "^5.69.0",
     "@types/react": "^19.0.12",
     "@wallet-standard/base": "^1.1.0",
@@ -26,7 +26,7 @@
     "vocs": "latest"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.0.17",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }

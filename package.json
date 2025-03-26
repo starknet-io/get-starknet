@@ -5,8 +5,6 @@
   "scripts": {
     "build": "pnpm run -r build",
     "dev": "pnpm run -r --parallel dev",
-    "format": "pnpm run -r format",
-    "format:check": "pnpm run -r format:check",
     "lint": "pnpm run -r lint",
     "lint:check": "pnpm run -r lint:check",
     "publish": "pnpm publish -r --no-git-checks --access public && changeset tag",

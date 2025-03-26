@@ -2,11 +2,11 @@ import type { RequestFn } from "@starknet-io/types-js";
 import type { Wallet, WalletWithFeatures } from "@wallet-standard/base";
 import {
   StandardConnect,
-  StandardDisconnect,
-  type StandardEventsFeature,
   type StandardConnectFeature,
+  StandardDisconnect,
   type StandardDisconnectFeature,
   StandardEvents,
+  type StandardEventsFeature,
 } from "@wallet-standard/features";
 
 export const StarknetWalletApi = "starknet:walletApi";

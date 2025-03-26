@@ -26,7 +26,11 @@ export const sidebar = [
     link: "/wallets",
   },
   {
-    text: "Demo",
+    text: "Demo - Discovery",
     link: "/demos/discovery",
+  },
+  {
+    text: "Demo - Modal",
+    link: "/demos/modal",
   },
 ] satisfies Sidebar;

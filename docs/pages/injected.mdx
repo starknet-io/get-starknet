@@ -1,19 +1,21 @@
 # Injected Wallets
 
-The `@get-starknet/wallet-standard` package provides the `StarknetInjectedWallet` class to adapt injected `StarknetWindowObject` to the `WalletWithStarknetFeatures` interface.
+The `@starknet-io/get-starknet-wallet-standard` package provides the
+`StarknetInjectedWallet` class to adapt injected `StarknetWindowObject` to the
+`WalletWithStarknetFeatures` interface.
 
 ## Usage
 
 ```ts
-import { StarknetInjectedWallet } from "@get-starknet/wallet-standard";
+import { StarknetInjectedWallet } from "@starknet-io/get-starknet-wallet-standard"
 
-const wallet = new StarknetInjectedWallet(window.starknet_myWallet);
+const wallet = new StarknetInjectedWallet(window.starknet_myWallet)
 
 // Connect wallet
-wallet.features["standard:connect"].connect({ silent: false });
+wallet.features["standard:connect"].connect({ silent: false })
 
 // Make a Starknet API request
 wallet.features["starknet:walletApi"].request({
   type: "wallet_getPermissions",
-});
+})
 ```
