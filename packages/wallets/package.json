@@ -1,5 +1,5 @@
 {
-  "name": "@get-starknet/wallets",
+  "name": "@starknet-io/get-starknet-wallets",
   "version": "5.0.0-beta.0",
   "keywords": ["starknet", "starkware", "l2", "zk", "rollup", "wallet", "dapp"],
   "license": "MIT",

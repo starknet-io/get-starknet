@@ -19,14 +19,14 @@ import {
   StarknetWalletApi,
   type StarknetFeatures,
   type WalletWithStarknetFeatures,
-} from "@get-starknet/wallet-standard/features";
+} from "@starknet-io/get-starknet-wallet-standard/features";
 import {
   isStarknetChain,
   STARKNET_CHAIN_PREFIX,
   WELL_KNOWN_STARKNET_CHAINS,
-} from "@get-starknet/wallet-standard/chains";
-import type { StarknetWalletAccount } from "@get-starknet/wallet-standard";
-import type { StarknetChain } from "@get-starknet/wallet-standard/chains";
+} from "@starknet-io/get-starknet-wallet-standard/chains";
+import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
+import type { StarknetChain } from "@starknet-io/get-starknet-wallet-standard/chains";
 import { Mutex } from "async-mutex";
 import { init, loadRemote } from "@module-federation/runtime";
 
@@ -52,7 +52,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
   #swo: StarknetWindowObject | null = null;
   #lock: Mutex = new Mutex();
 
-  constructor(private provider: MetaMaskProvider) {}
+  constructor(private provider: MetaMaskProvider) { }
 
   get version() {
     return "1.0.0" as const;

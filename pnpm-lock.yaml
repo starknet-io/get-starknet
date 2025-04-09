@@ -23,13 +23,13 @@ importers:
 
   docs:
     dependencies:
-      '@get-starknet/discovery':
+      '@starknet-io/get-starknet-discovery':
         specifier: workspace:*
         version: link:../packages/discovery
-      '@get-starknet/wallet-standard':
+      '@starknet-io/get-starknet-wallet-standard':
         specifier: workspace:*
         version: link:../packages/wallet-standard
-      '@get-starknet/wallets':
+      '@starknet-io/get-starknet-wallets':
         specifier: workspace:*
         version: link:../packages/wallets
       '@tanstack/react-query':
@@ -69,10 +69,10 @@ importers:
 
   packages/discovery:
     dependencies:
-      '@get-starknet/virtual-wallet':
+      '@starknet-io/get-starknet-virtual-wallet':
         specifier: workspace:^
         version: link:../virtual-wallet
-      '@get-starknet/wallet-standard':
+      '@starknet-io/get-starknet-wallet-standard':
         specifier: workspace:^
         version: link:../wallet-standard
       '@starknet-io/types-js':
@@ -94,12 +94,12 @@ importers:
 
   packages/virtual-wallet:
     dependencies:
-      '@get-starknet/wallet-standard':
-        specifier: workspace:*
-        version: link:../wallet-standard
       '@module-federation/runtime':
         specifier: ^0.8.2
         version: 0.8.2
+      '@starknet-io/get-starknet-wallet-standard':
+        specifier: workspace:*
+        version: link:../wallet-standard
       '@starknet-io/types-js':
         specifier: ^0.7.10
         version: 0.7.10

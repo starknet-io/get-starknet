@@ -1,4 +1,4 @@
-import type { EIP1193Adapter } from "@get-starknet/virtual-wallet";
+import type { EIP1193Adapter } from "@starknet-io/get-starknet-virtual-wallet";
 import type { Wallet } from "@wallet-standard/base";
 
 export function registerEIP1193WalletFromEIP6963Discovery(

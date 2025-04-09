@@ -1,5 +1,5 @@
 {
-  "name": "@get-starknet/discovery",
+  "name": "@starknet-io/get-starknet-discovery",
   "version": "5.0.0-beta.0",
   "keywords": ["starknet", "starkware", "l2", "zk", "rollup", "wallet", "dapp"],
   "license": "MIT",
@@ -29,8 +29,8 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@get-starknet/wallet-standard": "workspace:^",
-    "@get-starknet/virtual-wallet": "workspace:^",
+    "@starknet-io/get-starknet-wallet-standard": "workspace:^",
+    "@starknet-io/get-starknet-virtual-wallet": "workspace:^",
     "@starknet-io/types-js": "^0.7.10",
     "@wallet-standard/base": "^1.1.0"
   }

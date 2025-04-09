@@ -1,6 +1,6 @@
 {
   "name": "@starknet-io/get-starknet-monorepo",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "build": "pnpm run -r build",

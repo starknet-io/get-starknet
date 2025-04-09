@@ -1,5 +1,5 @@
 {
-  "name": "get-starknet",
+  "name": "get-starknet-docs",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -12,9 +12,9 @@
     "lint": "biome lint --write ."
   },
   "dependencies": {
-    "@get-starknet/discovery": "workspace:*",
-    "@get-starknet/wallet-standard": "workspace:*",
-    "@get-starknet/wallets": "workspace:*",
+    "@starknet-io/get-starknet-discovery": "workspace:*",
+    "@starknet-io/get-starknet-wallet-standard": "workspace:*",
+    "@starknet-io/get-starknet-wallets": "workspace:*",
     "@tanstack/react-query": "^5.69.0",
     "@types/react": "^19.0.12",
     "@wallet-standard/base": "^1.1.0",

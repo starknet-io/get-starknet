@@ -5,9 +5,9 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 import { RefreshCcw, Trash } from "lucide-react";
-import { createStore } from "@get-starknet/discovery";
-import type { WalletWithStarknetFeatures } from "@get-starknet/wallet-standard/features";
-import type { StarknetWalletAccount } from "@get-starknet/wallet-standard";
+import { createStore } from "@starknet-io/get-starknet-discovery";
+import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
+import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
 import { useCallback, useEffect, useState } from "react";
 import type { StandardEventsChangeProperties } from "@wallet-standard/features";
 

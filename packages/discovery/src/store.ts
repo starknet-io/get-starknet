@@ -1,9 +1,9 @@
 import {
   type WalletWithStarknetFeatures,
   isStarknetWallet,
-} from "@get-starknet/wallet-standard/features";
-import type { EIP1193Adapter } from "@get-starknet/virtual-wallet";
-import { metaMaskVirtualWallet } from "@get-starknet/virtual-wallet/metamask";
+} from "@starknet-io/get-starknet-wallet-standard/features";
+import type { EIP1193Adapter } from "@starknet-io/get-starknet-virtual-wallet";
+import { metaMaskVirtualWallet } from "@starknet-io/get-starknet-virtual-wallet/metamask";
 
 import { registerStandardWalletDiscovery } from "./standard-wallet";
 import { registerInjectedWalletDiscovery } from "./injected-wallet";

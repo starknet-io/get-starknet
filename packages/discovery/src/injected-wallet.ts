@@ -1,4 +1,4 @@
-import { StarknetInjectedWallet } from "@get-starknet/wallet-standard";
+import { StarknetInjectedWallet } from "@starknet-io/get-starknet-wallet-standard";
 import type { StarknetWindowObject } from "@starknet-io/types-js";
 import type { Wallet } from "@wallet-standard/base";
 
@@ -10,8 +10,8 @@ export function registerInjectedWalletDiscovery(
 } {
   if (typeof window === "undefined")
     return {
-      unregister: () => {},
-      refresh: () => {},
+      unregister: () => { },
+      refresh: () => { },
     };
 
   function refresh() {
@@ -25,7 +25,7 @@ export function registerInjectedWalletDiscovery(
   refresh();
 
   return {
-    unregister: () => {},
+    unregister: () => { },
     refresh,
   };
 }
