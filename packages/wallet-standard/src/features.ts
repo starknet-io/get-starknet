@@ -18,6 +18,7 @@ export type StarknetWalletRequestFeature = {
   readonly [StarknetWalletApi]: {
     readonly version: StarknetWalletApiVersion;
     readonly request: RequestFn;
+    readonly walletVersion: string;
   };
 };
 

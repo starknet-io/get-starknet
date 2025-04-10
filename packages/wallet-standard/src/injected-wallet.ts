@@ -67,6 +67,7 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
       [StarknetWalletApi]: {
         version: "1.0.0" as const,
         request: this.#request.bind(this),
+        walletVersion: this.injected.version,
       },
     };
   }
