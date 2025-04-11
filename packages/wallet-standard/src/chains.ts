@@ -24,6 +24,12 @@ export function isStarknetChain(
   return Hex.validate(parts[1]);
 }
 
+/** Returns a `StarknetChain` from a `ChainId`. */
+export function formatStarknetChainId(chainId: string): StarknetChain {
+  Hex.assert(chainId);
+  return `${STARKNET_CHAIN_PREFIX}${chainId}`;
+}
+
 /** Returns the 0x prefixed chain id. */
 export function getStarknetChainId(chain: StarknetChain): ChainId {
   const [, id] = chain.split(":");

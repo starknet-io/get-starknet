@@ -12,8 +12,8 @@ import {
 } from "@wallet-standard/features";
 
 import {
+  formatStarknetChainId,
   isStarknetChain,
-  STARKNET_CHAIN_PREFIX,
   type StarknetChain,
   WELL_KNOWN_STARKNET_CHAINS,
 } from "./chains";
@@ -178,21 +178,22 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
       return;
     }
 
-    if (!accounts || accounts.length === 0) {
-      this.#disconnected();
-      return;
-    }
-
-    const [account] = accounts;
-
-    const chain = `${STARKNET_CHAIN_PREFIX}:${chainId}` as const;
+    const chain = formatStarknetChainId(chainId);
 
     if (!isStarknetChain(chain)) {
-      throw new Error("Invalid Starknet chain");
+      throw new Error(`Invalid Starknet chain: ${chain}`);
     }
 
-    this.#account = { address: account, chain };
-    this.#emit("change", { accounts: this.accounts });
+    // Some wallets (like Keplr) don't provide accounts on network change.
+    if (accounts?.length > 0) {
+      const [account] = accounts;
+
+      this.#account = { address: account, chain };
+      this.#emit("change", { accounts: this.accounts });
+    } else {
+      this.#account.chain = chain;
+      this.#emit("change", { accounts: this.accounts });
+    }
   }
 
   #request(...args: Parameters<RequestFn>): ReturnType<RequestFn> {
@@ -203,10 +204,10 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
     const chainId = await this.injected.request({
       type: "wallet_requestChainId",
     });
-    const chain = `${STARKNET_CHAIN_PREFIX}${chainId}` as const;
+    const chain = formatStarknetChainId(chainId);
 
     if (!isStarknetChain(chain)) {
-      throw new Error("Invalid Starknet chain");
+      throw new Error(`Invalid Starknet chain: ${chain}`);
     }
 
     return chain;
