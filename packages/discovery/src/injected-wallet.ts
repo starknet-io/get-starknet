@@ -10,8 +10,8 @@ export function registerInjectedWalletDiscovery(
 } {
   if (typeof window === "undefined")
     return {
-      unregister: () => { },
-      refresh: () => { },
+      unregister: () => {},
+      refresh: () => {},
     };
 
   function refresh() {
@@ -25,7 +25,7 @@ export function registerInjectedWalletDiscovery(
   refresh();
 
   return {
-    unregister: () => { },
+    unregister: () => {},
     refresh,
   };
 }

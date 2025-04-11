@@ -1,15 +1,7 @@
 {
   "name": "@starknet-io/get-starknet-wallet-standard",
   "version": "5.0.0-beta.0",
-  "keywords": [
-    "starknet",
-    "starkware",
-    "l2",
-    "zk",
-    "rollup",
-    "wallet",
-    "dapp"
-  ],
+  "keywords": ["starknet", "starkware", "l2", "zk", "rollup", "wallet", "dapp"],
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.mjs",
@@ -34,10 +26,7 @@
       "default": "./dist/features.mjs"
     }
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "scripts": {
     "build": "unbuild",
     "format:check": "biome format .",

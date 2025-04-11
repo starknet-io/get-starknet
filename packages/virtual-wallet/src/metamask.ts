@@ -52,7 +52,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
   #swo: StarknetWindowObject | null = null;
   #lock: Mutex = new Mutex();
 
-  constructor(private provider: MetaMaskProvider) { }
+  constructor(private provider: MetaMaskProvider) {}
 
   get version() {
     return "1.0.0" as const;
