@@ -24,9 +24,11 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@wallet-standard/core": "^1.1.0",
+    "happy-dom": "^17.4.4",
     "typescript": "^5.8.3",
     "unbuild": "^2.0.0",
-    "vitest": "^2.1.9"
+    "vitest": "^3.1.1"
   },
   "dependencies": {
     "@starknet-io/get-starknet-virtual-wallet": "workspace:^",

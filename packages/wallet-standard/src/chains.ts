@@ -7,7 +7,10 @@ export const STARKNET_CHAIN_PREFIX = "starknet:";
 
 export type StarknetChain = `${typeof STARKNET_CHAIN_PREFIX}${ChainId}`;
 
-export const WELL_KNOWN_STARKNET_CHAINS = [] as const satisfies StarknetChain[];
+export const WELL_KNOWN_STARKNET_CHAINS = [
+  "starknet:0x534e5f4d41494e", // mainnet
+  "starknet:0x534e5f5345504f4c4941", // sepolia
+] as const satisfies StarknetChain[];
 
 /** Check if a chain is a known Starknet chain. */
 export function isStarknetChain(
