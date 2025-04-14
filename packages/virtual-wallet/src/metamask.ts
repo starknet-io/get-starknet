@@ -21,6 +21,7 @@ import {
   type WalletWithStarknetFeatures,
 } from "@starknet-io/get-starknet-wallet-standard/features";
 import {
+  formatStarknetChainId,
   isStarknetChain,
   STARKNET_CHAIN_PREFIX,
   WELL_KNOWN_STARKNET_CHAINS,
@@ -52,7 +53,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
   #swo: StarknetWindowObject | null = null;
   #lock: Mutex = new Mutex();
 
-  constructor(private provider: MetaMaskProvider) {}
+  constructor(private provider: MetaMaskProvider) { }
 
   get version() {
     return "1.0.0" as const;
@@ -207,7 +208,10 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
       throw new Error("Failed to load MetaMask Wallet");
     }
 
-    return new result.MetaMaskSnapWallet(provider, "*");
+    const swo = new result.MetaMaskSnapWallet(provider, "*");
+    swo.on("accountsChanged", this.#onAccountsChanged.bind(this))
+    swo.on("networkChanged", this.#onNetworkChanged.bind(this))
+    return swo;
   }
 
   async #getStarknetChain(): Promise<StarknetChain> {
@@ -241,6 +245,31 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
       this.#emit("change", { accounts: this.accounts });
     }
   }
+
+  #onNetworkChanged(chainId?: string, accounts?: string[]) {
+    if (!chainId) {
+      this.#disconnected();
+      return;
+    }
+
+    const chain = formatStarknetChainId(chainId);
+
+    if (!isStarknetChain(chain)) {
+      throw new Error(`Invalid Starknet chain: ${chain}`);
+    }
+
+    // Accounts should always be set, but check just in case.
+    if (accounts?.length > 0) {
+      const [account] = accounts;
+
+      this.#account = { address: account, chain };
+      this.#emit("change", { accounts: this.accounts });
+    } else {
+      this.#account.chain = chain;
+      this.#emit("change", { accounts: this.accounts });
+    }
+  }
+
 }
 
 type MetaMaskProvider = {
