@@ -1,6 +1,3 @@
 packages:
-  - "packages/wallets"
-  - "packages/wallet-standard"
-  - "packages/discovery"
-  - "packages/virtual-wallet"
+  - "packages/*"
   - "docs"
