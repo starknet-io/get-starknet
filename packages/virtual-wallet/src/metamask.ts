@@ -177,6 +177,12 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
     args: RequestFnCall<T>,
   ): Promise<RpcTypeToMessageMap[T]["result"]> {
     return this.#lock.runExclusive(async () => {
+      // Loading the MetaMask snap requires the user to confirm the installation.
+      // If the snap is not installed, return an empty array to avoid the wallet popup.
+      if (!this.#swo && args.type === "wallet_getPermissions") {
+        return [];
+      }
+
       if (!this.#swo) {
         this.#swo = await this.#loadWallet(this.provider);
         // Bind properties from the virtual wallet to make sure they're up-to-date.
