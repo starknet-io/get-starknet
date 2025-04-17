@@ -101,8 +101,8 @@ importers:
   packages/virtual-wallet:
     dependencies:
       '@module-federation/runtime':
-        specifier: ^0.8.12
-        version: 0.8.12
+        specifier: ^0.12.0
+        version: 0.12.0
       '@starknet-io/get-starknet-wallet-standard':
         specifier: workspace:*
         version: link:../wallet-standard
@@ -119,8 +119,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0
       viem:
-        specifier: ^2.26.2
-        version: 2.26.2(typescript@5.8.3)
+        specifier: ^2.27.2
+        version: 2.27.2(typescript@5.8.3)
     devDependencies:
       typescript:
         specifier: ^5.8.3
@@ -1027,17 +1027,17 @@ packages:
     peerDependencies:
       rollup: '>=2'
 
-  '@module-federation/error-codes@0.8.12':
-    resolution: {integrity: sha512-K+F4iiV62KY+IpjK6ggn3vI5Yt/T/LUb6xuazY78bhAGwLaHe1DYr7BfSutKMpiB+Dcs6U4dYOBogSMnnl0j4Q==}
+  '@module-federation/error-codes@0.12.0':
+    resolution: {integrity: sha512-DEXQjopcBuGzp/NA9OVtASO0uZ6grVK5TIe0PjrbDRyZDxVaYQXKrISxBLOE+3nSIELE98tYpfxptm8WC9A8zA==}
 
-  '@module-federation/runtime-core@0.6.20':
-    resolution: {integrity: sha512-rX7sd/i7tpkAbfMD4TtFt/57SWNC/iv7UYS8g+ad7mnCJggWE1YEKsKSFgcvp4zU3thwR+j2y+kOCwd1sQvxEA==}
+  '@module-federation/runtime-core@0.12.0':
+    resolution: {integrity: sha512-373zBM54196KHURs/O8lry9trCAM3PPidvsF4YdrtahNc8YaQynml0mE3zdZeBnqP6H0/4OpPqMMjACI80Ht8w==}
 
-  '@module-federation/runtime@0.8.12':
-    resolution: {integrity: sha512-eYohRfambj/qzxz6tEakDn459ROcixWO4zL5gmTEOmwG+jCDnxGR14j1guopyrrpjb6EKFNrPVWtYZTPPfGdQQ==}
+  '@module-federation/runtime@0.12.0':
+    resolution: {integrity: sha512-Cz9/7+gSvrdencwA8LXUMKnZdu0/flyN+yk6t3pkxfhvPJi3W65ZcalAKyOgyk2x8rEYrRSyEXu+/2DIFgrzmA==}
 
-  '@module-federation/sdk@0.8.12':
-    resolution: {integrity: sha512-zFgXYBHbzwIqlrLfn6ewIRXDZCctDDQT2nFhbsZr29yWQgpmW1fm2kJCxQsG0DENGGN1KpzfDoxjjvSKJS/ZHA==}
+  '@module-federation/sdk@0.12.0':
+    resolution: {integrity: sha512-vh3GcG90fxjbkMghK7iSWcMayi/y8U5DxI6mhEFuz11St3y1UgQO2TZYephL8nISFBld7DdiqAkimx+6Hb3hjQ==}
 
   '@noble/curves@1.8.1':
     resolution: {integrity: sha512-warwspo+UYUPep0Q+vtdVB4Ugn8GGQj8iyB3gnRWsztmUHTI3S1nhdiWNsPUGL0vud7JlRRk1XEu7Lq1KGTnMQ==}
@@ -3211,10 +3211,6 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  isomorphic-rslog@0.0.7:
-    resolution: {integrity: sha512-n6/XnKnZ5eLEj6VllG4XmamXG7/F69nls8dcynHyhcTpsPUYgcgx4ifEaCo4lQJ2uzwfmIT+F0KBGwBcMKmt5g==}
-    engines: {node: '>=14.17.6'}
-
   isows@1.0.6:
     resolution: {integrity: sha512-lPHCayd40oW98/I0uvgaHKWCSvkzY27LjWLbtzOm64yQ+G3Q5npjjbdppU65iZXkK1Zt+kH9pfegli0AYfwYYw==}
     peerDependencies:
@@ -4822,8 +4818,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  viem@2.26.2:
-    resolution: {integrity: sha512-+yXSl1n+jV/Kn/zpETiNq0WOcINXti29nxdPIONvvNh+Es0VfeusW8bb2okVfa55pmuc8kOCOpB5wq3ZIUCTSA==}
+  viem@2.27.2:
+    resolution: {integrity: sha512-VwsB+RswcflbwBNPMvzTHuafDA51iT8v4SuIFcudTP2skmxcdodbgoOLP4dYELVnCzcedxoSJDOeext4V3zdnA==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:
@@ -5888,22 +5884,20 @@ snapshots:
       - acorn
       - supports-color
 
-  '@module-federation/error-codes@0.8.12': {}
+  '@module-federation/error-codes@0.12.0': {}
 
-  '@module-federation/runtime-core@0.6.20':
+  '@module-federation/runtime-core@0.12.0':
     dependencies:
-      '@module-federation/error-codes': 0.8.12
-      '@module-federation/sdk': 0.8.12
+      '@module-federation/error-codes': 0.12.0
+      '@module-federation/sdk': 0.12.0
 
-  '@module-federation/runtime@0.8.12':
+  '@module-federation/runtime@0.12.0':
     dependencies:
-      '@module-federation/error-codes': 0.8.12
-      '@module-federation/runtime-core': 0.6.20
-      '@module-federation/sdk': 0.8.12
+      '@module-federation/error-codes': 0.12.0
+      '@module-federation/runtime-core': 0.12.0
+      '@module-federation/sdk': 0.12.0
 
-  '@module-federation/sdk@0.8.12':
-    dependencies:
-      isomorphic-rslog: 0.0.7
+  '@module-federation/sdk@0.12.0': {}
 
   '@noble/curves@1.8.1':
     dependencies:
@@ -8197,8 +8191,6 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  isomorphic-rslog@0.0.7: {}
-
   isows@1.0.6(ws@8.18.1):
     dependencies:
       ws: 8.18.1
@@ -10224,7 +10216,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  viem@2.26.2(typescript@5.8.3):
+  viem@2.27.2(typescript@5.8.3):
     dependencies:
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
