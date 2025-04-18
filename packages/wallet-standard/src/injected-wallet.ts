@@ -106,7 +106,7 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
         return { accounts: [] };
       }
 
-      await this.#onAccountsChanged(accounts);
+      await this.#updateAccount(accounts);
     }
 
     return { accounts: this.accounts };
@@ -159,22 +159,20 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
       return;
     }
 
-    const [account] = accounts;
-
-    if (this.#account?.chain) {
-      // Only account changed. No need to make a request for the chain id.
-      this.#account.address = account;
-      this.#emit("change", { accounts: this.accounts });
-    } else {
-      const chain = await this.#getStarknetChain();
-      this.#account = { address: account, chain };
-      this.#emit("change", { accounts: this.accounts });
+    if (!this.#account) {
+      return;
     }
+
+    await this.#updateAccount(accounts);
   }
 
   #onNetworkChanged(chainId?: string, accounts?: string[]) {
     if (!chainId) {
       this.#disconnected();
+      return;
+    }
+
+    if (!this.#account) {
       return;
     }
 
@@ -191,7 +189,25 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
       this.#account = { address: account, chain };
       this.#emit("change", { accounts: this.accounts });
     } else {
-      this.#account.chain = chain;
+      this.#account = { address: this.#account?.address, chain };
+      this.#emit("change", { accounts: this.accounts });
+    }
+  }
+
+  async #updateAccount(accounts: string[]) {
+    if (accounts.length === 0) {
+      return;
+    }
+
+    const [account] = accounts;
+
+    if (this.#account?.chain) {
+      // Only account changed. No need to make a request for the chain id.
+      this.#account.address = account;
+      this.#emit("change", { accounts: this.accounts });
+    } else {
+      const chain = await this.#getStarknetChain();
+      this.#account = { address: account, chain };
       this.#emit("change", { accounts: this.accounts });
     }
   }
