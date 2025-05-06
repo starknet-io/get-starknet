@@ -1,3 +1,6 @@
 packages:
-  - "packages/*"
-  - "docs"
+  - packages/*
+  - docs
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - esbuild

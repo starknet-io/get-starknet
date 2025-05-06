@@ -1,4 +1,14 @@
+import {
+  StarknetWalletApi,
+  type WalletWithStarknetFeatures,
+} from "@starknet-io/get-starknet-wallet-standard/features";
 import { Permission, type StarknetWindowObject } from "@starknet-io/types-js";
+import {
+  StandardConnect,
+  StandardDisconnect,
+  StandardEvents,
+} from "@wallet-standard/core";
+import { vi } from "vitest";
 
 export const UnknownWalletAMock: StarknetWindowObject = {
   id: "wallet_a",
@@ -19,6 +29,35 @@ export const UnknownWalletBMock: StarknetWindowObject = {
   on: () => {},
   off: () => {},
 };
+
+export const createMockStandardWallet = (
+  name: string,
+): WalletWithStarknetFeatures => ({
+  name,
+  icon: "data:image/svg+xml;base64,example",
+  version: "1.0.0",
+  chains: [],
+  accounts: [],
+  features: {
+    [StarknetWalletApi]: {
+      version: "1.0.0",
+      walletVersion: "1.0.0",
+      request: vi.fn(),
+    },
+    [StandardConnect]: {
+      version: "1.0.0",
+      connect: vi.fn(),
+    },
+    [StandardDisconnect]: {
+      version: "1.0.0",
+      disconnect: vi.fn(),
+    },
+    [StandardEvents]: {
+      version: "1.0.0",
+      on: vi.fn(),
+    },
+  },
+});
 
 export function makeAuthorized(authorized: boolean) {
   return (wallet: StarknetWindowObject) =>

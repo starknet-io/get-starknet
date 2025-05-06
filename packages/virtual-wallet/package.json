@@ -26,11 +26,13 @@
     "format:check": "biome format .",
     "format": "biome format --write .",
     "lint:check": "biome lint .",
-    "lint": "biome lint --write ."
+    "lint": "biome lint --write .",
+    "test": "vitest"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
-    "unbuild": "^2.0.0"
+    "unbuild": "^2.0.0",
+    "vitest": "^3.1.1"
   },
   "dependencies": {
     "@module-federation/runtime": "^0.12.0",

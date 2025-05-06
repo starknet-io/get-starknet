@@ -6,8 +6,13 @@ import { UnknownWalletAMock, UnknownWalletBMock } from "./mock";
 import { StarknetInjectedWallet } from "@starknet-io/get-starknet-wallet-standard";
 import { createStore } from "../src";
 
-// biome-ignore lint/suspicious/noExplicitAny: assignment to window
-(window as any).starknet_wallet_a = UnknownWalletAMock;
+interface TestWindow extends Window {
+  starknet_wallet_a?: typeof UnknownWalletAMock;
+}
+
+const testWindow = window as TestWindow;
+
+testWindow.starknet_wallet_a = UnknownWalletAMock;
 
 describe("createStore", () => {
   it("detects injected wallets", () => {

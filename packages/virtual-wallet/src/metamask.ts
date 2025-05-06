@@ -286,12 +286,12 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
   }
 }
 
-type MetaMaskProvider = {
+export type MetaMaskProvider = {
   isMetaMask: boolean;
   request(options: { method: string }): Promise<void>;
 };
 
-function isMetaMaskProvider(obj: unknown): obj is MetaMaskProvider {
+export function isMetaMaskProvider(obj: unknown): obj is MetaMaskProvider {
   return (
     obj !== null &&
     typeof obj === "object" &&
