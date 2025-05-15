@@ -17,16 +17,24 @@ describe("isStarknetChain", () => {
   });
 
   it("returns false for malformed chains", () => {
-    expect(isStarknetChain("starknet-0x1234" as IdentifierString)).toBeFalsy();
-    expect(isStarknetChain("starknet:" as IdentifierString)).toBeFalsy();
-    expect(isStarknetChain("starknet:invalid" as IdentifierString)).toBeFalsy();
-    expect(isStarknetChain("0x1234" as IdentifierString)).toBeFalsy();
+    expect(isStarknetChain("starknet-0x1234")).toBeFalsy();
+    expect(isStarknetChain("starknet:")).toBeFalsy();
+    expect(isStarknetChain("starknet:invalid")).toBeFalsy();
+    expect(isStarknetChain("0x1234")).toBeFalsy();
   });
 });
 
 describe("getStarknetChainId", () => {
   it("returns the 0x prefixed chain id", () => {
     expect(getStarknetChainId("starknet:0x1234")).toBe("0x1234");
+  });
+
+  it("throws for invalid chains", () => {
+    expect(() => getStarknetChainId("ethereum:0x1234")).toThrow();
+    expect(() => getStarknetChainId("starknet-0x1234")).toThrow();
+    expect(() => getStarknetChainId("starknet:")).toThrow();
+    expect(() => getStarknetChainId("starknet:invalid")).toThrow();
+    expect(() => getStarknetChainId("0x1234")).toThrow();
   });
 });
 
