@@ -1,0 +1,49 @@
+{
+  "name": "@starknet-io/get-starknet-wallet-standard",
+  "version": "5.0.0-beta.0",
+  "keywords": ["starknet", "starkware", "l2", "zk", "rollup", "wallet", "dapp"],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    },
+    "./chains": {
+      "types": "./dist/chains.d.ts",
+      "import": "./dist/chains.mjs",
+      "require": "./dist/chains.cjs",
+      "default": "./dist/chains.mjs"
+    },
+    "./features": {
+      "types": "./dist/features.d.ts",
+      "import": "./dist/features.mjs",
+      "require": "./dist/features.cjs",
+      "default": "./dist/features.mjs"
+    }
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "unbuild",
+    "format:check": "biome format .",
+    "format": "biome format --write .",
+    "lint:check": "biome lint .",
+    "lint": "biome lint --write .",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "unbuild": "^2.0.0",
+    "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "@starknet-io/types-js": "^0.7.10",
+    "@wallet-standard/base": "^1.1.0",
+    "@wallet-standard/features": "^1.1.0",
+    "ox": "^0.4.4"
+  }
+}

@@ -14,70 +14,18 @@
 
 ```
 # using npm
-npm install @starknet-io/get-starknet starknet@next
+npm install @starknet-io/get-starknet@next starknet@next
 
 # using yarn
-yarn add @starknet-io/get-starknet starknet@next
+yarn add @starknet-io/get-starknet@next starknet@next
 
 # using pnpm
-pnpm add @starknet-io/get-starknet starknet@next
+pnpm add @starknet-io/get-starknet@next starknet@next
 ```
 
 Read more about the new Starkent Dapp<>Wallet API in the
 [post](https://community.starknet.io/t/new-starknet-wallet-dapp-api/114295)
 
-## Usage for dApp developers
-
-You can use the built-in UI to connect to any Starknet wallet as fast as
-possible like this:
-
-```tsx
-import { connect, disconnect } from "get-starknet"
-
-return <button onClick={() => connect()}>Connect wallet</button>
-```
-
-### Advanced usage
-
-You can also choose to customize the UI by overwriting the CSS classes, or by
-implementing your very own UI. This is possible due to a split into a `core` and
-`ui` package. As a library author or dapp developer who wants to implement a
-custom UI, you can use the `core` package.
-
-```tsx
-import {
-  disconnect,
-  enable,
-  getAvailableWallets,
-  getDiscoveryWallets,
-  getLastConnectedWallet,
-  getPreAuthorizedWallets,
-} from "get-starknet-core"
-
-interface GetStarknetResult {
-  // Returns all wallets available in the window object
-  getAvailableWallets: (
-    options?: GetWalletOptions,
-  ) => Promise<StarknetWindowObject[]>
-  // Returns only preauthorized wallets available in the window object
-  getPreAuthorizedWallets: (
-    options?: GetWalletOptions,
-  ) => Promise<StarknetWindowObject[]>
-  // Returns all wallets in existence (from discovery file)
-  getDiscoveryWallets: (options?: GetWalletOptions) => Promise<WalletProvider[]>
-  // Returns the last wallet connected when it's still connected
-  getLastConnectedWallet: () => Promise<StarknetWindowObject | null>
-  // Connects to a wallet
-  enable: (
-    wallet: StarknetWindowObject,
-    options?: {
-      starknetVersion?: "v4" | "v5"
-    },
-  ) => Promise<ConnectedStarknetWindowObject>
-  // Disconnects from a wallet
-  disconnect: (options?: { clearLastWallet?: boolean }) => Promise<void>
-}
-```
 
 ## Development
 
