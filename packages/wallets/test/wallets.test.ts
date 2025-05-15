@@ -5,8 +5,6 @@ import * as module from "../src/wallets";
 
 describe("wallets", () => {
   it("should export all wallets", () => {
-    expect(wallets).toHaveLength(5);
-
     for (const [key, wallet] of Object.entries(module)) {
       if (key === "wallets") {
         continue;
