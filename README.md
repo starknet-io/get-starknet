@@ -1,6 +1,6 @@
 # get-starknet
 
-[![npm](https://img.shields.io/npm/v/get-starknet.svg)](https://www.npmjs.com/package/get-starknet)
+[![npm](https://img.shields.io/npm/v/%40starknet-io%2Fget-starknet)](https://www.npmjs.com/package/@starknet-io/get-starknet)
 
 ## Goals
 
@@ -14,13 +14,13 @@
 
 ```
 # using npm
-npm install @starknet-io/get-starknet starknet@next
+npm install @starknet-io/get-starknet starknet
 
 # using yarn
-yarn add @starknet-io/get-starknet starknet@next
+yarn add @starknet-io/get-starknet starknet
 
 # using pnpm
-pnpm add @starknet-io/get-starknet starknet@next
+pnpm add @starknet-io/get-starknet starknet
 ```
 
 Read more about the new Starkent Dapp<>Wallet API in the
