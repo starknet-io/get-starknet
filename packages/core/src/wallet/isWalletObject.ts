@@ -1,4 +1,4 @@
-import { fullWalletKeys, virtualWalletKeys } from "../types"
+import { evmWalletKeys, fullWalletKeys, virtualWalletKeys } from "../types"
 
 function createWalletGuard<T>(keys: (keyof T)[]) {
   return function hasKeys(obj: unknown): obj is T {
@@ -12,11 +12,15 @@ const isFullWallet = createWalletGuard(fullWalletKeys)
 
 const isVirtualWallet = createWalletGuard(virtualWalletKeys)
 
+const isEvmWallet = createWalletGuard(evmWalletKeys)
+
 function isWalletObject(wallet: unknown): boolean {
   try {
-    return isFullWallet(wallet) || isVirtualWallet(wallet)
+    return (
+      isFullWallet(wallet) || isVirtualWallet(wallet) || isEvmWallet(wallet)
+    )
   } catch (err) {}
   return false
 }
 
-export { isVirtualWallet, isFullWallet, isWalletObject }
+export { isVirtualWallet, isFullWallet, isWalletObject, isEvmWallet }

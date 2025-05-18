@@ -41,6 +41,21 @@ export interface VirtualWallet {
   hasSupport: (windowObject: Record<string, unknown>) => Promise<boolean>
 }
 
+export interface EvmWallet {
+  sendAsync?: (
+    request: { method: string; params?: Array<unknown> },
+    callback: (error: Error | null, response: unknown) => void,
+  ) => void
+  send?: (
+    request: { method: string; params?: Array<unknown> },
+    callback: (error: Error | null, response: unknown) => void,
+  ) => void
+  request: (request: {
+    method: string
+    params?: Array<unknown>
+  }) => Promise<unknown>
+}
+
 export const virtualWalletKeys = ensureKeysArray<VirtualWallet>({
   id: true,
   name: true,
@@ -58,6 +73,12 @@ export const fullWalletKeys = ensureKeysArray<StarknetWindowObject>({
   request: true,
   on: true,
   off: true,
+})
+
+export const evmWalletKeys = ensureKeysArray<EvmWallet>({
+  sendAsync: true,
+  send: true,
+  request: true,
 })
 
 export interface GetStarknetResult {
