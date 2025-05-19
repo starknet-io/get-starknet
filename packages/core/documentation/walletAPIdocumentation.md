@@ -71,7 +71,7 @@ const response = await myWallet.request(myRequest)
 ```
 
 > [!TIP] Starknet.js proposes also the `WalletAccount` class to code at a higher
-> and more confortable level.
+> and more comfortable level.
 
 # Subscription to events :
 
@@ -530,7 +530,7 @@ interface ACCOUNT_ALREADY_DEPLOYED {
 }
 ```
 
-- If the wallet is locked and the DAPP not connected, the method fails with this
+- If the wallet is locked and the DAPP is not connected, the method fails with this
   error :
 
 ```typescript
