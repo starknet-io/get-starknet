@@ -20,7 +20,7 @@ export const UnknownWalletBMock: StarknetWindowObject = {
   off: () => {},
 }
 
-export const ArgentXMock: StarknetWindowObject = {
+export const ReadyMock: StarknetWindowObject = {
   ...wallets.find((w) => w.id === "argentX")!,
   version: "0.0.0",
   request: async (request) => {

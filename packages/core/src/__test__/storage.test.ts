@@ -1,11 +1,11 @@
 import { getStarknet } from "../main"
 import { mockStorageFunction } from "./storage.mock"
 import {
-  ArgentXMock,
   BraavosMock,
   FordefiMock,
   KeplrMock,
   OKXMock,
+  ReadyMock,
   UnknownWalletAMock,
   UnknownWalletBMock,
   makeAuthorized,
@@ -49,7 +49,7 @@ describe("getLastConnectedWallet()", () => {
   it("should not return the last connected wallet if not preauthorized", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makeAuthorized(false)(ArgentXMock),
+        "starknet-ready": makeAuthorized(false)(ReadyMock),
         "starknet-braavos": makeAuthorized(false)(BraavosMock),
         starknet_okxwallet: makeAuthorized(false)(OKXMock),
         starknet_keplr: makeAuthorized(false)(KeplrMock),
@@ -65,7 +65,7 @@ describe("getLastConnectedWallet()", () => {
   it("should return the last connected wallet if still preauthorized", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makeAuthorized(false)(ArgentXMock),
+        "starknet-ready": makeAuthorized(false)(ReadyMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
         starknet_okxwallet: makeAuthorized(false)(OKXMock),
         starknet_keplr: makeAuthorized(false)(KeplrMock),
@@ -81,7 +81,7 @@ describe("getLastConnectedWallet()", () => {
   it("should return the last connected wallet when last is available", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makeAuthorized(true)(ArgentXMock),
+        "starknet-ready": makeAuthorized(true)(ReadyMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
         starknet_okxwallet: makeAuthorized(true)(OKXMock),
         starknet_keplr: makeAuthorized(true)(KeplrMock),
@@ -94,7 +94,7 @@ describe("getLastConnectedWallet()", () => {
   })
   it("should set the last connected wallet when enabled", async () => {
     const sn = getWallet({
-      "starknet-argentX": makeConnected(true)(ArgentXMock),
+      "starknet-ready": makeConnected(true)(ReadyMock),
       "starknet-braavos": makeConnected(true)(BraavosMock),
       starknet_okxwallet: makeConnected(true)(OKXMock),
       starknet_keplr: makeAuthorized(true)(KeplrMock),
@@ -110,7 +110,7 @@ describe("getLastConnectedWallet()", () => {
   })
   it("enabling fails", async () => {
     const sn = getWallet({
-      "starknet-argentX": makeConnected(false)(ArgentXMock),
+      "starknet-ready": makeConnected(false)(ReadyMock),
     })
     const lastConnectedWallet = await sn.getLastConnectedWallet()
     expect(lastConnectedWallet).toBe(null)
@@ -121,7 +121,7 @@ describe("getLastConnectedWallet()", () => {
   it("should default disable", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makeAuthorized(true)(ArgentXMock),
+        "starknet-ready": makeAuthorized(true)(ReadyMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
         starknet_okxwallet: makeAuthorized(true)(OKXMock),
         starknet_keplr: makeAuthorized(true)(KeplrMock),
@@ -141,7 +141,7 @@ describe("getLastConnectedWallet()", () => {
   it("should disable with clearLastWallet", async () => {
     const sn = getWallet(
       {
-        "starknet-argentX": makeAuthorized(true)(ArgentXMock),
+        "starknet-ready": makeAuthorized(true)(ReadyMock),
         "starknet-braavos": makeAuthorized(true)(BraavosMock),
         starknet_okxwallet: makeAuthorized(true)(OKXMock),
         starknet_keplr: makeAuthorized(true)(KeplrMock),
