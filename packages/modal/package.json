@@ -15,7 +15,8 @@
   },
   "files": ["dist", "src"],
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
+    "build": "unbuild",
+    "rollup:build": "rollup -c rollup.config.mjs",
     "lint:check": "biome check .",
     "lint": "biome check --write .",
     "format": "biome format --write .",
@@ -33,10 +34,11 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
-    "rollup": "^4.37.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "unbuild": "^2.0.0",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
