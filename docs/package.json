@@ -7,7 +7,9 @@
     "build": "vocs build",
     "preview": "vocs preview",
     "lint:check": "biome check .",
-    "lint": "biome check --write ."
+    "lint": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
   },
   "dependencies": {
     "@starknet-io/get-starknet-discovery": "workspace:*",

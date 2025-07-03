@@ -25,6 +25,8 @@
     "build": "unbuild",
     "lint:check": "biome check .",
     "lint": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "test": "vitest"
   },
   "devDependencies": {
