@@ -5,29 +5,36 @@ import {
   GetStarknetProvider,
   SelectedWallet,
   type UnavailableWallet,
+  type UseConnect,
   WalletList,
   useConnect,
 } from "@starknet-io/get-starknet-modal";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { WebWallet } from "./web-wallet";
 
 export default function WalletModalDemo() {
+  const webWallet = useMemo(() => new WebWallet(), []);
+
   return (
-    <GetStarknetProvider>
+    <GetStarknetProvider extraWallets={[webWallet]}>
       <WalletUser />
     </GetStarknetProvider>
   );
 }
 
+type ConnectWalletMethod = UseConnect["connect"];
+
 function WalletUser() {
   const [sortMethod, setSortMethod] = useState<
     "alpha-asc" | "alpha-desc" | "random"
   >("alpha-asc");
-  const { connected } = useConnect();
+  const { connected, connect, disconnect } = useConnect();
 
   return (
     <div className="flex flex-col gap-2 p-4">
       <div className="flex flex-row gap-2 justify-between">
         <div className="flex flex-row gap-2 justify-start">
+          <p className="font-bold">Sort by:</p>
           <button
             type="button"
             onClick={() => setSortMethod("alpha-asc")}
@@ -47,12 +54,25 @@ function WalletUser() {
             Random
           </button>
         </div>
-        <p>{connected ? "YES" : "NO"}</p>
+        <div className="flex flex-row gap-2">
+          <p
+            className={`font-bold ${connected?.name ? "text-green-500" : "text-red-500"}`}>
+            {connected?.name ? "Connected" : "Not connected"}
+          </p>
+          {connected?.name && (
+            <button
+              type="button"
+              className="!bg-red-500 text-xs !text-white px-2 py-1 rounded-md"
+              onClick={disconnect}>
+              Disconnect
+            </button>
+          )}
+        </div>
       </div>
 
       <WalletList
         sortAlgorithm={sortMethod}
-        className="flex flex-col gap-2 border border-gray-300 p-4">
+        className="flex flex-col gap-2 border border-gray-300 p-4 rounded-md">
         {({ isSelected, select, ...wallet }) =>
           wallet.state === "available" ? (
             <AvailableWalletButton
@@ -60,6 +80,7 @@ function WalletUser() {
               wallet={wallet}
               isSelected={isSelected}
               select={select}
+              connect={connect}
             />
           ) : (
             <UnavailableWalletButton
@@ -71,7 +92,7 @@ function WalletUser() {
           )
         }
       </WalletList>
-      <SelectedWallet className="w-full border border-gray-300 p-4">
+      <SelectedWallet className="w-full border border-gray-300 p-4 rounded-md">
         {(wallet) =>
           wallet ? (
             wallet.state === "available" ? (
@@ -92,12 +113,13 @@ function AvailableWalletButton({
   wallet,
   isSelected,
   select,
+  connect,
 }: {
   wallet: AvailableWallet;
   isSelected: boolean;
   select: () => void;
+  connect: ConnectWalletMethod;
 }): React.ReactNode {
-  const { connect } = useConnect();
   return (
     <WalletButton
       name={wallet.name}
@@ -154,15 +176,23 @@ function WalletButton({
     <button
       onClick={() => click()}
       type="button"
-      className={`flex flex-row p-4 gap-2 items-center justify-between hover:bg-gray-100/10 cursor-pointer border${
-        isSelected ? " border-red-500" : " border-transparent"
+      className={`flex flex-row p-4 gap-2 items-center justify-between hover:bg-gray-100/10 cursor-pointer border rounded-md${
+        isSelected ? " border-textAccent" : " border-transparent"
       }`}>
       <p className="w-full flex flex-row items-center gap-2">
-        <img alt={name} className="w-6 h-6" src={icon ?? ""} />
+        {icon ? (
+          <img alt={name} className="w-6 h-6" src={icon} />
+        ) : (
+          <span className="w-6 h-6 bg-amber-300 rounded-full flex items-center justify-center flex-shrink-0">
+            {name.charAt(0)}
+          </span>
+        )}
         {name}
       </p>
       {isInstalled ? (
-        <p className="text-xs bg-gray-800 px-2 py-1">Installed</p>
+        <p className="text-xs bg-infoBackground border rounded-md border-infoBorder px-2 py-1">
+          Installed
+        </p>
       ) : (
         <p />
       )}
@@ -175,7 +205,17 @@ function AvailableWalletScreen({
 }: {
   wallet: AvailableWallet;
 }): React.ReactNode {
-  return <div>Hello</div>;
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="font-bold">{wallet.name}</p>
+      <p className="text-sm text-gray-500">
+        Connected Address:{" "}
+        {wallet.wallet.accounts?.[0]?.address
+          ? wallet.wallet.accounts?.[0]?.address
+          : "No address connected"}
+      </p>
+    </div>
+  );
 }
 
 function UnavailableWalletScreen({
