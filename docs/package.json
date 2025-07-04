@@ -18,16 +18,17 @@
     "@starknet-io/get-starknet-wallets": "workspace:*",
     "@tailwindcss/vite": "^4.0.17",
     "@tanstack/react-query": "^5.69.0",
-    "@types/react": "^19.0.12",
+    "@types/react": "^19.1.8",
     "@wallet-standard/base": "^1.1.0",
     "@wallet-standard/features": "^1.1.0",
     "lucide-react": "^0.468.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "typescript": "^5.8.2",
     "vocs": "latest"
   },
   "devDependencies": {
+    "@starknet-io/types-js": "^0.7.10",
     "tailwindcss": "^4.0.17",
     "vite-tsconfig-paths": "^5.1.4"
   }
