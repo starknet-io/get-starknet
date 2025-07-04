@@ -1,5 +1,5 @@
 import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
-import { useCallback, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 export type UseConnect = {
   connected?: WalletWithStarknetFeatures;
@@ -7,7 +7,11 @@ export type UseConnect = {
   disconnect: () => void;
 };
 
-export function useConnect(): UseConnect {
+export const UseConnectContext = createContext<UseConnect | null>(null);
+
+export function UseConnectProvider({
+  children,
+}: { children: React.ReactNode }) {
   const [connected, setConnected] = useState<
     WalletWithStarknetFeatures | undefined
   >(undefined);
@@ -29,9 +33,17 @@ export function useConnect(): UseConnect {
     setConnected(undefined);
   }, [connected]);
 
-  return {
-    connected,
-    connect,
-    disconnect,
-  };
+  return (
+    <UseConnectContext.Provider value={{ connected, connect, disconnect }}>
+      {children}
+    </UseConnectContext.Provider>
+  );
+}
+
+export function useConnect(): UseConnect {
+  const context = useContext(UseConnectContext);
+  if (!context) {
+    throw new Error("useConnect must be used within a GetStarknetProvider");
+  }
+  return context;
 }

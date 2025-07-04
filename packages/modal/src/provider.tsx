@@ -5,6 +5,7 @@ import {
   wallets as allStarknetWallets,
 } from "@starknet-io/get-starknet-wallets";
 import { createContext, useContext } from "react";
+import { UseConnectProvider } from "./connect";
 import { type GetStarknetState, useGetStarknet } from "./state";
 
 const GetStarknetContext = createContext<GetStarknetState>({
@@ -54,7 +55,7 @@ export function GetStarknetProvider({
 
   return (
     <GetStarknetContext.Provider value={state}>
-      {children}
+      <UseConnectProvider>{children}</UseConnectProvider>
     </GetStarknetContext.Provider>
   );
 }
