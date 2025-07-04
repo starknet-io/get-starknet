@@ -1,3 +1,4 @@
+import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
 import { useMemo } from "react";
 import type { MaybeWallet } from "./maybe-wallet";
 import { useStarknetProvider } from "./provider";
@@ -9,7 +10,11 @@ export type WalletListProps = {
   /** How to sort wallets */
   sortAlgorithm?: SortAlgorithm;
   children: (
-    wallet: { isSelected: boolean; select: () => void } & MaybeWallet,
+    wallet: {
+      isSelected: boolean;
+      select: () => void;
+      type: string;
+    } & MaybeWallet,
   ) => React.ReactNode;
 };
 
@@ -37,13 +42,18 @@ export function WalletList({
 
   return (
     <div ref={ref} {...props}>
-      {sortedWallets.map((wallet) =>
-        children?.({
+      {sortedWallets.map((wallet) => {
+        const type =
+          wallet.state === "available"
+            ? getWalletClassName(wallet.wallet)
+            : "Unknown";
+        return children?.({
           ...wallet,
           isSelected: selected && walletEq(wallet, selected.wallet),
+          type,
           select: () => onSelectedChange({ wallet }),
-        }),
-      )}
+        });
+      })}
     </div>
   );
 }
@@ -73,4 +83,8 @@ function getOrInitSortSeed(): number {
 
 function walletEq(a: MaybeWallet, b: MaybeWallet) {
   return a.state === b.state && a.name === b.name;
+}
+
+function getWalletClassName(wallet: WalletWithStarknetFeatures) {
+  return wallet.constructor.name;
 }

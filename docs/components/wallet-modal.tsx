@@ -73,7 +73,7 @@ function WalletUser() {
       <WalletList
         sortAlgorithm={sortMethod}
         className="flex flex-col gap-2 border border-gray-300 p-4 rounded-md">
-        {({ isSelected, select, ...wallet }) =>
+        {({ isSelected, select, type, ...wallet }) =>
           wallet.state === "available" ? (
             <AvailableWalletButton
               key={wallet.name}
@@ -81,6 +81,7 @@ function WalletUser() {
               isSelected={isSelected}
               select={select}
               connect={connect}
+              type={type}
             />
           ) : (
             <UnavailableWalletButton
@@ -88,6 +89,7 @@ function WalletUser() {
               wallet={wallet}
               isSelected={isSelected}
               select={select}
+              type={type}
             />
           )
         }
@@ -114,11 +116,13 @@ function AvailableWalletButton({
   isSelected,
   select,
   connect,
+  type,
 }: {
   wallet: AvailableWallet;
   isSelected: boolean;
   select: () => void;
   connect: ConnectWalletMethod;
+  type: string;
 }): React.ReactNode {
   return (
     <WalletButton
@@ -127,6 +131,7 @@ function AvailableWalletButton({
       isInstalled={true}
       isSelected={isSelected}
       select={select}
+      type={type}
       onClick={() => connect(wallet.wallet)}
     />
   );
@@ -136,10 +141,12 @@ function UnavailableWalletButton({
   wallet,
   isSelected,
   select,
+  type,
 }: {
   wallet: UnavailableWallet;
   isSelected: boolean;
   select: () => void;
+  type: string;
 }): React.ReactNode {
   return (
     <WalletButton
@@ -148,6 +155,7 @@ function UnavailableWalletButton({
       isInstalled={false}
       isSelected={isSelected}
       select={select}
+      type={type}
     />
   );
 }
@@ -159,6 +167,7 @@ function WalletButton({
   isSelected,
   select,
   onClick,
+  type,
 }: {
   icon?: string;
   name: string;
@@ -166,6 +175,7 @@ function WalletButton({
   isSelected: boolean;
   select: () => void;
   onClick?: () => void;
+  type: string;
 }) {
   const click = () => {
     select();
@@ -195,6 +205,11 @@ function WalletButton({
         </p>
       ) : (
         <p />
+      )}
+      {type !== "unknown" && (
+        <p className="text-xs bg-infoBackground border rounded-md border-infoBorder px-2 py-1">
+          {type}
+        </p>
       )}
     </button>
   );
