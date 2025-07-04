@@ -4,16 +4,28 @@ import {
   type AvailableWallet,
   GetStarknetProvider,
   SelectedWallet,
+  type SortAlgorithm,
   type UnavailableWallet,
-  type UseConnect,
   WalletList,
   useConnect,
 } from "@starknet-io/get-starknet-modal";
-import { useMemo, useState } from "react";
-import { WebWallet } from "./web-wallet";
+import { Fragment, useState } from "react";
+import {
+  WebWalletConnectUi,
+  WebWalletProvider,
+  useWebWallet,
+} from "./web-wallet";
 
 export default function WalletModalDemo() {
-  const webWallet = useMemo(() => new WebWallet(), []);
+  return (
+    <WebWalletProvider>
+      <DemoComponent />
+    </WebWalletProvider>
+  );
+}
+
+function DemoComponent() {
+  const { wallet: webWallet } = useWebWallet();
 
   return (
     <GetStarknetProvider extraWallets={[webWallet]}>
@@ -22,13 +34,11 @@ export default function WalletModalDemo() {
   );
 }
 
-type ConnectWalletMethod = UseConnect["connect"];
-
 function WalletUser() {
-  const [sortMethod, setSortMethod] = useState<
-    "alpha-asc" | "alpha-desc" | "random"
-  >("alpha-asc");
-  const { connected, connect, disconnect } = useConnect();
+  const [tab, setTab] = useState<"injected" | "web">("injected");
+  const [sortMethod, setSortMethod] = useState<SortAlgorithm>("alpha-asc");
+
+  const { connected, disconnect } = useConnect();
 
   return (
     <div className="flex flex-col gap-2 p-4">
@@ -70,30 +80,29 @@ function WalletUser() {
         </div>
       </div>
 
-      <WalletList
-        sortAlgorithm={sortMethod}
-        className="flex flex-col gap-2 border border-gray-300 p-4 rounded-md">
-        {({ isSelected, select, type, ...wallet }) =>
-          wallet.state === "available" ? (
-            <AvailableWalletButton
-              key={wallet.name}
-              wallet={wallet}
-              isSelected={isSelected}
-              select={select}
-              connect={connect}
-              type={type}
-            />
-          ) : (
-            <UnavailableWalletButton
-              key={wallet.name}
-              wallet={wallet}
-              isSelected={isSelected}
-              select={select}
-              type={type}
-            />
-          )
-        }
-      </WalletList>
+      <div className="border border-gray-300 rounded-md max-h-[500px] overflow-y-auto">
+        <div className="flex w-full flex-row border-b sticky top-0 divide-x divide-gray-300 bg-[var(--vocs-color_background)] z-10 border-gray-300">
+          <button
+            type="button"
+            onClick={() => setTab("injected")}
+            className={`${tab === "injected" ? "underline" : ""} flex-1 p-2`}>
+            Injected
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setTab("web");
+            }}
+            className={`${tab === "web" ? "underline" : ""} flex-1 p-2`}>
+            Web
+          </button>
+        </div>
+        <div className="p-4">
+          {tab === "injected" && <InjectedWalletList sortMethod={sortMethod} />}
+          {tab === "web" && <WebWalletTab />}
+        </div>
+      </div>
+
       <SelectedWallet className="w-full border border-gray-300 p-4 rounded-md">
         {(wallet) =>
           wallet ? (
@@ -115,15 +124,14 @@ function AvailableWalletButton({
   wallet,
   isSelected,
   select,
-  connect,
   type,
 }: {
   wallet: AvailableWallet;
   isSelected: boolean;
   select: () => void;
-  connect: ConnectWalletMethod;
   type: string;
 }): React.ReactNode {
+  const { connect } = useConnect();
   return (
     <WalletButton
       name={wallet.name}
@@ -206,7 +214,7 @@ function WalletButton({
       ) : (
         <p />
       )}
-      {type !== "unknown" && (
+      {type !== "Unknown" && (
         <p className="text-xs bg-infoBackground border rounded-md border-infoBorder px-2 py-1">
           {type}
         </p>
@@ -256,5 +264,47 @@ function UnavailableWalletScreen({
         ))}
       </ul>
     </div>
+  );
+}
+
+function InjectedWalletList({ sortMethod }: { sortMethod: SortAlgorithm }) {
+  return (
+    <WalletList sortAlgorithm={sortMethod} className="flex flex-col gap-2">
+      {({ isSelected, select, type, ...wallet }) => {
+        if (type === "WebWallet") {
+          return <Fragment key={wallet.name} />;
+        }
+        return wallet.state === "available" ? (
+          <AvailableWalletButton
+            key={wallet.name}
+            wallet={wallet}
+            isSelected={isSelected}
+            select={select}
+            type={type}
+          />
+        ) : (
+          <UnavailableWalletButton
+            key={wallet.name}
+            wallet={wallet}
+            isSelected={isSelected}
+            select={select}
+            type={type}
+          />
+        );
+      }}
+    </WalletList>
+  );
+}
+
+function WebWalletTab() {
+  return (
+    <WalletList className="flex flex-col gap-2">
+      {({ isSelected, select, type, ...wallet }) => {
+        if (type === "WebWallet") {
+          return <WebWalletConnectUi key={wallet.name} onConnect={select} />;
+        }
+        return <Fragment key={wallet.name} />;
+      }}
+    </WalletList>
   );
 }
