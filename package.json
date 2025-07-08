@@ -1,30 +1,33 @@
 {
   "name": "@starknet-io/get-starknet-monorepo",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "build": "pnpm run -r build",
     "dev": "pnpm run -r --parallel dev",
-    "format": "prettier --ignore-path .gitignore --plugin-search-dir=. --write '**/*.{js,cjs,ts,tsx,svelte,md,yml,json}'",
-    "format:check": "prettier --ignore-path .gitignore --plugin-search-dir=. --check '**/*.{js,cjs,ts,tsx,svelte,md,yml,json}'",
-    "prepare": "pnpm run build && husky install",
+    "format": "pnpm run -r format",
+    "format:check": "pnpm run -r format:check",
+    "lint": "pnpm run -r lint",
+    "lint:check": "pnpm run -r lint:check",
     "publish": "pnpm publish -r --no-git-checks --access public && changeset tag",
     "publish:next": "pnpm publish -r --no-git-checks --access public --tag next && changeset tag",
     "test": "CI=true pnpm run -r test",
     "version": "changeset version && pnpm install --lockfile-only"
   },
-  "lint-staged": {
-    "*.{js,cjs,ts,tsx,svelte,md,yml,json}": "prettier --ignore-path .gitignore --plugin-search-dir=. --write"
-  },
   "devDependencies": {
-    "@changesets/cli": "^2.24.1",
-    "@commitlint/cli": "^17.0.3",
-    "@commitlint/config-conventional": "^17.0.3",
-    "@trivago/prettier-plugin-sort-imports": "^3.3.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "prettier-plugin-packagejson": "^2.2.18",
-    "prettier-plugin-svelte": "^2.7.0"
-  }
+    "@biomejs/biome": "1.9.4",
+    "@changesets/cli": "^2.28.1",
+    "@commitlint/cli": "^17.8.1",
+    "@commitlint/config-conventional": "^17.8.1",
+    "typescript": "^5.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/starknet-io/get-starknet.git"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.10.0"
 }
