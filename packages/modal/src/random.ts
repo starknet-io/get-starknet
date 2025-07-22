@@ -40,7 +40,7 @@ export class MersenneTwister {
 
   private randomNumber() {
     let y: number;
-    const mag01 = new Array(0x0, MATRIX_A);
+    const mag01 = [0x0, MATRIX_A];
     /* mag01[x] = x * MATRIX_A  for x=0,1 */
 
     if (this.mti >= N) {

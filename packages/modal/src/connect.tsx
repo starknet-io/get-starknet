@@ -11,7 +11,9 @@ export const UseConnectContext = createContext<UseConnect | null>(null);
 
 export function UseConnectProvider({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   const [connected, setConnected] = useState<
     WalletWithStarknetFeatures | undefined
   >(undefined);

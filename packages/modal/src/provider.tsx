@@ -1,8 +1,8 @@
-import { type Store, createStore } from "@starknet-io/get-starknet-discovery";
+import { createStore, type Store } from "@starknet-io/get-starknet-discovery";
 import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
 import {
-  type WalletInformation,
   wallets as allStarknetWallets,
+  type WalletInformation,
 } from "@starknet-io/get-starknet-wallets";
 import { createContext, useContext } from "react";
 import { UseConnectProvider } from "./connect";

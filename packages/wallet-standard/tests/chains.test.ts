@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
-  WELL_KNOWN_STARKNET_CHAINS,
   formatStarknetChainId,
   getStarknetChainId,
   isStarknetChain,
+  WELL_KNOWN_STARKNET_CHAINS,
 } from "../src/chains";
 
 describe("isStarknetChain", () => {

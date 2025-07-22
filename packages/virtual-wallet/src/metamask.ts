@@ -1,12 +1,12 @@
 import { init, loadRemote } from "@module-federation/runtime";
 import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
+import type { StarknetChain } from "@starknet-io/get-starknet-wallet-standard/chains";
 import {
-  STARKNET_CHAIN_PREFIX,
-  WELL_KNOWN_STARKNET_CHAINS,
   formatStarknetChainId,
   isStarknetChain,
+  STARKNET_CHAIN_PREFIX,
+  WELL_KNOWN_STARKNET_CHAINS,
 } from "@starknet-io/get-starknet-wallet-standard/chains";
-import type { StarknetChain } from "@starknet-io/get-starknet-wallet-standard/chains";
 import {
   type StarknetFeatures,
   StarknetWalletApi,

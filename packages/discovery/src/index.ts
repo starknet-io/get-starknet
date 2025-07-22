@@ -1,6 +1,6 @@
 export {
-  createStore,
-  type Store,
-  type Listener,
   type CleanupListener,
+  createStore,
+  type Listener,
+  type Store,
 } from "./store";

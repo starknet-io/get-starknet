@@ -1,9 +1,9 @@
-export { GetStarknetProvider, useStarknetProvider } from "./provider";
-export { WalletList, type SortAlgorithm } from "./wallet-list";
+export { type UseConnect, useConnect } from "./connect";
 export type {
-  MaybeWallet,
   AvailableWallet,
+  MaybeWallet,
   UnavailableWallet,
 } from "./maybe-wallet";
+export { GetStarknetProvider, useStarknetProvider } from "./provider";
 export { SelectedWallet } from "./selected-wallet";
-export { useConnect, type UseConnect } from "./connect";
+export { type SortAlgorithm, WalletList } from "./wallet-list";

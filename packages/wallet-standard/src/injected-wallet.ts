@@ -12,10 +12,10 @@ import {
 } from "@wallet-standard/features";
 
 import {
-  type StarknetChain,
-  WELL_KNOWN_STARKNET_CHAINS,
   formatStarknetChainId,
   isStarknetChain,
+  type StarknetChain,
+  WELL_KNOWN_STARKNET_CHAINS,
 } from "./chains";
 import {
   type StarknetFeatures,

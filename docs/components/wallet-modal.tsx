@@ -6,14 +6,14 @@ import {
   SelectedWallet,
   type SortAlgorithm,
   type UnavailableWallet,
-  WalletList,
   useConnect,
+  WalletList,
 } from "@starknet-io/get-starknet-modal";
 import { Fragment, useState } from "react";
 import {
+  useWebWallet,
   WebWalletConnectUi,
   WebWalletProvider,
-  useWebWallet,
 } from "./web-wallet";
 
 export default function WalletModalDemo() {

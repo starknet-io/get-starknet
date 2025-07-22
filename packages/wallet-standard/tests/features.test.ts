@@ -7,10 +7,10 @@ import {
 import { describe, expect, it } from "vitest";
 import { WELL_KNOWN_STARKNET_CHAINS } from "../src/chains";
 import {
+  isStarknetWallet,
   RequiredStarknetFeatures,
   type StarknetFeatures,
   StarknetWalletApi,
-  isStarknetWallet,
 } from "../src/features";
 
 const createMockWallet = (features: Partial<StarknetFeatures>): Wallet => ({
