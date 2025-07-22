@@ -79,6 +79,28 @@ importers:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.8.3)(vite@6.3.5(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0))
 
+  packages/core:
+    dependencies:
+      '@starknet-io/get-starknet-discovery':
+        specifier: workspace:^
+        version: link:../discovery
+      '@starknet-io/get-starknet-virtual-wallet':
+        specifier: workspace:^
+        version: link:../virtual-wallet
+      '@starknet-io/get-starknet-wallet-standard':
+        specifier: workspace:^
+        version: link:../wallet-standard
+      '@starknet-io/get-starknet-wallets':
+        specifier: workspace:^
+        version: link:../wallets
+    devDependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      unbuild:
+        specifier: ^2.0.0
+        version: 2.0.0(typescript@5.8.3)
+
   packages/discovery:
     dependencies:
       '@starknet-io/get-starknet-virtual-wallet':
