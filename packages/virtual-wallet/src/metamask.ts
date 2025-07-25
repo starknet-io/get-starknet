@@ -85,6 +85,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
         on: this.#on.bind(this),
       },
       [StarknetWalletApi]: {
+        id: "metamask",
         version: "1.0.0" as const,
         request: this.#request.bind(this),
         walletVersion: "2.0.0",
