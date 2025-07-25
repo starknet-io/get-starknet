@@ -1,5 +1,8 @@
 import type { Store } from "@starknet-io/get-starknet-discovery";
-import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
+import {
+  StarknetWalletApi,
+  type WalletWithStarknetFeatures,
+} from "@starknet-io/get-starknet-wallet-standard/features";
 import type { WalletInformation } from "@starknet-io/get-starknet-wallets";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { MaybeWallet } from "./maybe-wallet";
@@ -17,6 +20,14 @@ export type GetStarknetState = {
   onSelectedChange: (selected?: SelectedWallet) => void;
 };
 
+/**
+ * This hook is used to get the state for the Starknet provider.
+ *
+ * @param store - The store to use.
+ * @param recommendedWallets - The recommended wallets to show the user.
+ * @param extraWallets - The extra wallets to show the user.
+ * @returns `GetStarknetState` - A state for the Starknet provider.
+ */
 export function useGetStarknet({
   store,
   recommendedWallets,
@@ -34,7 +45,7 @@ export function useGetStarknet({
   const walletIdToWallet = useMemo(() => {
     return Object.fromEntries(
       [...injectedWallets, ...extraWallets].map((wallet) => [
-        wallet.name,
+        wallet.features[StarknetWalletApi].id,
         wallet,
       ]),
     );
@@ -42,7 +53,7 @@ export function useGetStarknet({
 
   const wallets = useMemo(() => {
     const unavailableWallets = recommendedWallets
-      .filter((wallet) => !walletIdToWallet[wallet.name])
+      .filter((wallet) => !walletIdToWallet[wallet.id])
       .map((info) => ({
         state: "unavailable" as const,
         name: info.name,
@@ -53,7 +64,9 @@ export function useGetStarknet({
       state: "available" as const,
       name: wallet.name,
       wallet,
-      info: recommendedWallets.find((w) => w.name === wallet.name),
+      info: recommendedWallets.find(
+        (w) => w.id === wallet.features[StarknetWalletApi].id,
+      ),
     }));
     return [...unavailableWallets, ...availableWallets];
   }, [recommendedWallets, walletIdToWallet]);
