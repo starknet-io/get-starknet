@@ -1,2 +1,3 @@
-export * from "./modal";
 import "./styles.css";
+
+export * from "./modal";
