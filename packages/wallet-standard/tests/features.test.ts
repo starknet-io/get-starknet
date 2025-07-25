@@ -26,6 +26,7 @@ describe("isStarknetWallet", () => {
   it("returns true for a wallet with all required features", () => {
     const wallet = createMockWallet({
       [StarknetWalletApi]: {
+        id: "mock-wallet",
         version: "1.0.0",
         request: async () => "",
         walletVersion: "1.0.0",
@@ -69,6 +70,7 @@ describe("isStarknetWallet", () => {
     // Missing StandardConnect
     const wallet2 = createMockWallet({
       [StarknetWalletApi]: {
+        id: "mock-wallet",
         version: "1.0.0",
         request: async () => "",
         walletVersion: "1.0.0",

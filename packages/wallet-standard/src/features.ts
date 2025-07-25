@@ -19,13 +19,24 @@ export type StarknetWalletRequestFeature = {
     readonly version: StarknetWalletApiVersion;
     readonly request: RequestFn;
     readonly walletVersion: string;
+    readonly id: string;
   };
 };
+
+export {
+  StandardConnect,
+  type StandardConnectFeature,
+  StandardDisconnect,
+  type StandardDisconnectFeature,
+  StandardEvents,
+  type StandardEventsFeature,
+} from "@wallet-standard/features";
 
 export type StarknetFeatures = StarknetWalletRequestFeature &
   StandardConnectFeature &
   StandardDisconnectFeature &
   StandardEventsFeature;
+
 export type WalletWithStarknetFeatures = WalletWithFeatures<StarknetFeatures>;
 
 export const RequiredStarknetFeatures = [
