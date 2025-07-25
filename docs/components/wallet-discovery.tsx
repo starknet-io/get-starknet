@@ -83,7 +83,6 @@ export default function WalletDiscoveryDemo() {
           </div>
           <div className="flex flex-col gap-2 pt-4">
             {events.map((event, index) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: it's fine
               <p key={index} className="text-sm text-gray-500">
                 {event}
               </p>

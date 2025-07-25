@@ -33,4 +33,8 @@ export const sidebar = [
     text: "Demo - Modal",
     link: "/demos/modal",
   },
+  {
+    text: "Demo - UI",
+    link: "/demos/ui",
+  },
 ] satisfies Sidebar;

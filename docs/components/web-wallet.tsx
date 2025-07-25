@@ -80,13 +80,14 @@ export function WebWalletConnectUi({ onConnect }: WebWalletConnectUiProps) {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center py-12 px-4">
       {connected && connected.name === wallet.name ? (
         <div className="flex flex-col gap-4">
           <p className="text-lg">Connected to {wallet.name}</p>
           <p>
             <span className="font-bold">Address:</span>{" "}
-            {wallet.accounts[0].address}
+            {wallet.accounts[0].address.slice(0, 6)}...
+            {wallet.accounts[0].address.slice(-4)}
           </p>
           <button
             type="button"
@@ -169,6 +170,7 @@ export class WebWallet implements WalletWithStarknetFeatures {
         on: this.#on.bind(this),
       },
       [StarknetWalletApi]: {
+        id: "web-wallet",
         version: "1.0.0" as const,
         request: this.#request.bind(this),
         walletVersion: this.version,

@@ -5,3 +5,5 @@ onlyBuiltDependencies:
   - '@biomejs/biome'
   - '@tailwindcss/oxide'
   - esbuild
+patchedDependencies:
+  vocs: patches/vocs.patch
