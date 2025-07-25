@@ -38,6 +38,27 @@ export function useStarknetProvider() {
   return useContext(GetStarknetContext);
 }
 
+/**
+ * This provider is used to provide the Starknet modal with the necessary information.
+ *
+ * @param GetStarknetProviderProps - The props for the provider.
+ * @returns The provider for the Starknet modal.
+ *
+ * @example
+ *
+ * ```tsx
+ * import { GetStarknetProvider } from "@starknet-io/get-starknet-modal";
+ *
+ * function Main() {
+ *   return (
+ *     <GetStarknetProvider>
+ *       <Dapp />
+ *     </GetStarknetProvider>
+ *   );
+ * }
+ *
+ * ```
+ */
 export function GetStarknetProvider({
   extraWallets = [],
   recommendedWallets: userRecommendedWallets,
