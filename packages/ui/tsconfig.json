@@ -16,9 +16,6 @@
     "jsx": "react-jsx",
 
     "baseUrl": ".",
-    "paths": {
-      "~ui/*": ["./src/*"]
-    },
 
     "allowJs": true,
     "checkJs": true,

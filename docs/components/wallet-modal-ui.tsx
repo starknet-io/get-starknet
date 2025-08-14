@@ -1,8 +1,11 @@
 "use client";
 
-import { GetStarknetProvider } from "@starknet-io/get-starknet-modal";
-import { WalletConnectModal } from "@starknet-io/get-starknet-ui";
-import { StarknetWalletApi } from "@starknet-io/get-starknet-wallet-standard/features";
+import {
+  GetStarknetProvider,
+  WalletConnectModal,
+  StarknetWalletApi,
+  useConnect,
+} from "@starknet-io/get-starknet-ui";
 import {
   useWebWallet,
   WebWalletConnectUi,
@@ -39,6 +42,21 @@ function WalletUser() {
           },
         }}
       />
+      <ExampleNestedComponent />
+    </div>
+  );
+}
+
+function ExampleNestedComponent() {
+  const { connected } = useConnect();
+
+  return (
+    <div className="p-32">
+      <p>
+        {connected && connected.accounts.length > 0
+          ? connected.accounts[0].address
+          : "Not connected"}
+      </p>
     </div>
   );
 }

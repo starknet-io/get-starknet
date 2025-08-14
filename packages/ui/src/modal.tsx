@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { Button } from "~ui/components/ui/button";
+import { Button } from "./components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -27,7 +27,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "~ui/components/ui/dialog";
+} from "./components/ui/dialog";
 import { Badge } from "./components/ui/badge";
 import { useCopyToClipboard } from "./hooks/use-copy";
 import { cn } from "./lib/utils";

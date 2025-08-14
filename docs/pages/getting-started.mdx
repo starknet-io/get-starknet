@@ -1,0 +1,66 @@
+# Getting Started
+
+This guide shows you how to add Get Starknet to your project.
+
+At the end of this guide, you will have a "connect wallet modal" that allows users to connect their wallets to your application.
+
+After completing this guide, you should continue to the [wallet standard](/wallet-standard) page to learn how to use the wallet connector in your code.
+
+## Before we start
+
+This guide assumes you have a basic understanding of React and TypeScript.
+We also expect you to have a working React application already. You can use Get Starknet with all the popular React frameworks, such as Next, React Router, and Remix.
+
+## Installation
+
+Install the Get Starknet UI using your favourite package manager.
+
+:::code-group
+
+```bash [npm]
+npm install @starknet-io/get-starknet-ui@next
+```
+
+```bash [pnpm]
+pnpm add @starknet-io/get-starknet-ui@next
+```
+
+:::
+
+## Setup the React provider
+
+Add the `GetStarknetProvider` to your root component.
+
+```tsx [app.tsx]
+import { GetStarknetProvider } from "@starknet-io/get-starknet-ui"
+
+export default function App() {
+  return (
+    <GetStarknetProvider>
+      {/** ... */}
+    </GetStarknetProvider>
+  )
+}
+```
+
+## Setup the modal
+
+Next you should setup the `WalletConnectModal` component. Place this component where you want to render the "connect wallet" button.
+
+
+```tsx [my-header.tsx]
+import { WalletConnectModal } from "@starknet-io/get-starknet-ui"
+
+export function MyHeader() {
+  return (
+    <div>
+      <WalletConnectModal />
+      {/** ... */}
+    </div>
+  )
+}
+```
+
+## Use the connected wallet
+
+Move to the [next guide](/wallet-standard) to learn how to use the connected wallet.

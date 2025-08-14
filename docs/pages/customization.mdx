@@ -1,0 +1,122 @@
+# Custom Wallet Modal
+
+## Lightweight customization
+
+The provided Get Starknet UI is implemented using Tailwind CSS and shadcn/ui. It can be customized by changing the CSS variables in your project's CSS file.
+
+## Advanced customization
+
+Get Starknet provides an headless implementation of the wallet modal. This implementation allows you to customize the modal to your needs.
+
+### Installation
+
+To build your custom wallet modal, you should use the `@starknet-io/get-starknet-modal` package.
+
+:::code-group
+
+```bash [npm]
+npm install @starknet-io/get-starknet-modal@next
+```
+
+```bash [pnpm]
+pnpm add @starknet-io/get-starknet-modal@next
+```
+
+:::
+
+
+### Setup the React provider
+
+Add the `GetStarknetProvider` to your root component.
+
+```tsx [app.tsx]
+import { GetStarknetProvider } from "@starknet-io/get-starknet-modal"
+
+export default function App() {
+  return (
+    <GetStarknetProvider>
+      {/** ... */}
+    </GetStarknetProvider>
+  )
+}
+```
+
+### Custom button
+
+Use the `useConnect` hook to get the currently connected wallet.
+With this information, you can create a custom button to open the modal.
+
+### Show wallet list
+
+Use the `WalletList` and `SelectedWallet` components together to create an UI that lets the user select a wallet.
+
+The `WalletList` component is used to render all wallets (available and unavailable) providing consistent sorting. The function takes a callback that receives the wallet and its metadata as an argument.
+
+```tsx
+import { WalletList } from "@starknet-io/get-starknet-modal"
+
+function MyComponent() {
+  return (
+    <WalletList sortAlgorithm={"recommended"} className="flex flex-col gap-2">
+      {({ isSelected, select, type, isLastConnected, ...wallet }) => {
+        return wallet.state === "available" ? (
+          <MyAvailableWalletButton
+            key={wallet.name}
+            wallet={wallet}
+            isSelected={isSelected}
+            select={select}
+            type={type}
+          />
+        ) : (
+          <MyUnavailableWalletButton
+            key={wallet.name}
+            wallet={wallet}
+            isSelected={isSelected}
+            select={select}
+            type={type}
+          />
+        );
+      }}
+    </WalletList>
+  );
+}
+````
+
+Use the `SelectedWallet` component to render the information about the wallet selected in the `WalletList` component.
+
+This component takes a callback children prop that receives the currently selected wallet as an argument.
+
+Since the user can select a wallet that is not available, the callback must handle this case, showing a message to the user with instructions on how to install the wallet.
+
+```tsx
+import { SelectedWallet } from "@starknet-io/get-starknet-modal"
+
+export function MyComponent() {
+  return (
+    <SelectedWallet className="w-full border border-gray-300 p-4 rounded-md">
+      {(wallet) =>
+        wallet ? (
+          wallet.state === "available" ? (
+            <MyAvailableWalletScreen key={wallet.name} wallet={wallet} />
+          ) : (
+            <MyUnavailableWalletScreen key={wallet.name} wallet={wallet} />
+          )
+        ) : (
+          <div>No wallet selected</div>
+        )
+      }
+    </SelectedWallet>
+  );
+}
+```
+
+### Connect the wallet
+
+Use the `useConnect` hook to connect to a wallet. The `connect` function returned by the hook accepts a Starknet wallet object as argument and starts the connection process.
+
+```tsx
+import { useConnect } from "@starknet-io/get-starknet-modal"
+
+
+const { isConnecting, isError, connected, connect, disconnect } = useConnect()
+```

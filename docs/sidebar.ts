@@ -1,40 +1,59 @@
 import type { Sidebar } from "vocs";
 
+const PACKAGES = [
+  "core",
+  "ui",
+  "modal",
+  "discovery",
+  "virtual-wallet",
+  "wallet-standard",
+  "wallets",
+];
+
 export const sidebar = [
   {
     text: "Introduction",
     link: "/",
   },
   {
+    text: "Getting Started",
+    link: "/getting-started",
+  },
+  {
     text: "Wallet Standard",
     link: "/wallet-standard",
   },
   {
-    text: "Discovery",
-    link: "/discovery",
+    text: "Customization",
+    link: "/customization",
   },
   {
-    text: "Injected Wallets",
-    link: "/injected",
+    text: "Wallet Integration",
+    link: "/integration-guide",
   },
   {
-    text: "Virtual Wallets",
-    link: "/virtual-wallet",
+    text: "API Reference",
+    collapsed: false,
+    items: PACKAGES.map((pkg) => ({
+      text: pkg,
+      link: `/api/${pkg}`,
+    })),
   },
   {
-    text: "Wallets",
-    link: "/wallets",
-  },
-  {
-    text: "Demo - Discovery",
-    link: "/demos/discovery",
-  },
-  {
-    text: "Demo - Modal",
-    link: "/demos/modal",
-  },
-  {
-    text: "Demo - UI",
-    link: "/demos/ui",
+    text: "Demo",
+    items: [
+      {
+        text: "Wallet Modal",
+        link: "/demo/ui",
+      },
+      {
+        text: "Headless Modal",
+        link: "/demo/headless-modal",
+      },
+      {
+        text: "Discovery",
+        link: "/demo/discovery",
+      },
+    ],
   },
 ] satisfies Sidebar;
