@@ -1,0 +1,25 @@
+# metaMaskVirtualWallet
+
+This [EIP1193Adapter](/core/EIP1193Adapter) function is used to create a Starknet wallet from the injected MetaMask provider.
+
+## Usage
+
+```ts
+import {
+  metaMaskVirtualWallet
+} from "@starknet-io/get-starknet-core/virtual-wallet";
+
+const wallet = metaMaskVirtualWallet(
+  { rdns: "io.metamask" },
+  window.metamask,
+);
+```
+
+## Arguments
+
+ * `info: EIP6963ProviderInfo` - the provider information.
+ * `provider: EIP1193Provider` - the viem's provider.
+
+## Returns
+
+ * `WalletWithStarknetFeatures | null` - if the provider is a MetaMask provider, returns the MetaMask virtual wallet for Starknet.

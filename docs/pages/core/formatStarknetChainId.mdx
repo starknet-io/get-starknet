@@ -1,0 +1,19 @@
+# formatStarknetChainId
+
+Format a raw 0x-prefixed chain ID into an opaque `StarknetChain` object.
+
+## Usage
+
+```ts
+import { formatStarknetChainId } from "@starknet-io/get-starknet-core";
+
+formatStarknetChainId("0x1234");
+````
+
+## Arguments
+
+ * `chainId: string` - The chain ID.
+
+## Returns
+
+ * `StarknetChain` - The formatted chain ID.

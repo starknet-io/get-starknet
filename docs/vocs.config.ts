@@ -7,6 +7,16 @@ export default defineConfig({
   title: "Get Starknet",
   rootDir: ".",
   sidebar,
+  topNav: [
+    {
+      text: "Guide",
+      link: "/",
+    },
+    {
+      text: "Core",
+      link: "/core",
+    },
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
