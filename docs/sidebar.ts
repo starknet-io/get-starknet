@@ -40,6 +40,52 @@ export const sidebar = {
       ],
     },
   ],
+  "/ui": [
+    {
+      text: "Overview",
+      link: "/ui",
+    },
+    {
+      text: "Reference",
+      items: [
+        {
+          text: "WalletConnectModal",
+          link: "/ui/WalletConnectModal",
+        },
+      ],
+    },
+  ],
+  "/modal": [
+    {
+      text: "Overview",
+      link: "/modal",
+    },
+    {
+      text: "Reference",
+      items: [
+        {
+          text: "GetStarknetProvider",
+          link: "/modal/GetStarknetProvider",
+        },
+        {
+          text: "SelectedWallet",
+          link: "/modal/SelectedWallet",
+        },
+        {
+          text: "WalletList",
+          link: "/modal/WalletList",
+        },
+        {
+          text: "useStarknetProvider",
+          link: "/modal/useStarknetProvider",
+        },
+        {
+          text: "useConnect",
+          link: "/modal/useConnect",
+        },
+      ],
+    },
+  ],
   "/core": [
     {
       text: "Overview",

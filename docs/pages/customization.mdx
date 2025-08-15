@@ -27,7 +27,7 @@ pnpm add @starknet-io/get-starknet-modal@next
 
 ### Setup the React provider
 
-Add the `GetStarknetProvider` to your root component.
+Add the [`GetStarknetProvider`](/modal/GetStarknetProvider) to your root component.
 
 ```tsx [app.tsx]
 import { GetStarknetProvider } from "@starknet-io/get-starknet-modal"
@@ -43,12 +43,12 @@ export default function App() {
 
 ### Custom button
 
-Use the `useConnect` hook to get the currently connected wallet.
+Use the [`useConnect`](/modal/useConnect) hook to get the currently connected wallet.
 With this information, you can create a custom button to open the modal.
 
 ### Show wallet list
 
-Use the `WalletList` and `SelectedWallet` components together to create an UI that lets the user select a wallet.
+Use the [`WalletList`](/modal/WalletList) and [`SelectedWallet`](/modal/SelectedWallet) components together to create an UI that lets the user select a wallet.
 
 The `WalletList` component is used to render all wallets (available and unavailable) providing consistent sorting. The function takes a callback that receives the wallet and its metadata as an argument.
 

@@ -13,6 +13,14 @@ export default defineConfig({
       link: "/",
     },
     {
+      text: "UI",
+      link: "/ui",
+    },
+    {
+      text: "Headless UI",
+      link: "/modal",
+    },
+    {
       text: "Core",
       link: "/core",
     },

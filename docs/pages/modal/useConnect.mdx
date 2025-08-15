@@ -1,0 +1,28 @@
+# useConnect
+
+Hook to connect to a wallet.
+
+## Usage
+
+```tsx
+import { useConnect } from "@starknet-io/get-starknet-modal";
+
+function Dapp() {
+  const {
+    connect,
+    disconnect,
+    isConnecting,
+    isError,
+    connected
+  } = useConnect();
+  return <button onClick={() => connect(wallet)}>Connect</button>
+}
+```
+
+## Returns
+
+ * `connect: (wallet: WalletWithStarknetFeatures) => Promise<void>` - connect to the specified wallet.
+ * `disconnect: () => Promise<void>` - disconnect from the connected wallet.
+ * `isConnecting: boolean` - whether the wallet is connecting.
+ * `isError: boolean` - whether an error occurred during the connection process.
+ * `connected?: WalletWithStarknetFeatures` - the connected wallet.

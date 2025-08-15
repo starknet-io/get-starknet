@@ -1,0 +1,32 @@
+# WalletList
+
+This component displays a list of wallets.
+
+## Usage
+
+```tsx
+import { WalletList } from "@starknet-io/get-starknet-modal";
+
+function App() {
+  return (
+    <WalletList>
+      {({
+        isSelected,
+        select,
+        type,
+        isLastConnected,
+        ...wallet
+      }) => <div>{wallet.name} - {wallet.type}</div>}
+    </WalletList>
+  );
+}
+```
+
+## Arguments
+
+ * `sortAlgorithm: "alpha-asc" | "alpha-desc" | "random" | "recommended"` - The sorting algorithm to use for the list of wallets.
+ * `children: ({ isLastConnected, isSelected, select, type } & MaybeWallet) => ReactNode` - The callback to render each wallet's selection button.
+   + `isLastConnected: boolean` - Whether the wallet is the last connected wallet.
+   + `isSelected: boolean` - Whether the wallet is selected.
+   + `select: () => void` - Callback to select the wallet.
+   + `type: string` - The type of the wallet (e.g. `"InjectedWallet"`).
