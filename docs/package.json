@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vocs dev",
-    "build": "vocs build",
+    "build": "vocs build --outDir dist",
     "preview": "vocs preview",
     "lint:check": "biome check .",
     "lint": "biome check --write .",
