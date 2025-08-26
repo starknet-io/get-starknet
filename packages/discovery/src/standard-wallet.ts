@@ -1,9 +1,9 @@
 import type {
+  Wallet,
   WalletEventsWindow,
-  WindowRegisterWalletEvent,
   WindowAppReadyEvent,
   WindowAppReadyEventAPI,
-  Wallet,
+  WindowRegisterWalletEvent,
 } from "@wallet-standard/base";
 
 export function registerStandardWalletDiscovery(

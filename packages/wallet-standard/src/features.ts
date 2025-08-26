@@ -2,11 +2,11 @@ import type { RequestFn } from "@starknet-io/types-js";
 import type { Wallet, WalletWithFeatures } from "@wallet-standard/base";
 import {
   StandardConnect,
-  StandardDisconnect,
-  type StandardEventsFeature,
   type StandardConnectFeature,
+  StandardDisconnect,
   type StandardDisconnectFeature,
   StandardEvents,
+  type StandardEventsFeature,
 } from "@wallet-standard/features";
 
 export const StarknetWalletApi = "starknet:walletApi";
@@ -19,13 +19,24 @@ export type StarknetWalletRequestFeature = {
     readonly version: StarknetWalletApiVersion;
     readonly request: RequestFn;
     readonly walletVersion: string;
+    readonly id: string;
   };
 };
+
+export {
+  StandardConnect,
+  type StandardConnectFeature,
+  StandardDisconnect,
+  type StandardDisconnectFeature,
+  StandardEvents,
+  type StandardEventsFeature,
+} from "@wallet-standard/features";
 
 export type StarknetFeatures = StarknetWalletRequestFeature &
   StandardConnectFeature &
   StandardDisconnectFeature &
   StandardEventsFeature;
+
 export type WalletWithStarknetFeatures = WalletWithFeatures<StarknetFeatures>;
 
 export const RequiredStarknetFeatures = [

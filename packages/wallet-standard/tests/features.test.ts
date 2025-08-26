@@ -7,10 +7,10 @@ import {
 import { describe, expect, it } from "vitest";
 import { WELL_KNOWN_STARKNET_CHAINS } from "../src/chains";
 import {
+  isStarknetWallet,
   RequiredStarknetFeatures,
   type StarknetFeatures,
   StarknetWalletApi,
-  isStarknetWallet,
 } from "../src/features";
 
 const createMockWallet = (features: Partial<StarknetFeatures>): Wallet => ({
@@ -26,6 +26,7 @@ describe("isStarknetWallet", () => {
   it("returns true for a wallet with all required features", () => {
     const wallet = createMockWallet({
       [StarknetWalletApi]: {
+        id: "mock-wallet",
         version: "1.0.0",
         request: async () => "",
         walletVersion: "1.0.0",
@@ -69,6 +70,7 @@ describe("isStarknetWallet", () => {
     // Missing StandardConnect
     const wallet2 = createMockWallet({
       [StarknetWalletApi]: {
+        id: "mock-wallet",
         version: "1.0.0",
         request: async () => "",
         walletVersion: "1.0.0",

@@ -1,3 +1,23 @@
+import { init, loadRemote } from "@module-federation/runtime";
+import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
+import type { StarknetChain } from "@starknet-io/get-starknet-wallet-standard/chains";
+import {
+  formatStarknetChainId,
+  isStarknetChain,
+  STARKNET_CHAIN_PREFIX,
+  WELL_KNOWN_STARKNET_CHAINS,
+} from "@starknet-io/get-starknet-wallet-standard/chains";
+import {
+  type StarknetFeatures,
+  StarknetWalletApi,
+  type WalletWithStarknetFeatures,
+} from "@starknet-io/get-starknet-wallet-standard/features";
+import type {
+  RequestFnCall,
+  RpcMessage,
+  RpcTypeToMessageMap,
+  StarknetWindowObject,
+} from "@starknet-io/types-js";
 import {
   StandardConnect,
   type StandardConnectMethod,
@@ -8,28 +28,8 @@ import {
   type StandardEventsNames,
   type StandardEventsOnMethod,
 } from "@wallet-standard/features";
-import type { EIP1193Provider } from "viem";
-import type {
-  RequestFnCall,
-  RpcMessage,
-  RpcTypeToMessageMap,
-  StarknetWindowObject,
-} from "@starknet-io/types-js";
-import {
-  StarknetWalletApi,
-  type StarknetFeatures,
-  type WalletWithStarknetFeatures,
-} from "@starknet-io/get-starknet-wallet-standard/features";
-import {
-  formatStarknetChainId,
-  isStarknetChain,
-  STARKNET_CHAIN_PREFIX,
-  WELL_KNOWN_STARKNET_CHAINS,
-} from "@starknet-io/get-starknet-wallet-standard/chains";
-import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
-import type { StarknetChain } from "@starknet-io/get-starknet-wallet-standard/chains";
 import { Mutex } from "async-mutex";
-import { init, loadRemote } from "@module-federation/runtime";
+import type { EIP1193Provider } from "viem";
 
 import type { EIP6963ProviderInfo } from "./types";
 
@@ -85,6 +85,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
         on: this.#on.bind(this),
       },
       [StarknetWalletApi]: {
+        id: "metamask",
         version: "1.0.0" as const,
         request: this.#request.bind(this),
         walletVersion: "2.0.0",

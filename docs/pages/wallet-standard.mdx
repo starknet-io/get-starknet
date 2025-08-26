@@ -1,47 +1,66 @@
+import { Callout } from "vocs/components"
+
 # Wallet Standard
 
-The `@get-starknet/wallet-standard` package provides an implementation of [Wallet Standard](https://github.com/wallet-standard/wallet-standard) for Starknet.
+Get Starknet provides a Wallet Standard compatible implementation for Starknet.
 
-## Functions
+## TL;DR
 
-The `isStarknetWallet` function is used to check if a wallet implements the Starknet Wallet Standard.
+Access the currently connected wallet with the `useConnect` hook.
 
-```ts
-import type { Wallet } from "@wallet-standard/base";
-import { isStarknetWallet, type WalletWithStarknetFeatures } from "@get-starknet/wallet-standard/features";
+This (possibily undefined) value is a [`WalletWithStarknetFeatures`](/core/StarknetWalletRequestFeature) object. This object exposes a list of accounts and the Starknet wallet API.
 
-const wallet: Wallet = getWallet();
+<Callout type="info">
+    Applications should use the hooks provided by Starknet React to interact with the wallet. These hooks simplify working with the `WalletWithStarknetFeatures` object.
+</Callout>
 
-if (isStarknetWallet(wallet)) {
-  // Wallet implements the Starknet Wallet Standard
-  // Wallet is now a `WalletWithStarknetFeatures`
+The Starknet wallet API is an object with the following properties:
 
-  // Connect wallet
-  wallet.features["standard:connect"].connect({ silent: false });
+ - `walletVersion`: the version of the wallet.
+ - `request`: a function to send a request to the wallet using the wallet's RPC API.
 
-  // Make a Starknet API request
-  wallet.features["starknet:walletApi"].request({
-    type: "wallet_getPermissions",
-  });
+```tsx [my-component.tsx]
+import { useConnect, StarknetWalletApi } from "@starknet-io/get-starknet-ui";
+
+export function MyComponent() {
+  const { connected } = useConnect();
+
+  if (!connected) {
+    return (
+      <div>
+        <p>Please connect your wallet</p>
+      </div>
+    )
+  }
+
+  const address = connected.accounts[0].address;
+  const version = connected.features[StarknetWalletApi].walletVersion;
+
+  return (
+    <div>
+      <p>{address}</p>
+      <p>{version}</p>
+    </div>
+  )
 }
-```
+````
 
-## Required Features
+## API overview
 
-The following features are required to be implemented by a Starknet Wallet:
+Wallet Standard provides a generic "Web3 Wallet" API that supports multiple chains and wallets.
 
-### `standard:connect`
+This wallet API has two properties:
 
-Part of `@wallet-standard/features`, requires a `connect({ silent })` method.
+ - `accounts`: an array of `WalletAccount` objects.
+ - `features`: an object to expose the wallet's features. Features represent capabilities such as interacting with a specific chain, or emitting events.
 
-### `standard:disconnect`
+The `WalletAccount` object provides the wallet's address together with additional (optional) properties such as the raw public key and the supported chains.
 
-Part of `@wallet-standard/features`, requires a `disconnect()` method.
+## Starknet Features
 
-### `standard:events`
+Get Starknet defines the Wallet Standard Starknet API (identifier: `starknet:walletApi`):
 
-Part of `@wallet-standard/features`, requires a `on()` method.
+ - `walletVersion`: the version of the wallet.
+ - `request`: a function to send a request to the wallet using the wallet's RPC API.
 
-### `starknet:walletApi`
-
-Part of `@get-starknet/wallet-standard`, requires the `request` method defined in the [Starknet Wallet API](https://community.starknet.io/t/snip-standardizing-starknet-wallet-connections-with-write-api-and-json-rpc-integration/98049).
+These two functions are used to interact with the wallet using the wallet's RPC API.

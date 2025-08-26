@@ -1,15 +1,15 @@
+import { createStore } from "@starknet-io/get-starknet-discovery";
+import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
+import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
 import {
   QueryClient,
   QueryClientProvider,
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
-import { RefreshCcw, Trash } from "lucide-react";
-import { createStore } from "@starknet-io/get-starknet-discovery";
-import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
-import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
-import { useCallback, useEffect, useState } from "react";
 import type { StandardEventsChangeProperties } from "@wallet-standard/features";
+import { RefreshCcw, Trash } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 const store = createStore();
 const queryClient = new QueryClient();
@@ -83,7 +83,6 @@ export default function WalletDiscoveryDemo() {
           </div>
           <div className="flex flex-col gap-2 pt-4">
             {events.map((event, index) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: it's fine
               <p key={index} className="text-sm text-gray-500">
                 {event}
               </p>

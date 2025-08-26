@@ -1,0 +1,28 @@
+# createStore
+
+Create a new store used to manage injected wallets.
+
+## Usage
+
+```ts
+import { createStore } from "@starknet-io/get-starknet-core";
+
+const store = createStore();
+
+// Get the currently detected wallets.
+const wallets = store.getWallets();
+
+// Listen for wallet changes.
+store.subscribe((wallets) => {
+  console.log(wallets);
+});
+
+```
+
+## Arguments
+
+* `eip1193Adapters?: EIP1193Adapter[]` - An array of [EIP1193 adapters](/core/EIP1193Adapter) to use for EIP1193 wallets.
+
+## Returns
+
+* `store: Store` - The created store.

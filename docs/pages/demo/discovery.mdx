@@ -1,0 +1,33 @@
+import WalletDiscoveryDemo from "../../components/wallet-discovery"
+
+# Wallet Discovery
+
+This demo shows how to use `@starknet-io/get-starknet-discovery` to discover
+wallets that support Starknet.
+
+## Goal
+
+- Injected wallets are discovered and displayed.
+- Can connect and disconnect wallets (`standard:connect` and
+  `standard:disconnect` features).
+- Events are listened for and displayed (`standard:events` feature).
+
+## How to use
+
+- Have at least one Starknet wallet installed.
+- Click the refresh button to discover wallets (if the wallet doesn't implement
+  the Wallet Standard discovery mechanism).
+- Click the "Connect Silent" button and verify that the wallet doesn't ask for
+  permission.
+- Click the "Connect" button to connect the wallet.
+- Check that the wallet address and chain are displayed.
+- Check that the events are displayed.
+- Change the chain and/or account from the wallet interface.
+- Check that the events are displayed and the ui updates.
+- Click the "Disconnect" button to disconnect the wallet.
+- Check that the wallet address and chain are no longer displayed.
+- Check that the events show the wallet being disconnected.
+
+## Demo
+
+<WalletDiscoveryDemo />

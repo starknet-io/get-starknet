@@ -1,0 +1,45 @@
+# SelectedWallet
+
+Display the currently selected wallet in the [WalletList](/modal/WalletList).
+
+## Usage
+
+```tsx
+import { SelectedWallet } from "@starknet-io/get-starknet-modal";
+
+function Dapp() {
+  return (
+    <SelectedWallet>
+      {(wallet) => (
+        <div>
+          {wallet?.state} - {wallet?.name}
+        </div>
+      )}
+    </SelectedWallet>
+  );
+}
+```
+
+## Arguments
+
+ * `children: (wallet?: MaybeWallet) => ReactNode` - A function that renders the selected wallet information.
+
+```ts
+/** A wallet that is available */
+type AvailableWallet = {
+  state: "available";
+  name: string;
+  wallet: WalletWithStarknetFeatures;
+  info?: WalletInformation;
+};
+
+/** A wallet that is not available */
+type UnavailableWallet = {
+  state: "unavailable";
+  name: string;
+  info: WalletInformation;
+};
+
+/** A wallet that could be available or unavailable */
+type MaybeWallet = AvailableWallet | UnavailableWallet;
+```
