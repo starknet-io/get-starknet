@@ -8,7 +8,7 @@ const execAsync = promisify(exec);
 export default defineBuildConfig({
   entries: ["src/index.ts"],
   alias: {
-    "~ui": fileURLToPath(new URL("src", import.meta.url)),
+    src: fileURLToPath(new URL("src", import.meta.url)),
   },
   outDir: "dist",
   clean: true,

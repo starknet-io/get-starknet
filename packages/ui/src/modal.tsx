@@ -3,6 +3,7 @@ import {
   SelectedWallet,
   type UnavailableWallet,
   useConnect,
+  useStarknetProvider,
   WalletList,
 } from "@starknet-io/get-starknet-modal";
 import {
@@ -19,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { Fragment, useCallback, useEffect, useState } from "react";
+import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import {
   Dialog,
@@ -28,8 +30,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./components/ui/dialog";
-import { Badge } from "./components/ui/badge";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./components/ui/drawer";
 import { useCopyToClipboard } from "./hooks/use-copy";
+import { useMediaQuery } from "./hooks/use-media-query";
 import { cn } from "./lib/utils";
 import { LogosAndroidIcon } from "./logos/android";
 import { LogosApple } from "./logos/apple";
@@ -69,24 +78,10 @@ export type WalletConnectModalProps = {
  * }
  * ```
  */
-export function WalletConnectModal({
-  walletUi,
-  buttonClassName,
-  dialogContentClassName,
-}: WalletConnectModalProps) {
+export function WalletConnectModal(props: WalletConnectModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const { connected, connect, disconnect } = useConnect();
-
-  const connectWallet = useCallback(
-    (wallet: WalletWithStarknetFeatures) => {
-      if (connected || walletUi?.[wallet.features[StarknetWalletApi].id]) {
-        return;
-      }
-      connect(wallet);
-    },
-    [connected, walletUi, connect],
-  );
+  const { connected } = useConnect();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -102,7 +97,35 @@ export function WalletConnectModal({
     };
   }, [connected]);
 
+  if (isDesktop) {
+    return <DesktopModal isOpen={isOpen} setIsOpen={setIsOpen} {...props} />;
+  }
+
+  return <MobileModal isOpen={isOpen} setIsOpen={setIsOpen} {...props} />;
+}
+
+function DesktopModal({
+  isOpen,
+  setIsOpen,
+  buttonClassName,
+  dialogContentClassName,
+  walletUi,
+}: {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+} & WalletConnectModalProps) {
+  const { connected, connect, disconnect } = useConnect();
   const [copy, isCopied] = useCopyToClipboard();
+
+  const connectWallet = useCallback(
+    (wallet: WalletWithStarknetFeatures) => {
+      if (connected || walletUi?.[wallet.features[StarknetWalletApi].id]) {
+        return;
+      }
+      connect(wallet);
+    },
+    [connected, walletUi, connect],
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -260,6 +283,191 @@ export function WalletConnectModal({
         </DialogContent>
       </div>
     </Dialog>
+  );
+}
+
+function MobileModal({
+  isOpen,
+  setIsOpen,
+  buttonClassName,
+  dialogContentClassName,
+  walletUi,
+}: {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+} & WalletConnectModalProps) {
+  const { connected, connect, disconnect } = useConnect();
+  const [copy, isCopied] = useCopyToClipboard();
+  const { selected, onSelectedChange } = useStarknetProvider();
+
+  const connectWallet = useCallback(
+    (wallet: WalletWithStarknetFeatures) => {
+      if (connected || walletUi?.[wallet.features[StarknetWalletApi].id]) {
+        return;
+      }
+      connect(wallet);
+    },
+    [connected, walletUi, connect],
+  );
+
+  return (
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <div className="get-starknet-ui">
+        <DrawerTrigger asChild>
+          <Button
+            onClick={() => setIsOpen(true)}
+            className={cn(buttonClassName)}>
+            {connected && connected.accounts.length > 0 ? (
+              <span>
+                <span className="gs:font-medium">
+                  {connected.accounts[0].address.slice(0, 6)}...
+                  {connected.accounts[0].address.slice(-4)}
+                </span>
+              </span>
+            ) : (
+              "Connect Wallet"
+            )}
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className={cn(
+            "get-starknet-ui gs:overflow-hidden gs:p-0 gs:border-foreground/20 gs:gap-0",
+            dialogContentClassName,
+          )}>
+          <div className="gs:h-full gs:grid gs:grid-cols-[1fr] gs:gap-0">
+            {/* Left Column */}
+            <div className="gs:flex gs:flex-col">
+              {/* Header */}
+              <div className="gs:flex-shrink-0 gs:p-4 gs:bg-background gs:h-[90px]">
+                <DrawerTitle className="gs:text-lg gs:leading-none gs:font-semibold gs:mb-2">
+                  {connected
+                    ? `Connected to ${connected.name}`
+                    : "Connect Wallet"}
+                </DrawerTitle>
+                <DrawerDescription className="gs:text-muted-foreground gs:text-sm">
+                  {connected && connected.accounts.length > 0 ? (
+                    <div className="gs:flex gs:items-center gs:gap-2">
+                      <Button
+                        variant="secondary"
+                        size={"sm"}
+                        className="gs:flex-1"
+                        onClick={() => {
+                          copy(connected.accounts[0].address);
+                        }}>
+                        {isCopied ? (
+                          <Check className="gs:size-4" />
+                        ) : (
+                          <CopyIcon className="gs:size-4" />
+                        )}
+                        <span className="gs:text-sm gs:font-medium">
+                          {connected.accounts[0].address.slice(0, 6)}...
+                          {connected.accounts[0].address.slice(-4)}
+                        </span>
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size={"sm"}
+                        onClick={() => {
+                          disconnect();
+                          setIsOpen(false);
+                        }}>
+                        <LogOut className="gs:size-4" />
+                        Disconnect
+                      </Button>
+                    </div>
+                  ) : (
+                    "Select a wallet to connect to Starknet."
+                  )}
+                </DrawerDescription>
+              </div>
+
+              {/* Wallet List */}
+              <div className="gs:overflow-y-auto gs:styled-scrollbar gs:h-[410px] gs:pb-4">
+                <p className="gs:text-xs gs:font-semibold gs:text-muted-foreground gs:px-4 gs:my-2">
+                  Available Wallets
+                </p>
+                <WalletList
+                  className="gs:flex gs:flex-col gs:gap-1 gs:px-4"
+                  sortAlgorithm="recommended">
+                  {({
+                    isSelected,
+                    select,
+                    type,
+                    isLastConnected,
+                    ...wallet
+                  }) => {
+                    return wallet.state === "available" ? (
+                      <WalletItem
+                        key={wallet.name}
+                        wallet={wallet}
+                        isSelected={isSelected}
+                        select={select}
+                        type={type}
+                        isAvailable={true}
+                        isLastConnected={isLastConnected}
+                        onClick={() => {
+                          connectWallet(wallet.wallet);
+                        }}
+                      />
+                    ) : (
+                      <Fragment key={wallet.name} />
+                    );
+                  }}
+                </WalletList>
+
+                <p className="gs:text-xs gs:font-semibold gs:text-muted-foreground gs:px-4 gs:my-2">
+                  More Wallets
+                </p>
+                <WalletList
+                  className="gs:flex gs:flex-col gs:gap-1 gs:px-4"
+                  sortAlgorithm="recommended">
+                  {({
+                    isSelected,
+                    select,
+                    type,
+                    isLastConnected,
+                    ...wallet
+                  }) => {
+                    return wallet.state !== "available" ? (
+                      <WalletItem
+                        key={wallet.name}
+                        wallet={wallet}
+                        isSelected={isSelected}
+                        select={select}
+                        type={type}
+                        isAvailable={false}
+                        isLastConnected={isLastConnected}
+                      />
+                    ) : (
+                      <Fragment key={wallet.name} />
+                    );
+                  }}
+                </WalletList>
+              </div>
+            </div>
+
+            {/* Right Column - Info Panel */}
+
+            <Drawer
+              open={selected?.wallet !== undefined}
+              onOpenChange={(open) => open === false && onSelectedChange()}>
+              <DrawerContent
+                onOpenAutoFocus={(e) => e.preventDefault()}
+                className={cn(
+                  "get-starknet-ui gs:overflow-hidden gs:p-0 gs:border-foreground/20 gs:gap-0",
+                  dialogContentClassName,
+                )}>
+                <SelectedWalletUi
+                  walletUi={walletUi}
+                  handleConnect={connectWallet}
+                />
+              </DrawerContent>
+            </Drawer>
+          </div>
+        </DrawerContent>
+      </div>
+    </Drawer>
   );
 }
 

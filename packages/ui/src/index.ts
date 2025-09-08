@@ -1,7 +1,5 @@
 import "./styles.css";
 
-export * from "./modal";
-
 // Re-export from the low-level packages to simplify usage
 export {
   GetStarknetProvider,
@@ -9,3 +7,4 @@ export {
   useStarknetProvider,
 } from "@starknet-io/get-starknet-modal";
 export { StarknetWalletApi } from "@starknet-io/get-starknet-wallet-standard/features";
+export * from "./modal";

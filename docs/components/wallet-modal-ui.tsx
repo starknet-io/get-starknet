@@ -2,9 +2,9 @@
 
 import {
   GetStarknetProvider,
-  WalletConnectModal,
   StarknetWalletApi,
   useConnect,
+  WalletConnectModal,
 } from "@starknet-io/get-starknet-ui";
 import {
   useWebWallet,
