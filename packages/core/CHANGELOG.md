@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-core
 
+## 4.0.8
+
+### Patch Changes
+
+- ccc9462: Add Xverse to discovery list
+
 ## 4.0.7
 
 ### Patch Changes
