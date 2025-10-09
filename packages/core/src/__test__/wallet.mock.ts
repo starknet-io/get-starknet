@@ -110,6 +110,21 @@ export const XverseMock: StarknetWindowObject = {
   off: () => {},
 }
 
+export const GateMock: StarknetWindowObject = {
+  ...wallets.find((w) => w.id === "gateio")!,
+  version: "0.0.0",
+  request: async (request) => {
+    switch (request.type) {
+      case "wallet_getPermissions":
+        return []
+      default:
+        return undefined as any
+    }
+  },
+  on: () => {},
+  off: () => {},
+}
+
 export function makeAuthorized(authorized: boolean) {
   return (wallet: StarknetWindowObject) =>
     ({
