@@ -29,7 +29,12 @@ export {
   StandardDisconnect,
   type StandardDisconnectFeature,
   StandardEvents,
+  type StandardEventsChangeProperties,
   type StandardEventsFeature,
+  type StandardEventsListeners,
+  type StandardEventsNames,
+  type StandardEventsOnMethod,
+  type StandardEventsVersion,
 } from "@wallet-standard/features";
 
 export type StarknetFeatures = StarknetWalletRequestFeature &
