@@ -163,40 +163,44 @@ function DesktopModal({
                     ? `Connected to ${connected.name}`
                     : "Connect Wallet"}
                 </DialogTitle>
-                <DialogDescription className="gs:text-muted-foreground gs:text-sm">
-                  {connected && connected.accounts.length > 0 ? (
-                    <div className="gs:flex gs:items-center gs:gap-2">
-                      <Button
-                        variant="secondary"
-                        size={"sm"}
-                        className="gs:flex-1"
-                        onClick={() => {
-                          copy(connected.accounts[0].address);
-                        }}>
-                        {isCopied ? (
-                          <Check className="gs:size-4" />
-                        ) : (
-                          <CopyIcon className="gs:size-4" />
-                        )}
-                        <span className="gs:text-sm gs:font-medium">
-                          {connected.accounts[0].address.slice(0, 6)}...
-                          {connected.accounts[0].address.slice(-4)}
-                        </span>
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size={"sm"}
-                        onClick={() => {
-                          disconnect();
-                          setIsOpen(false);
-                        }}>
-                        <LogOut className="gs:size-4" />
-                        Disconnect
-                      </Button>
-                    </div>
-                  ) : (
-                    "Select a wallet to connect to Starknet."
-                  )}
+                <DialogDescription
+                  className="gs:text-muted-foreground gs:text-sm"
+                  asChild>
+                  <div>
+                    {connected && connected.accounts.length > 0 ? (
+                      <div className="gs:flex gs:items-center gs:gap-2">
+                        <Button
+                          variant="secondary"
+                          size={"sm"}
+                          className="gs:flex-1"
+                          onClick={() => {
+                            copy(connected.accounts[0].address);
+                          }}>
+                          {isCopied ? (
+                            <Check className="gs:size-4" />
+                          ) : (
+                            <CopyIcon className="gs:size-4" />
+                          )}
+                          <span className="gs:text-sm gs:font-medium">
+                            {connected.accounts[0].address.slice(0, 6)}...
+                            {connected.accounts[0].address.slice(-4)}
+                          </span>
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size={"sm"}
+                          onClick={() => {
+                            disconnect();
+                            setIsOpen(false);
+                          }}>
+                          <LogOut className="gs:size-4" />
+                          Disconnect
+                        </Button>
+                      </div>
+                    ) : (
+                      "Select a wallet to connect to Starknet."
+                    )}
+                  </div>
                 </DialogDescription>
               </div>
 
@@ -272,7 +276,7 @@ function DesktopModal({
             />
           </div>
 
-          <DialogClose>
+          <DialogClose asChild>
             <Button
               variant="secondary"
               size={"icon"}
