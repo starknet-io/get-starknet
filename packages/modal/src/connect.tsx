@@ -1,6 +1,7 @@
 import {
   StandardConnect,
   StandardDisconnect,
+  StandardEvents,
   StarknetWalletApi,
   type WalletWithStarknetFeatures,
 } from "@starknet-io/get-starknet-wallet-standard/features";
@@ -30,44 +31,69 @@ export function UseConnectProvider({
   const [isConnecting, setIsConnecting] = useState(false);
   const [isError, setIsError] = useState(false);
   const [connected, setConnected] = useState<
-    WalletWithStarknetFeatures | undefined
+    [WalletWithStarknetFeatures, () => void] | undefined
   >(undefined);
 
-  const connect = useCallback(async (wallet: WalletWithStarknetFeatures) => {
-    try {
-      setIsError(false);
-      setIsConnecting(true);
-      const result = await wallet.features[StandardConnect].connect({
-        silent: false,
-      });
-
-      setIsConnecting(false);
-      if (result.accounts.length > 0) {
-        setConnected(wallet);
-        setLastConnectedWalletId(wallet.features[StarknetWalletApi].id);
+  const connect = useCallback(
+    async (wallet: WalletWithStarknetFeatures) => {
+      try {
         setIsError(false);
-        return true;
+        setIsConnecting(true);
+        const result = await wallet.features[StandardConnect].connect({
+          silent: false,
+        });
+
+        setIsConnecting(false);
+        if (result.accounts.length > 0) {
+          if (connected) {
+            const [_, removePreviousListener] = connected;
+            removePreviousListener();
+          }
+
+          const removeListener = wallet.features[StandardEvents].on(
+            "change",
+            (_event) => {
+              // Reset the currently connected wallet so that components can re-render
+              // with the new accounts
+              setConnected([wallet, removeListener]);
+            },
+          );
+          setConnected([wallet, removeListener]);
+          setLastConnectedWalletId(wallet.features[StarknetWalletApi].id);
+          setIsError(false);
+          return true;
+        }
+        setIsError(true);
+        return false;
+      } catch (error) {
+        setIsError(true);
+        setIsConnecting(false);
+        throw error;
       }
-      setIsError(true);
-      return false;
-    } catch (error) {
-      setIsError(true);
-      setIsConnecting(false);
-      throw error;
-    }
-  }, []);
+    },
+    [connected],
+  );
 
   const disconnect = useCallback(async () => {
     if (!connected) {
       return;
     }
-    await connected.features[StandardDisconnect].disconnect();
+
+    const [wallet, removeListener] = connected;
+    await wallet.features[StandardDisconnect].disconnect();
+    removeListener();
     setConnected(undefined);
   }, [connected]);
 
   return (
     <UseConnectContext.Provider
-      value={{ connected, connect, disconnect, isConnecting, isError }}>
+      value={{
+        connected: connected?.[0],
+        connect,
+        disconnect,
+        isConnecting,
+        isError,
+      }}>
       {children}
     </UseConnectContext.Provider>
   );
