@@ -6,4 +6,9 @@ export type {
 } from "./maybe-wallet";
 export { GetStarknetProvider, useStarknetProvider } from "./provider";
 export { SelectedWallet } from "./selected-wallet";
-export { type SortAlgorithm, WalletList } from "./wallet-list";
+export {
+  type CustomSortFunction,
+  type SortAlgorithm,
+  WalletList,
+  type WalletListProps,
+} from "./wallet-list";

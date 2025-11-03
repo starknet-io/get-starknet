@@ -21,9 +21,16 @@ export type SortAlgorithm =
 
 const popularWallets = [readyWallet.id, braavos.id];
 
+export type CustomSortFunction = (
+  wallets: readonly MaybeWallet[],
+  lastConnectedWalletId: string | null,
+) => MaybeWallet[];
+
 export type WalletListProps = {
   /** How to sort wallets */
   sortAlgorithm?: SortAlgorithm;
+  /** A custom sort function to use for the list of wallets. If provided, the `sortAlgorithm` will be ignored. */
+  customSortFunction?: CustomSortFunction;
   children: (
     wallet: {
       isLastConnected: boolean;
@@ -64,14 +71,17 @@ export function WalletList({
   sortAlgorithm: userSortAlgorithm,
   children,
   ref,
+  customSortFunction,
   ...props
 }: WalletListProps & Omit<React.ComponentProps<"div">, "children">) {
   const { wallets, selected, onSelectedChange } = useStarknetProvider();
-  const sortAlgorithm = userSortAlgorithm ?? "recommended";
+  const sortAlgorithm = userSortAlgorithm ?? "random";
 
   const sortedWallets = useMemo(() => {
     const lastConnectedWalletId = getLastConnectedWalletId();
-
+    if (customSortFunction) {
+      return customSortFunction(wallets, lastConnectedWalletId);
+    }
     if (sortAlgorithm === "alpha-asc") {
       return sortAlphabeticalAsc(wallets);
     }
@@ -85,7 +95,7 @@ export function WalletList({
       return sortRecommended(wallets, lastConnectedWalletId);
     }
     throw new Error(`Invalid sort algorithm: ${sortAlgorithm}`);
-  }, [wallets, sortAlgorithm]);
+  }, [wallets, sortAlgorithm, customSortFunction]);
 
   const lastConnectedWalletId = getLastConnectedWalletId();
 
@@ -203,14 +213,31 @@ function sortUnavailableWallets(
 }
 
 function getOrInitSortSeed(): number {
-  const storedSeed = localStorage.getItem("get-starknet-sort-seed");
-  if (storedSeed !== null) {
-    return Number(storedSeed);
+  const key = "get-starknet-sort-seed";
+  const now = Math.floor(Date.now() / 1000);
+  const expirationSeconds = 600; // 10 minutes
+  const stored = window.localStorage.getItem(key);
+
+  const write = (seed: number, timestamp: number) => {
+    window.localStorage.setItem(key, `${seed}:${timestamp}`);
+    return seed;
+  };
+
+  if (stored) {
+    const [seedStr, tsStr] = stored.split(":");
+    const seed = Number(seedStr);
+    const ts = Number(tsStr);
+    if (Number.isFinite(seed) && Number.isFinite(ts)) {
+      if (now - ts > expirationSeconds) {
+        const newSeed = Math.floor(Math.random() * 1_000_00);
+        return write(newSeed, now);
+      }
+      return write(seed, now);
+    }
   }
 
   const newSeed = Math.floor(Math.random() * 1_000_00);
-  localStorage.setItem("get-starknet-sort-seed", newSeed.toString());
-  return newSeed;
+  return write(newSeed, now);
 }
 
 function walletEq(a: MaybeWallet, b: MaybeWallet) {
