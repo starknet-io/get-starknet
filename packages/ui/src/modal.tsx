@@ -1,6 +1,8 @@
 import {
   type AvailableWallet,
+  type CustomSortFunction,
   SelectedWallet,
+  type SortAlgorithm,
   type UnavailableWallet,
   useConnect,
   useStarknetProvider,
@@ -60,6 +62,8 @@ export type WalletConnectModalProps = {
   walletUi?: WalletUiMap;
   buttonClassName?: string;
   dialogContentClassName?: string;
+  customSortFunction?: CustomSortFunction;
+  sortAlgorithm?: SortAlgorithm;
 };
 
 /**
@@ -110,6 +114,8 @@ function DesktopModal({
   buttonClassName,
   dialogContentClassName,
   walletUi,
+  customSortFunction,
+  sortAlgorithm,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -211,7 +217,8 @@ function DesktopModal({
                 </p>
                 <WalletList
                   className="gs:flex gs:flex-col gs:gap-1 gs:px-4"
-                  sortAlgorithm="recommended">
+                  sortAlgorithm={sortAlgorithm ?? "recommended"}
+                  customSortFunction={customSortFunction}>
                   {({
                     isSelected,
                     select,
