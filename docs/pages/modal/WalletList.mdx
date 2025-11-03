@@ -5,28 +5,68 @@ This component displays a list of wallets.
 ## Usage
 
 ```tsx
-import { WalletList } from "@starknet-io/get-starknet-modal";
+import { WalletList } from "@starknet-io/get-starknet-modal"
 
 function App() {
   return (
     <WalletList>
-      {({
-        isSelected,
-        select,
-        type,
-        isLastConnected,
-        ...wallet
-      }) => <div>{wallet.name} - {wallet.type}</div>}
+      {({ isSelected, select, type, isLastConnected, ...wallet }) => (
+        <div>
+          {wallet.name} - {wallet.type}
+        </div>
+      )}
     </WalletList>
-  );
+  )
 }
 ```
 
 ## Arguments
 
- * `sortAlgorithm: "alpha-asc" | "alpha-desc" | "random" | "recommended"` - The sorting algorithm to use for the list of wallets.
- * `children: ({ isLastConnected, isSelected, select, type } & MaybeWallet) => ReactNode` - The callback to render each wallet's selection button.
-   + `isLastConnected: boolean` - Whether the wallet is the last connected wallet.
-   + `isSelected: boolean` - Whether the wallet is selected.
-   + `select: () => void` - Callback to select the wallet.
-   + `type: string` - The type of the wallet (e.g. `"InjectedWallet"`).
+- `sortAlgorithm: "alpha-asc" | "alpha-desc" | "random" | "recommended"` - The
+  sorting algorithm to use for the list of wallets. Defaults to `"random"`.
+  Note: when using `"random"`, the order is stable for 10 minutes to prevent
+  user misclicks.
+- `customSortFunction: (wallets: readonly MaybeWallet[], lastConnectedWalletId: string | null) => MaybeWallet[]` -
+  A custom sort function to use for the list of wallets. If provided, the
+  `sortAlgorithm` will be ignored.
+- `children: ({ isLastConnected, isSelected, select, type } & MaybeWallet) => ReactNode` -
+  The callback to render each wallet's selection button.
+  - `isLastConnected: boolean` - Whether the wallet is the last connected
+    wallet.
+  - `isSelected: boolean` - Whether the wallet is selected.
+  - `select: () => void` - Callback to select the wallet.
+  - `type: string` - The type of the wallet (e.g. `"InjectedWallet"`).
+
+## Custom Sort Function
+
+You can provide a custom sort function to implement your own wallet ordering
+logic:
+
+```tsx
+import {
+  WalletList,
+  type CustomSortFunction,
+} from "@starknet-io/get-starknet-modal"
+
+const myCustomSort: CustomSortFunction = (wallets, lastConnectedWalletId) => {
+  // Sort available wallets first, then by name
+  return wallets.slice().sort((a, b) => {
+    if (a.state !== b.state) {
+      return a.state === "available" ? -1 : 1
+    }
+    return a.name.localeCompare(b.name)
+  })
+}
+
+function App() {
+  return (
+    <WalletList customSortFunction={myCustomSort}>
+      {({ isSelected, select, type, isLastConnected, ...wallet }) => (
+        <div>
+          {wallet.name} - {wallet.type}
+        </div>
+      )}
+    </WalletList>
+  )
+}
+```
