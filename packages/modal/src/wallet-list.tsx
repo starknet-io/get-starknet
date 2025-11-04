@@ -72,7 +72,7 @@ export function WalletList({
   ...props
 }: WalletListProps & Omit<React.ComponentProps<"div">, "children">) {
   const { wallets, selected, onSelectedChange } = useStarknetProvider();
-  const sortAlgorithm = userSortAlgorithm ?? "random";
+  const sortAlgorithm = userSortAlgorithm ?? "recommended";
 
   const sortedWallets = useMemo(() => {
     const lastConnectedWalletId = getLastConnectedWalletId();
