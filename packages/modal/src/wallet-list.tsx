@@ -4,7 +4,7 @@ import {
 } from "@starknet-io/get-starknet-wallet-standard/features";
 import { braavos, readyWallet } from "@starknet-io/get-starknet-wallets";
 import { useMemo } from "react";
-import { getLastConnectedWalletId } from "./helper";
+import { getLastConnectedWalletId, getOrInitSortSeed } from "./helper";
 import type {
   AvailableWallet,
   MaybeWallet,
@@ -207,34 +207,6 @@ function sortUnavailableWallets(
   const shuffledOthers = shuffle(getOrInitSortSeed(), otherWallets);
 
   return [...shuffledPopular, ...shuffledOthers];
-}
-
-function getOrInitSortSeed(): number {
-  const key = "get-starknet-sort-seed";
-  const now = Math.floor(Date.now() / 1000);
-  const expirationSeconds = 600; // 10 minutes
-  const stored = window.localStorage.getItem(key);
-
-  const write = (seed: number, timestamp: number) => {
-    window.localStorage.setItem(key, `${seed}:${timestamp}`);
-    return seed;
-  };
-
-  if (stored) {
-    const [seedStr, tsStr] = stored.split(":");
-    const seed = Number(seedStr);
-    const ts = Number(tsStr);
-    if (Number.isFinite(seed) && Number.isFinite(ts)) {
-      if (now - ts > expirationSeconds) {
-        const newSeed = Math.floor(Math.random() * 1_000_00);
-        return write(newSeed, now);
-      }
-      return write(seed, now);
-    }
-  }
-
-  const newSeed = Math.floor(Math.random() * 1_000_00);
-  return write(newSeed, now);
 }
 
 function walletEq(a: MaybeWallet, b: MaybeWallet) {
