@@ -22,13 +22,14 @@ function App() {
 
 ## Arguments
 
-- `sortAlgorithm: "alpha-asc" | "alpha-desc" | "random" | "recommended"` - The
-  sorting algorithm to use for the list of wallets. Defaults to `"random"`.
+- `sortAlgorithm: "alpha-asc" | "alpha-desc" | "random" | "recommended" | (wallets: readonly MaybeWallet[], lastConnectedWalletId: string | null) => MaybeWallet[]` -
+  The sorting algorithm to use for the list of wallets. Defaults to `"random"`.
+  If a custom sort function is provided, it will be used instead of the built-in
+  algorithms.
+
   Note: when using `"random"`, the order is stable for 10 minutes to prevent
   user misclicks.
-- `customSortFunction: (wallets: readonly MaybeWallet[], lastConnectedWalletId: string | null) => MaybeWallet[]` -
-  A custom sort function to use for the list of wallets. If provided, the
-  `sortAlgorithm` will be ignored.
+
 - `children: ({ isLastConnected, isSelected, select, type } & MaybeWallet) => ReactNode` -
   The callback to render each wallet's selection button.
   - `isLastConnected: boolean` - Whether the wallet is the last connected

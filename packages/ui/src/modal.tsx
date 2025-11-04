@@ -62,8 +62,7 @@ export type WalletConnectModalProps = {
   walletUi?: WalletUiMap;
   buttonClassName?: string;
   dialogContentClassName?: string;
-  customSortFunction?: CustomSortFunction;
-  sortAlgorithm?: SortAlgorithm;
+  sortAlgorithm?: SortAlgorithm | CustomSortFunction;
 };
 
 /**
@@ -114,7 +113,6 @@ function DesktopModal({
   buttonClassName,
   dialogContentClassName,
   walletUi,
-  customSortFunction,
   sortAlgorithm,
 }: {
   isOpen: boolean;
@@ -217,8 +215,7 @@ function DesktopModal({
                 </p>
                 <WalletList
                   className="gs:flex gs:flex-col gs:gap-1 gs:px-4"
-                  sortAlgorithm={sortAlgorithm ?? "recommended"}
-                  customSortFunction={customSortFunction}>
+                  sortAlgorithm={sortAlgorithm ?? "recommended"}>
                   {({
                     isSelected,
                     select,

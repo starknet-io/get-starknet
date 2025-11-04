@@ -27,10 +27,8 @@ export type CustomSortFunction = (
 ) => MaybeWallet[];
 
 export type WalletListProps = {
-  /** How to sort wallets */
-  sortAlgorithm?: SortAlgorithm;
-  /** A custom sort function to use for the list of wallets. If provided, the `sortAlgorithm` will be ignored. */
-  customSortFunction?: CustomSortFunction;
+  /** How to sort wallets. If a custom sort function is provided, it will be used instead of the default sorting algorithm. */
+  sortAlgorithm?: SortAlgorithm | CustomSortFunction;
   children: (
     wallet: {
       isLastConnected: boolean;
@@ -71,7 +69,6 @@ export function WalletList({
   sortAlgorithm: userSortAlgorithm,
   children,
   ref,
-  customSortFunction,
   ...props
 }: WalletListProps & Omit<React.ComponentProps<"div">, "children">) {
   const { wallets, selected, onSelectedChange } = useStarknetProvider();
@@ -79,8 +76,8 @@ export function WalletList({
 
   const sortedWallets = useMemo(() => {
     const lastConnectedWalletId = getLastConnectedWalletId();
-    if (customSortFunction) {
-      return customSortFunction(wallets, lastConnectedWalletId);
+    if (typeof sortAlgorithm === "function") {
+      return sortAlgorithm(wallets, lastConnectedWalletId);
     }
     if (sortAlgorithm === "alpha-asc") {
       return sortAlphabeticalAsc(wallets);
@@ -95,7 +92,7 @@ export function WalletList({
       return sortRecommended(wallets, lastConnectedWalletId);
     }
     throw new Error(`Invalid sort algorithm: ${sortAlgorithm}`);
-  }, [wallets, sortAlgorithm, customSortFunction]);
+  }, [wallets, sortAlgorithm]);
 
   const lastConnectedWalletId = getLastConnectedWalletId();
 
