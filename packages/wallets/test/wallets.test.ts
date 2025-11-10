@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { wallets } from "../src/wallets";
 import * as module from "../src/wallets";
+import { wallets } from "../src/wallets";
 
 describe("wallets", () => {
   it("should export all wallets", () => {

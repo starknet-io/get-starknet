@@ -1,0 +1,67 @@
+diff --git a/_lib/app/styles/reset.css.js b/_lib/app/styles/reset.css.js
+index c348b15e136557b3b767e75e134a8a19a2d313ca..bdff49044738d4a08bf46237185973753a19fb4a 100644
+--- a/_lib/app/styles/reset.css.js
++++ b/_lib/app/styles/reset.css.js
+@@ -142,12 +142,20 @@ globalStyle('button,input,optgroup,select,textarea', {
+     },
+ });
+ globalStyle('button,select', {
+-    textTransform: 'none',
++    '@layer': {
++        [resetLayer]: {
++            textTransform: 'none',
++        },
++    },
+ });
+ globalStyle('button,select', {
+-    appearance: 'button',
+-    backgroundColor: 'transparent',
+-    backgroundImage: 'none',
++    '@layer': {
++        [resetLayer]: {
++            appearance: 'button',
++            backgroundColor: 'transparent',
++            backgroundImage: 'none',
++        },
++    },
+ });
+ globalStyle(':-moz-focusring', {
+     outline: 'auto',
+@@ -176,7 +184,11 @@ globalStyle('summary', {
+     display: 'list-item',
+ });
+ globalStyle('blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre', {
+-    margin: 0,
++    '@layer': {
++        [resetLayer]: {
++            margin: 0,
++        },
++    },
+ });
+ globalStyle('fieldset', {
+     margin: 0,
+@@ -186,12 +198,20 @@ globalStyle('legend', {
+     padding: 0,
+ });
+ globalStyle('ol,ul,menu', {
+-    listStyle: 'none',
+-    margin: 0,
+-    padding: 0,
++    '@layer': {
++        [resetLayer]: {
++            listStyle: 'none',
++            margin: 0,
++            padding: 0,
++        },
++    },
+ });
+ globalStyle('dialog', {
+-    padding: 0,
++    '@layer': {
++        [resetLayer]: {
++            padding: 0,
++        },
++    },
+ });
+ globalStyle('textarea', {
+     resize: 'vertical',

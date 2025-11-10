@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createStore } from "../src";
 import type { WindowRegisterWalletEventCallback } from "@wallet-standard/base";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { createStore } from "../src";
 import { createMockStandardWallet } from "./mock";
 
 describe("Standard wallet discovery", () => {

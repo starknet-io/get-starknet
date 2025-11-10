@@ -1,13 +1,13 @@
-import {
-  type WalletWithStarknetFeatures,
-  isStarknetWallet,
-} from "@starknet-io/get-starknet-wallet-standard/features";
 import type { EIP1193Adapter } from "@starknet-io/get-starknet-virtual-wallet";
 import { metaMaskVirtualWallet } from "@starknet-io/get-starknet-virtual-wallet/metamask";
+import {
+  isStarknetWallet,
+  type WalletWithStarknetFeatures,
+} from "@starknet-io/get-starknet-wallet-standard/features";
 
-import { registerStandardWalletDiscovery } from "./standard-wallet";
-import { registerInjectedWalletDiscovery } from "./injected-wallet";
 import { registerEIP1193WalletFromEIP6963Discovery } from "./eip1193-wallet";
+import { registerInjectedWalletDiscovery } from "./injected-wallet";
+import { registerStandardWalletDiscovery } from "./standard-wallet";
 
 export type CleanupListener = () => void;
 export type Listener = (wallets: readonly WalletWithStarknetFeatures[]) => void;

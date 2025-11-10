@@ -40,6 +40,7 @@ export const createMockStandardWallet = (
   accounts: [],
   features: {
     [StarknetWalletApi]: {
+      id: "mock",
       version: "1.0.0",
       walletVersion: "1.0.0",
       request: vi.fn(),

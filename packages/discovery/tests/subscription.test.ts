@@ -1,9 +1,9 @@
 // @vitest-environment happy-dom
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { UnknownWalletAMock } from "./mock";
-import { createStore } from "../src";
 import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { createStore } from "../src";
+import { UnknownWalletAMock } from "./mock";
 
 interface TestWindow extends Window {
   starknet_wallet_a?: typeof UnknownWalletAMock;

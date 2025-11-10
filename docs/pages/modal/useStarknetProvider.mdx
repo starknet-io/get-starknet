@@ -1,0 +1,21 @@
+# useStarknetProvider
+
+Hook to fetch the Starknet provider's state.
+
+## Usage
+
+```tsx
+import { useStarknetProvider } from "@starknet-io/get-starknet-modal";
+
+function MyComponent() {
+  const { /* .. */ } = useStarknetProvider();
+}
+```
+
+## Returns
+
+ * `injectedWallets: WalletWithStarknetFeatures[]` - Array of wallets that have been injected into the page.
+ * `extraWallets: WalletWithStarknetFeatures[]` - Array of additional wallets that have been configured in the provider.
+ * `recommendedWallets: WalletInformation[]` - Array of recommended wallets that have been configured in the provider.
+ * `wallets: MaybeWallet[]` - Deduplicated array of all wallets (injected, extra, and recommended) together with their availability status.
+ * `selected: { wallet?: MaybeWallet }` - The currently selected wallet.

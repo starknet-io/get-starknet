@@ -6,7 +6,7 @@ type DownloadsRecord<
   DL extends string,
 > = Record<SV, DL>;
 
-export type WalletProvider = {
+export type WalletInformation = {
   id: string;
   name: string;
   icon: string;

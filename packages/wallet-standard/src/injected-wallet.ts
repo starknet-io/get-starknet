@@ -65,6 +65,7 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
         on: this.#on.bind(this),
       },
       [StarknetWalletApi]: {
+        id: this.injected.id,
         version: "1.0.0" as const,
         request: this.#request.bind(this),
         walletVersion: this.injected.version,

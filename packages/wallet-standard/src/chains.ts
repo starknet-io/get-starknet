@@ -1,4 +1,3 @@
-import type { IdentifierString } from "@wallet-standard/base";
 import { Hex } from "ox";
 
 export type ChainId = `0x${string}`;
