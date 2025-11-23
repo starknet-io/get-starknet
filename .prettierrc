@@ -1,13 +1,44 @@
 {
+  // The number of spaces per indentation level. Using 2 spaces is standard in many projects.
   "tabWidth": 2,
+  
+  // Use spaces instead of tabs for indentation.
   "useTabs": false,
+  
+  // Print spaces between brackets in object literals. e.g. { foo: bar }.
   "bracketSpacing": true,
+  
+  // Print trailing commas wherever possible. "all" is often preferred for cleaner Git diffs.
   "trailingComma": "all",
+  
+  // Use double quotes instead of single quotes for strings.
   "singleQuote": false,
+  
+  // Put the > of a multi-line HTML/JSX/Vue element on the same line as the last attribute.
+  // This is a common choice for cleaner JSX structures.
   "bracketSameLine": true,
+  
+  // Do not print semicolons at the end of statements. (Semicolon-less style)
   "semi": false,
+  
+  // Always include parentheses around a sole arrow function parameter. e.g. (x) => x.
   "arrowParens": "always",
+  
+  // Wrap prose if it exceeds the print width. Helps with consistent formatting in Markdown.
   "proseWrap": "always",
+  
+  // Prettier has no native option for 'importOrderSeparation' and 'importOrderSortSpecifiers'.
+  // These are typically provided by a separate plugin (e.g., @trivago/prettier-plugin-sort-imports).
+  // Assuming the plugin is used, these settings ensure imports are cleanly separated and sorted.
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+
+  // --- Recommended Additions for Completeness ---
+
+  // Specify the line length that Prettier will wrap on. 80 is the classic limit.
+  "printWidth": 80, 
+
+  // Format array elements in brackets and function parameters in parentheses.
+  // "false" (default) is fine, but some prefer 'true' for aesthetic consistency.
+  "vueIndentScriptAndStyle": false
 }
