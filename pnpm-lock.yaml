@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@starknet-io/types-js':
+      specifier: ^0.7.10
+      version: 0.7.10
     tsdown:
       specifier: ^0.21.9
       version: 0.21.9
@@ -85,7 +88,7 @@ importers:
         version: 1.4.1(@types/node@25.6.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(esbuild@0.28.0)(jiti@2.6.1)(lightningcss@1.32.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(rollup@4.60.1)(typescript@5.9.3)
     devDependencies:
       '@starknet-io/types-js':
-        specifier: ^0.7.10
+        specifier: 'catalog:'
         version: 0.7.10
       tailwindcss:
         specifier: ^4.0.17
@@ -125,7 +128,7 @@ importers:
         specifier: workspace:^
         version: link:../wallet-standard
       '@starknet-io/types-js':
-        specifier: ^0.7.10
+        specifier: 'catalog:'
         version: 0.7.10
       '@wallet-standard/base':
         specifier: ^1.1.0
@@ -263,7 +266,7 @@ importers:
         specifier: workspace:*
         version: link:../wallet-standard
       '@starknet-io/types-js':
-        specifier: ^0.7.10
+        specifier: 'catalog:'
         version: 0.7.10
       '@wallet-standard/base':
         specifier: ^1.1.0
@@ -291,7 +294,7 @@ importers:
   packages/wallet-standard:
     dependencies:
       '@starknet-io/types-js':
-        specifier: ^0.7.10
+        specifier: 'catalog:'
         version: 0.7.10
       '@wallet-standard/base':
         specifier: ^1.1.0
