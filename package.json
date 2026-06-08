@@ -3,6 +3,7 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
+    "typecheck": "pnpm run -r typecheck",
     "build": "pnpm run -r build",
     "dev": "pnpm run -r --parallel dev",
     "lint": "pnpm run -r lint",
@@ -16,10 +17,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
-    "@changesets/cli": "^2.28.1",
+    "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.3"
   },
   "repository": {
     "type": "git",

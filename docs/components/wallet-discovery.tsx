@@ -52,7 +52,7 @@ export default function WalletDiscoveryDemo() {
     <QueryClientProvider client={queryClient}>
       <div className="border border-gray-200 rounded-md p-4 flex flex-col gap-8">
         <div className="flex flex-col gap-2">
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-2">
             <h1 className="text-2xl font-bold">Wallets</h1>
             <button
               className="border active:bg-gray-200/10 px-2 py-1 rounded-md"
@@ -72,7 +72,7 @@ export default function WalletDiscoveryDemo() {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-2">
             <h1 className="text-2xl font-bold">Events</h1>
             <button
               className="border active:bg-gray-200/10 px-2 py-1 rounded-md"
@@ -136,7 +136,7 @@ function WalletInfo({
       : "Not connected";
 
   return (
-    <div className="border border-gray-200 p-2 rounded-md flex flex-col gap-1">
+    <div className="border border-gray-200 rounded-md flex flex-col gap-1 p-4">
       <div className="flex flex-row justify-between">
         <p className="text-md">{wallet.name}</p>
         <p className="text-sm text-gray-500">{JSON.stringify(data)}</p>

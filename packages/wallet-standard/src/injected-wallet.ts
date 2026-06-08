@@ -92,7 +92,7 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
     return [];
   }
 
-  #connect: StandardConnectMethod = async ({ silent }) => {
+  #connect: StandardConnectMethod = async ({ silent } = {}) => {
     if (!this.#account) {
       const accounts = await this.injected.request({
         type: "wallet_requestAccounts",
@@ -154,7 +154,7 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
     }
   }
 
-  async #onAccountsChanged(accounts: string[]) {
+  async #onAccountsChanged(accounts: string[] | undefined) {
     if (!accounts || accounts.length === 0) {
       this.#disconnected();
       return;
@@ -184,7 +184,7 @@ export class StarknetInjectedWallet implements WalletWithStarknetFeatures {
     }
 
     // Some wallets (like Keplr) don't provide accounts on network change.
-    if (accounts?.length > 0) {
+    if (accounts && accounts.length > 0) {
       const [account] = accounts;
 
       this.#account = { address: account, chain };

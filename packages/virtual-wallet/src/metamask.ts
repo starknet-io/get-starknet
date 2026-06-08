@@ -112,7 +112,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
     return [];
   }
 
-  #connect: StandardConnectMethod = async ({ silent }) => {
+  #connect: StandardConnectMethod = async ({ silent } = {}) => {
     if (!this.#account) {
       const accounts = await this.#request({
         type: "wallet_requestAccounts",
@@ -243,7 +243,7 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
     return chain;
   }
 
-  async #onAccountsChanged(accounts: string[]) {
+  async #onAccountsChanged(accounts?: string[]) {
     if (!accounts || accounts.length === 0) {
       this.#disconnected();
       return;
@@ -275,15 +275,14 @@ export class MetaMaskVirtualWallet implements WalletWithStarknetFeatures {
     }
 
     // Accounts should always be set, but check just in case.
-    if (accounts?.length > 0) {
+    if (accounts && accounts.length > 0) {
       const [account] = accounts;
 
       this.#account = { address: account, chain };
-      this.#emit("change", { accounts: this.accounts });
-    } else {
+    } else if (this.#account !== null) {
       this.#account.chain = chain;
-      this.#emit("change", { accounts: this.accounts });
     }
+    this.#emit("change", { accounts: this.accounts });
   }
 }
 

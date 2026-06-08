@@ -13,10 +13,10 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     }
@@ -26,7 +26,8 @@
     "src"
   ],
   "scripts": {
-    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "build": "tsdown",
     "lint:check": "biome check .",
     "lint": "biome check --write .",
     "format": "biome format --write .",
@@ -41,12 +42,12 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "unbuild": "^2.0.0",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

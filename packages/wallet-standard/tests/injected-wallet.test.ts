@@ -137,7 +137,7 @@ describe("StarknetInjectedWallet", () => {
       // (callbacks registered in the constructor of StarknetInjectedWallet)
       const accountsChangedHandler = (
         mockInjected.on as ReturnType<typeof vi.fn>
-      ).mock.calls.find((call) => call[0] === "accountsChanged")[1];
+      ).mock.calls.find((call) => call[0] === "accountsChanged")?.[1];
 
       // we're simulating the injected wallet calling the callback function
       accountsChangedHandler(["0x456"]);
@@ -157,7 +157,7 @@ describe("StarknetInjectedWallet", () => {
       // (callbacks registered in the constructor of StarknetInjectedWallet)
       const networkChangedHandler = (
         mockInjected.on as ReturnType<typeof vi.fn>
-      ).mock.calls.find((call) => call[0] === "networkChanged")[1];
+      ).mock.calls.find((call) => call[0] === "networkChanged")?.[1];
 
       networkChangedHandler("0x534e5f5345504f4c4941", ["0x123"]);
 

@@ -13,10 +13,10 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "default": "./dist/index.mjs"
@@ -27,7 +27,8 @@
     "src"
   ],
   "scripts": {
-    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "build": "tsdown",
     "lint:check": "biome check .",
     "lint": "biome check --write .",
     "format": "biome format --write .",
@@ -35,16 +36,16 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@wallet-standard/core": "^1.1.0",
-    "happy-dom": "^17.4.4",
-    "typescript": "^5.8.3",
-    "unbuild": "^2.0.0",
-    "vitest": "^3.1.1"
+    "@wallet-standard/core": "^1.1.2",
+    "happy-dom": "^17.6.3",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@starknet-io/get-starknet-virtual-wallet": "workspace:^",
     "@starknet-io/get-starknet-wallet-standard": "workspace:^",
-    "@starknet-io/types-js": "^0.7.10",
-    "@wallet-standard/base": "^1.1.0"
+    "@starknet-io/types-js": "catalog:",
+    "@wallet-standard/base": "^1.1.1"
   }
 }

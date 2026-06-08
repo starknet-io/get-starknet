@@ -13,22 +13,22 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "default": "./dist/index.mjs"
     },
     "./wallets": {
-      "types": "./dist/wallets.d.ts",
+      "types": "./dist/wallets.d.mts",
       "import": "./dist/wallets.mjs",
       "require": "./dist/wallets.cjs",
       "default": "./dist/wallets.mjs"
     },
     "./virtual-wallet": {
-      "types": "./dist/virtual-wallet.d.ts",
+      "types": "./dist/virtual-wallet.d.mts",
       "import": "./dist/virtual-wallet.mjs",
       "require": "./dist/virtual-wallet.cjs",
       "default": "./dist/virtual-wallet.mjs"
@@ -39,20 +39,21 @@
     "src"
   ],
   "scripts": {
-    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "build": "tsdown",
     "lint:check": "biome check .",
     "lint": "biome check --write .",
     "format": "biome format --write .",
     "format:check": "biome format ."
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
-    "unbuild": "^2.0.0"
+    "typescript": "catalog:",
+    "tsdown": "catalog:"
   },
   "dependencies": {
     "@starknet-io/get-starknet-discovery": "workspace:^",
     "@starknet-io/get-starknet-virtual-wallet": "workspace:^",
-    "@starknet-io/get-starknet-wallets": "workspace:^",
-    "@starknet-io/get-starknet-wallet-standard": "workspace:^"
+    "@starknet-io/get-starknet-wallet-standard": "workspace:^",
+    "@starknet-io/get-starknet-wallets": "workspace:^"
   }
 }
