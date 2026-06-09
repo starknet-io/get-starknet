@@ -1,5 +1,16 @@
 # get-starknet-docs
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [274bc33]
+  - @starknet-io/get-starknet-wallet-standard@6.0.0
+  - @starknet-io/get-starknet-discovery@6.0.0
+  - @starknet-io/get-starknet-wallets@6.0.0
+  - @starknet-io/get-starknet-modal@6.0.0
+  - @starknet-io/get-starknet-ui@6.0.0
+
 ## 0.0.2
 
 ### Patch Changes

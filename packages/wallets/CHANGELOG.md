@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-wallets
 
+## 6.0.0
+
+### Major Changes
+
+- 274bc33: Release v6.0.0
+
 ## 5.0.1
 
 ### Patch Changes

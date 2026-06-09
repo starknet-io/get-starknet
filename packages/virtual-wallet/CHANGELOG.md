@@ -1,5 +1,16 @@
 # @starknet-io/get-starknet-virtual-wallet
 
+## 6.0.0
+
+### Major Changes
+
+- 274bc33: Release v6.0.0
+
+### Patch Changes
+
+- Updated dependencies [274bc33]
+  - @starknet-io/get-starknet-wallet-standard@6.0.0
+
 ## 5.0.1
 
 ### Patch Changes
