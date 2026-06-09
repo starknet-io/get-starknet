@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@wallet-standard/core": "^1.1.2",
-    "happy-dom": "^17.6.3",
+    "happy-dom": "^20.10.2",
     "tsdown": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
