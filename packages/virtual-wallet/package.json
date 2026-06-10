@@ -12,6 +12,11 @@
   ],
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/starknet-io/get-starknet.git",
+    "directory": "packages/virtual-wallet"
+  },
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "exports": {

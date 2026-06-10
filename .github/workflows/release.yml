@@ -6,6 +6,11 @@ on:
       - master
       - develop
 
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   version:
     timeout-minutes: 15
@@ -23,12 +28,12 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
 
-      - name: Setup npmrc
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN_DEVELOP }}" >> .npmrc
+      - name: update npm cli
+        run: npm install -g npm@11
 
       - name: install dependencies
         run: pnpm install
