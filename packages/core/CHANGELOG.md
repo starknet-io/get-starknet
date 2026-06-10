@@ -1,5 +1,16 @@
 # @starknet-io/get-starknet-core
 
+## 6.0.1
+
+### Patch Changes
+
+- Bump @starknet-io/types-js to 0.11.0-beta.1.
+- Updated dependencies
+  - @starknet-io/get-starknet-wallet-standard@6.0.1
+  - @starknet-io/get-starknet-virtual-wallet@6.0.1
+  - @starknet-io/get-starknet-discovery@6.0.1
+  - @starknet-io/get-starknet-wallets@6.0.1
+
 ## 6.0.0
 
 ### Major Changes
