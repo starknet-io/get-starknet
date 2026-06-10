@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@starknet-io/types-js':
-      specifier: ^0.10.2
-      version: 0.10.2
+      specifier: 0.11.0-beta.1
+      version: 0.11.0-beta.1
     tsdown:
       specifier: ^0.21.9
       version: 0.21.9
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.2
+        version: 0.11.0-beta.1
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.0
@@ -129,7 +129,7 @@ importers:
         version: link:../wallet-standard
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.2
+        version: 0.11.0-beta.1
       '@wallet-standard/base':
         specifier: ^1.1.1
         version: 1.1.1
@@ -267,7 +267,7 @@ importers:
         version: link:../wallet-standard
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.2
+        version: 0.11.0-beta.1
       '@wallet-standard/base':
         specifier: ^1.1.1
         version: 1.1.1
@@ -295,7 +295,7 @@ importers:
     dependencies:
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.2
+        version: 0.11.0-beta.1
       '@wallet-standard/base':
         specifier: ^1.1.1
         version: 1.1.1
@@ -2356,8 +2356,8 @@ packages:
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
-  '@starknet-io/types-js@0.10.2':
-    resolution: {integrity: sha512-AtUFPYdmo9DqVus++aBSoY9W13/2PZmillPr8/mXZjc+V0iYJ/QTmkTsbw+es2mnLeLhYWSymW9ivQzyyyKdog==}
+  '@starknet-io/types-js@0.11.0-beta.1':
+    resolution: {integrity: sha512-T3KgwTK4CO6x3hT2VT6GFgSOIGscJB/7Zg+gyzeTJZh1cRAB2s03iI6WMFbyZ9wevYfm4lXzRxOgZfYk0eCVtQ==}
 
   '@tailwindcss/cli@4.3.0':
     resolution: {integrity: sha512-X9kdlqyMopO9fewbgHsEeuy31YzMHbdZ9VsKt004tB+mxSg1CNbyhZYCzvhciN0AM4R4b5lvIprPjtNq7iQxpQ==}
@@ -7652,7 +7652,7 @@ snapshots:
 
   '@standard-schema/spec@1.0.0': {}
 
-  '@starknet-io/types-js@0.10.2': {}
+  '@starknet-io/types-js@0.11.0-beta.1': {}
 
   '@tailwindcss/cli@4.3.0':
     dependencies:
