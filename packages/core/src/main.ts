@@ -2,8 +2,14 @@ import discovery, { type WalletProvider } from "./discovery"
 import { LocalStorageWrapper } from "./localStorageStore"
 import type { GetStarknetOptions, GetStarknetResult } from "./types"
 import { pipe, ssrSafeWindow } from "./utils"
+import {
+  EVMWalletInfo,
+  EVMWalletProvider,
+  detectEVMSupport,
+} from "./wallet/EVMWalletBridge"
 import { filterBy, filterByAuthorized } from "./wallet/filter"
 import {
+  isEvmWallet,
   isFullWallet,
   isVirtualWallet,
   isWalletObject,
@@ -72,12 +78,38 @@ export function getStarknet(
 
   initiateVirtualWallets(windowObject)
 
+  let evmWallets: {
+    provider: EVMWalletProvider | null
+    info: EVMWalletInfo | null
+  }[]
+
+  async function isEVMAvailable() {
+    evmWallets = await detectEVMSupport(windowObject)
+  }
+
+  isEVMAvailable()
+
   return {
     getAvailableWallets: async (options = {}) => {
       const availableWallets = scanObjectForWallets(
         windowObject,
         isWalletObject,
       )
+
+      evmWallets.forEach((evmWallet) => {
+        if (evmWallet.provider && evmWallet.info) {
+          availableWallets.push({
+            ...evmWallet.provider,
+            id: evmWallet.info.name,
+            name: evmWallet.info.name,
+            icon: evmWallet.info.icon,
+            version: evmWallet.info.icon,
+            on: evmWallet.provider.on,
+            off: evmWallet.provider.off,
+          })
+        }
+      })
+
       return pipe<StarknetWindowObject[]>(
         (_) => filterBy(_, options),
         (_) => sortBy(_, options.sort),
@@ -144,18 +176,36 @@ export function getStarknet(
       let wallet: StarknetWindowObject
       if (isVirtualWallet(inputWallet)) {
         wallet = await resolveVirtualWallet(windowObject, inputWallet)
+      } else if (isEvmWallet(inputWallet)) {
+        // Get all detected EVM wallets
+        const evmWallets = await detectEVMSupport(windowObject)
+
+        // Find the matching wallet in the detected list
+        const selectedWallet = evmWallets.find(
+          ({ info }) => info && info.name === inputWallet.name,
+        )
+
+        if (selectedWallet && selectedWallet.provider) {
+          wallet = selectedWallet.provider
+        } else {
+          throw new Error("Failed to connect to the selected EVM wallet")
+        }
       } else if (isFullWallet(inputWallet)) {
         wallet = inputWallet
       } else {
         throw new Error("Invalid wallet object")
       }
 
-      await wallet.request({
-        type: "wallet_requestAccounts",
-        params: {
-          silent_mode: options?.silent_mode,
-        },
-      })
+      if (isEvmWallet(wallet)) {
+        await wallet.request({ method: "eth_requestAccounts" })
+      } else {
+        await wallet.request({
+          type: "wallet_requestAccounts",
+          params: {
+            silent_mode: options?.silent_mode,
+          },
+        })
+      }
 
       // check for permissions
       const permissions: Permission[] = await wallet.request({
@@ -165,6 +215,7 @@ export function getStarknet(
         throw new Error("Failed to connect to wallet")
       }
       lastConnectedStore.set(wallet.id)
+
       return wallet
     },
     disconnect: async ({ clearLastWallet } = {}) => {
