@@ -4,6 +4,7 @@ import {
   ArgentXMock,
   BraavosMock,
   FordefiMock,
+  GateMock,
   KeplrMock,
   OKXMock,
   UnknownWalletAMock,
@@ -150,12 +151,13 @@ describe("getDiscoveryWallets()", () => {
   it("should return all discovery wallets", async () => {
     const sn = getWallet({})
     const discoveryWallets = await sn.getDiscoveryWallets()
-    expect(discoveryWallets.length).toBe(7)
+    expect(discoveryWallets.length).toBe(8)
     expect(discoveryWallets.map((w) => w.id)).contains(ArgentXMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(BraavosMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(OKXMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(KeplrMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(FordefiMock.id)
     expect(discoveryWallets.map((w) => w.id)).contains(XverseMock.id)
+    expect(discoveryWallets.map((w) => w.id)).contains(GateMock.id)
   })
 })
