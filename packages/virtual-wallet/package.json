@@ -1,0 +1,63 @@
+{
+  "name": "@starknet-io/get-starknet-virtual-wallet",
+  "version": "6.0.2",
+  "keywords": [
+    "starknet",
+    "starkware",
+    "l2",
+    "zk",
+    "rollup",
+    "wallet",
+    "dapp"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/starknet-io/get-starknet.git",
+    "directory": "packages/virtual-wallet"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    },
+    "./metamask": {
+      "types": "./dist/metamask.d.mts",
+      "import": "./dist/metamask.mjs",
+      "require": "./dist/metamask.cjs",
+      "default": "./dist/metamask.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsdown",
+    "lint:check": "biome check .",
+    "lint": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "dependencies": {
+    "@module-federation/runtime": "^0.12.0",
+    "@starknet-io/get-starknet-wallet-standard": "workspace:*",
+    "@starknet-io/types-js": "catalog:",
+    "@wallet-standard/base": "^1.1.1",
+    "@wallet-standard/features": "^1.1.1",
+    "async-mutex": "^0.5.0",
+    "viem": "^2.52.2"
+  }
+}

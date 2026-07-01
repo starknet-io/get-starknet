@@ -1,0 +1,86 @@
+# Wallet integration
+
+This guide explains how to integrate your wallet with Get Starknet.
+
+## Injected wallets
+
+After you injected your wallet into the page, you should announce it to all Wallet Standard subscribers. This is done by calling the `registerWallet` function from the `@wallet-standard/base` package.
+
+This step is not necessary but it is recommended to ensure your wallet is properly detected by the application.
+
+This example assumes you are using the `StarknetInjectedWallet` adapter provided by Get Starknet, but if your wallet implements Wallet Standard natively you can simply call `registerWallet` with your wallet.
+
+```ts
+import { registerWallet } from "@wallet-standard/base"
+
+const wallet = new StarknetInjectedWallet(window.starknet_myWallet)
+
+registerWallet(wallet)
+```
+
+## Other wallets
+
+You can integrate any type of wallet with Get Starknet.
+
+You need to implement the following Wallet Standard features:
+
+ 1. `StandardConnect`:  this feature provides a `connect` method to connect the wallet to the application.
+ 2. `StandardDisconnect`: this feature provides a `disconnect` method to disconnect the wallet from the application.
+ 3. `StandardEvents`: this feature provides an `on` method to listen to events emitted by the wallet.
+ 4. `StarknetWalletRequest`: this feature provides a `request` method to [send RPC requests to the wallet](https://github.com/starkware-libs/starknet-specs/blob/master/wallet-api/wallet_rpc.json).
+
+After that, you can publish the package to NPM. Developers that want to integrate your wallet with their application can install it and register it with Get Starknet.
+
+### Registering a UI
+
+If your wallet requires a different type of login flow, you can provide a custom UI component. This component is shown when the user clicks on your wallet's icon in the modal.
+
+**What your package should export**
+
+1. A React provider component to store the wallet's state.
+2. A React component to render the wallet's UI.
+
+**How developers can integrate your wallet**
+
+Our recommended approach is to have the application developer wrap the Get Starknet provider with your wallet's provider component. This ensures that the wallet's state is accessible to Get Starknet.
+
+After that, they can register your wallet's custom UI component with the `WalletConnectModal` component.
+
+```tsx
+
+import {
+  GetStarknetProvider,
+  WalletConnectModal,
+  StarknetWalletApi,
+} from "@starknet-io/get-starknet-ui";
+import {
+  YourWalletProvider,
+  useYourWallet,
+} from "@your-wallet/react";
+
+export default function App() {
+  return (
+    <YourWalletProvider>
+      <AppInner />
+    </YourWalletProvider>
+  )
+}
+
+function AppInner() {
+  // Access the wallet's object to register it with Get Starknet
+  const { wallet: yourWallet } = useYourWallet();
+
+  return (
+    <GetStarknetProvider extraWallets={[yourWallet]}>
+      <WalletConnectModal
+        walletUi={{
+          [yourWallet.features[StarknetWalletApi].id]: {
+            viewPanel: (wallet) => <YourWalletConnectUi key={wallet.name} />,
+          },
+        }}
+      />
+      {/* ... */}
+    </GetStarknetProvider>
+  )
+}
+```

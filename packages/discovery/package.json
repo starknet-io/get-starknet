@@ -1,0 +1,56 @@
+{
+  "name": "@starknet-io/get-starknet-discovery",
+  "version": "6.0.2",
+  "keywords": [
+    "starknet",
+    "starkware",
+    "l2",
+    "zk",
+    "rollup",
+    "wallet",
+    "dapp"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/starknet-io/get-starknet.git",
+    "directory": "packages/discovery"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsdown",
+    "lint:check": "biome check .",
+    "lint": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@wallet-standard/core": "^1.1.2",
+    "happy-dom": "^20.10.2",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "dependencies": {
+    "@starknet-io/get-starknet-virtual-wallet": "workspace:^",
+    "@starknet-io/get-starknet-wallet-standard": "workspace:^",
+    "@starknet-io/types-js": "catalog:",
+    "@wallet-standard/base": "^1.1.1"
+  }
+}

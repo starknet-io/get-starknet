@@ -1,0 +1,66 @@
+import { Callout } from "vocs/components"
+
+# Wallet Standard
+
+Get Starknet provides a Wallet Standard compatible implementation for Starknet.
+
+## TL;DR
+
+Access the currently connected wallet with the `useConnect` hook.
+
+This (possibily undefined) value is a [`WalletWithStarknetFeatures`](/core/StarknetWalletRequestFeature) object. This object exposes a list of accounts and the Starknet wallet API.
+
+<Callout type="info">
+    Applications should use the hooks provided by Starknet React to interact with the wallet. These hooks simplify working with the `WalletWithStarknetFeatures` object.
+</Callout>
+
+The Starknet wallet API is an object with the following properties:
+
+ - `walletVersion`: the version of the wallet.
+ - `request`: a function to send a request to the wallet using the wallet's RPC API.
+
+```tsx [my-component.tsx]
+import { useConnect, StarknetWalletApi } from "@starknet-io/get-starknet-ui";
+
+export function MyComponent() {
+  const { connected } = useConnect();
+
+  if (!connected) {
+    return (
+      <div>
+        <p>Please connect your wallet</p>
+      </div>
+    )
+  }
+
+  const address = connected.accounts[0].address;
+  const version = connected.features[StarknetWalletApi].walletVersion;
+
+  return (
+    <div>
+      <p>{address}</p>
+      <p>{version}</p>
+    </div>
+  )
+}
+````
+
+## API overview
+
+Wallet Standard provides a generic "Web3 Wallet" API that supports multiple chains and wallets.
+
+This wallet API has two properties:
+
+ - `accounts`: an array of `StarknetWalletAccount` objects.
+ - `features`: an object to expose the wallet's features. Features represent capabilities such as interacting with a specific chain, or emitting events.
+
+The `StarknetWalletAccount` object provides the wallet's address together with additional (optional) properties such as the raw public key and the supported chains.
+
+## Starknet Features
+
+Get Starknet defines the Wallet Standard Starknet API (identifier: `starknet:walletApi`):
+
+ - `walletVersion`: the version of the wallet.
+ - `request`: a function to send a request to the wallet using the wallet's RPC API.
+
+These two functions are used to interact with the wallet using the wallet's RPC API.
