@@ -1,5 +1,14 @@
 # @starknet-io/get-starknet-discovery
 
+## 6.0.2
+
+### Patch Changes
+
+- f785d33: Update @starknet-io/types-js to 0.10.3
+- Updated dependencies [f785d33]
+  - @starknet-io/get-starknet-wallet-standard@6.0.2
+  - @starknet-io/get-starknet-virtual-wallet@6.0.2
+
 ## 6.0.1
 
 ### Patch Changes

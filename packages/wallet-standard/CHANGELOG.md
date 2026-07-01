@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-wallet-standard
 
+## 6.0.2
+
+### Patch Changes
+
+- f785d33: Update @starknet-io/types-js to 0.10.3
+
 ## 6.0.1
 
 ### Patch Changes
