@@ -57,7 +57,6 @@
     "@starknet-io/types-js": "catalog:",
     "@wallet-standard/base": "^1.1.1",
     "@wallet-standard/features": "^1.1.1",
-    "async-mutex": "^0.5.0",
-    "viem": "^2.52.2"
+    "async-mutex": "^0.5.0"
   }
 }
