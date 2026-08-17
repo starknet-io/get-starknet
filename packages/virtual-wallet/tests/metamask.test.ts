@@ -5,14 +5,13 @@ import {
   StandardDisconnect,
   StandardEvents,
 } from "@wallet-standard/features";
-import type { EIP1193Provider } from "viem";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   type MetaMaskProvider,
   MetaMaskVirtualWallet,
   metaMaskVirtualWallet,
 } from "../src/metamask";
-import type { EIP6963ProviderInfo } from "../src/types";
+import type { EIP1193Provider, EIP6963ProviderInfo } from "../src/types";
 
 const createMockStarknetWindowObject = (): StarknetWindowObject => {
   return {
