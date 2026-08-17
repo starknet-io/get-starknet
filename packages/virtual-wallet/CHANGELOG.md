@@ -1,5 +1,14 @@
 # @starknet-io/get-starknet-virtual-wallet
 
+## 6.0.5
+
+### Patch Changes
+
+- 67155d9: Upgrade the Noble and Scure cryptography dependencies to their 2.x
+  releases.
+- Updated dependencies [67155d9]
+  - @starknet-io/get-starknet-wallet-standard@6.0.5
+
 ## 6.0.4
 
 ### Patch Changes
