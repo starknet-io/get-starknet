@@ -1,5 +1,3 @@
-import { generateUID } from "./utils"
-
 export interface IStorageWrapper {
   set(value: string | null | undefined): boolean
   get(): string | null | undefined
@@ -8,12 +6,11 @@ export interface IStorageWrapper {
 
 export class LocalStorageWrapper implements IStorageWrapper {
   #initialized = false
-  #key: string | undefined = undefined
-  #prefix: string
+  #key: string
   value: string | null | undefined = undefined
 
   constructor(key: string) {
-    this.#prefix = key
+    this.#key = key
 
     this.#init()
   }
@@ -23,19 +20,17 @@ export class LocalStorageWrapper implements IStorageWrapper {
       return false
     }
 
-    this.delete() // clear current key
-
     this.value = value
     if (value) {
-      this.#key = `${this.#prefix}-${generateUID()}`
       localStorage.setItem(this.#key, value)
+    } else {
+      localStorage.removeItem(this.#key)
     }
 
     return true
   }
 
   get() {
-    this.#validateValue()
     return this.value
   }
 
@@ -45,31 +40,38 @@ export class LocalStorageWrapper implements IStorageWrapper {
     }
 
     this.value = null
-    if (this.#key) localStorage.removeItem(this.#key)
+    localStorage.removeItem(this.#key)
 
     return true
-  }
-
-  #validateValue() {
-    if (this.value) {
-      this.set(this.value)
-    }
   }
 
   #init() {
     try {
       if (!this.#initialized && typeof window !== "undefined") {
-        // init with prev key/value
-        this.#key = Object.keys(localStorage).find((sk) =>
-          sk.startsWith(this.#prefix),
-        )
-
-        // set initialized as soon as we managed to extract data
-        // from localStorage, so the `set` call below won't result
-        // in a endless-recursive loop
+        // set initialized before touching storage so a re-entrant call
+        // cannot recurse back into #init
         this.#initialized = true
-        if (this.#key) {
-          this.set(localStorage.getItem(this.#key))
+
+        // Older versions stored the value under a rotating `${key}-<uid>`
+        // key and rewrote it on every read, which could leave several
+        // duplicate entries and make the "last connected wallet" lookup
+        // non-deterministic. Migrate any such legacy keys into the single
+        // stable key and drop the duplicates.
+        const legacyKeys: string[] = []
+        for (let i = 0; i < localStorage.length; i++) {
+          const sk = localStorage.key(i)
+          if (sk && sk !== this.#key && sk.startsWith(`${this.#key}-`)) {
+            legacyKeys.push(sk)
+          }
+        }
+        const existing =
+          localStorage.getItem(this.#key) ??
+          (legacyKeys.length > 0 ? localStorage.getItem(legacyKeys[0]) : null)
+        legacyKeys.forEach((sk) => localStorage.removeItem(sk))
+
+        if (existing != null) {
+          this.value = existing
+          localStorage.setItem(this.#key, existing)
         }
       }
     } catch (err) {
