@@ -79,7 +79,10 @@ async function waitForMetaMaskProvider(
     return null
   }
 
-  provider = await waitForMetaMaskProvider({ timeout, retries: retries - 1 })
+  provider = await waitForMetaMaskProvider(windowObject, {
+    timeout,
+    retries: retries - 1,
+  })
   return provider
 }
 
