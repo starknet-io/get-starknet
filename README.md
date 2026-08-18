@@ -45,16 +45,22 @@ implementing your very own UI. This is possible due to a split into a `core` and
 custom UI, you can use the `core` package.
 
 ```tsx
-import {
-  disconnect,
-  discoverVirtualWallets,
-  enable,
-  getAuthorizedWallets,
+import { getStarknet } from "@starknet-io/get-starknet-core"
+
+// `@starknet-io/get-starknet-core` exports the `getStarknet()` factory (and a
+// default, ready-to-use instance). The methods below live on the object it
+// returns, they are not named exports of the package:
+const {
   getAvailableWallets,
+  getAuthorizedWallets,
   getDiscoveryWallets,
   getLastConnectedWallet,
-} from "@starknet-io/get-starknet-core"
+  discoverVirtualWallets,
+  enable,
+  disconnect,
+} = getStarknet()
 
+// The returned object implements GetStarknetResult:
 interface GetStarknetResult {
   // Returns all wallets available in the window object
   getAvailableWallets: (
