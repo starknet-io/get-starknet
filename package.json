@@ -26,5 +26,9 @@
     "prettier": "^2.7.1",
     "prettier-plugin-packagejson": "^2.2.18",
     "prettier-plugin-svelte": "^2.7.0"
+  },
+  "packageManager": "pnpm@8.15.9",
+  "engines": {
+    "node": ">=22"
   }
 }
