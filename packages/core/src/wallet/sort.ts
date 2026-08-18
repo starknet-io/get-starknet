@@ -13,7 +13,12 @@ export const sortBy = <T extends StarknetWindowObject | WalletProvider>(
     // sort by client-specific order
     wallets.sort((a, b) => sort.indexOf(a.id) - sort.indexOf(b.id))
 
-    const sortScope = wallets.length - sort.length
+    // count only the wallets that are actually installed and named in `sort`;
+    // `sort` may list ids the user does not have, and those must not shift the
+    // split between the sorted and shuffled groups
+    const sortScope =
+      wallets.length -
+      wallets.filter((wallet) => sort.includes(wallet.id)).length
     return [
       ...wallets.slice(sortScope),
       // shuffle wallets which are outside `sort` scope
