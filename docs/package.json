@@ -1,6 +1,6 @@
 {
   "name": "get-starknet-docs",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "type": "module",
   "private": true,
   "scripts": {

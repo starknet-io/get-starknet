@@ -13,6 +13,33 @@
   - @starknet-io/get-starknet-virtual-wallet@6.1.0
   - @starknet-io/get-starknet-wallet-standard@6.1.0
 
+## 6.0.6
+
+### Patch Changes
+
+- b5e9341: Update @starknet-io/types-js to 0.10.4
+- Updated dependencies [b5e9341]
+  - @starknet-io/get-starknet-wallet-standard@6.0.6
+  - @starknet-io/get-starknet-virtual-wallet@6.0.6
+
+## 6.0.4
+
+### Patch Changes
+
+- ac7e6cc: Update @starknet-io/types-js to 0.10.4-beta.2
+- Updated dependencies [ac7e6cc]
+  - @starknet-io/get-starknet-wallet-standard@6.0.4
+  - @starknet-io/get-starknet-virtual-wallet@6.0.4
+
+## 6.0.3
+
+### Patch Changes
+
+- 6c7d374: Update @starknet-io/types-js to 0.10.4-beta.1
+- Updated dependencies [6c7d374]
+  - @starknet-io/get-starknet-wallet-standard@6.0.3
+  - @starknet-io/get-starknet-virtual-wallet@6.0.3
+
 ## 6.0.2
 
 ### Patch Changes

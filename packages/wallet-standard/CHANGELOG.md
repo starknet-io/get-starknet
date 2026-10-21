@@ -7,6 +7,31 @@
 - 97bfc24: Promote the v6 line to the stable `latest` tag (6.1.0 GA). Includes
   the @starknet-io/types-js 0.10.3 upgrade.
 
+## 6.0.6
+
+### Patch Changes
+
+- b5e9341: Update @starknet-io/types-js to 0.10.4
+
+## 6.0.5
+
+### Patch Changes
+
+- 67155d9: Upgrade the Noble and Scure cryptography dependencies to their 2.x
+  releases.
+
+## 6.0.4
+
+### Patch Changes
+
+- ac7e6cc: Update @starknet-io/types-js to 0.10.4-beta.2
+
+## 6.0.3
+
+### Patch Changes
+
+- 6c7d374: Update @starknet-io/types-js to 0.10.4-beta.1
+
 ## 6.0.2
 
 ### Patch Changes

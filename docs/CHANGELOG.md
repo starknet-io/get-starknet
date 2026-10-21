@@ -1,5 +1,35 @@
 # get-starknet-docs
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies [0850d05]
+  - @starknet-io/get-starknet-wallets@6.0.7
+
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies [b5e9341]
+  - @starknet-io/get-starknet-wallet-standard@6.0.6
+  - @starknet-io/get-starknet-discovery@6.0.6
+
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [67155d9]
+  - @starknet-io/get-starknet-wallet-standard@6.0.5
+
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies [ac7e6cc]
+  - @starknet-io/get-starknet-wallet-standard@6.0.4
+  - @starknet-io/get-starknet-discovery@6.0.4
+
 ## 0.0.6
 
 ### Patch Changes
@@ -10,6 +40,9 @@
   - @starknet-io/get-starknet-ui@6.1.0
   - @starknet-io/get-starknet-wallet-standard@6.1.0
   - @starknet-io/get-starknet-wallets@6.1.0
+- Updated dependencies [6c7d374]
+  - @starknet-io/get-starknet-wallet-standard@6.0.3
+  - @starknet-io/get-starknet-discovery@6.0.3
 
 ## 0.0.5
 

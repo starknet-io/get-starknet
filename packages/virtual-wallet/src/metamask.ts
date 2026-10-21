@@ -29,9 +29,7 @@ import {
   type StandardEventsOnMethod,
 } from "@wallet-standard/features";
 import { Mutex } from "async-mutex";
-import type { EIP1193Provider } from "viem";
-
-import type { EIP6963ProviderInfo } from "./types";
+import type { EIP1193Provider, EIP6963ProviderInfo } from "./types";
 
 export function metaMaskVirtualWallet(
   info: EIP6963ProviderInfo,
