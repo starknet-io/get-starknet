@@ -1,5 +1,16 @@
 # @starknet-io/get-starknet-virtual-wallet
 
+## 6.1.1
+
+### Patch Changes
+
+- 20adf2b: Upgrade the Noble and Scure cryptography dependencies to their 2.x
+  releases.
+- 20adf2b: Update @starknet-io/types-js to 0.10.4
+- Updated dependencies [20adf2b]
+- Updated dependencies [20adf2b]
+  - @starknet-io/get-starknet-wallet-standard@6.1.1
+
 ## 6.1.0
 
 ### Minor Changes
