@@ -11,7 +11,6 @@
     "format": "pnpm run -r format",
     "format:check": "pnpm run -r format:check",
     "publish": "pnpm publish -r --no-git-checks --access public && changeset tag",
-    "publish:next": "pnpm publish -r --no-git-checks --access public --tag next && changeset tag",
     "test": "CI=true pnpm run -r test",
     "version": "changeset version && pnpm install --lockfile-only"
   },

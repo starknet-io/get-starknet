@@ -88,3 +88,16 @@ For running tests:
 ```bash
 pnpm test
 ```
+
+### Releasing
+
+`master` is the only long-lived branch. Open pull requests against `master`
+and add a changeset for any change to a published package:
+
+```bash
+pnpm changeset
+```
+
+When changesets land on `master`, the release workflow opens a "Master branch
+version bump" pull request. Merging it publishes the new versions to npm under
+`latest`.
