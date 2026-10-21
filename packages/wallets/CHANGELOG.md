@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-wallets
 
+## 6.1.1
+
+### Patch Changes
+
+- 20adf2b: Add Bramble to the list of discoverable wallets.
+
 ## 6.1.0
 
 ### Minor Changes
