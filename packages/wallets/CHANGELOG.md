@@ -1,5 +1,18 @@
 # @starknet-io/get-starknet-wallets
 
+## 6.1.1
+
+### Patch Changes
+
+- 20adf2b: Add Bramble to the list of discoverable wallets.
+
+## 6.1.0
+
+### Minor Changes
+
+- 97bfc24: Promote the v6 line to the stable `latest` tag (6.1.0 GA). Includes
+  the @starknet-io/types-js 0.10.3 upgrade.
+
 ## 6.0.7
 
 ### Patch Changes
