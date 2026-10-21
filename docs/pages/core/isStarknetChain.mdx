@@ -1,0 +1,23 @@
+# isStarknetChain
+
+Checks whether the given string represents a Starknet chain ID.
+
+If you need the chain ID, you can use the [`getStarknetChainId` function](/core/getStarknetChainId).
+
+## Usage
+
+```ts
+import { isStarknetChain } from "@starknet-io/get-starknet-core";
+
+if (isStarknetChain("starknet:0x12345")) {
+  console.log("It's a Starknet chain!");
+}
+````
+
+## Arguments
+
+ * `chain: string` - The chain ID to check.
+
+## Returns
+
+ * `chain is StarknetChain` - Whether the given string represents a Starknet chain ID.

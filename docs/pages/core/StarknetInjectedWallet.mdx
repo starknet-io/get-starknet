@@ -1,0 +1,19 @@
+# StarknetInjectedWallet
+
+Creates a Starknet wallet from the object injected in the browser.
+
+## Usage
+
+```ts
+import { StarknetInjectedWallet } from "@starknet-io/get-starknet-core";
+
+const wallet = new StarknetInjectedWallet(window.starknet_myWallet);
+```
+
+## Arguments
+
+ * `injected: StarknetWindowObject` - the object injected in the browser.
+
+## Returns
+
+ * `StarknetInjectedWallet` - the wallet instance. Implements [`WalletWithStarknetFeatures`](/core/StarknetWalletRequestFeature).

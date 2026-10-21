@@ -1,0 +1,27 @@
+# EIP1193Adapter
+
+This function type is used to create a Starknet wallet from a viem's EIP1193Provider object.
+
+## Usage
+
+```ts
+import {
+  EIP1193Adapter
+} from "@starknet-io/get-starknet-core/virtual-wallet";
+```
+
+## Definition
+
+```ts
+import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";
+import type { EIP1193Provider } from "viem";
+
+type EIP6963ProviderInfo = {
+  rdns: string;
+};
+
+type EIP1193Adapter = (
+  info: EIP6963ProviderInfo,
+  provider: EIP1193Provider,
+) => WalletWithStarknetFeatures | null;
+````

@@ -1,6 +1,6 @@
 {
   "name": "@starknet-io/get-starknet-core",
-  "version": "4.0.8",
+  "version": "6.0.1",
   "keywords": [
     "starknet",
     "starkware",
@@ -10,41 +10,55 @@
     "wallet",
     "dapp"
   ],
+  "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/starknet-io/get-starknet.git",
     "directory": "packages/core"
   },
-  "license": "MIT",
-  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "import": "./dist/core.js",
-      "require": "./dist/core.umd.cjs"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    },
+    "./wallets": {
+      "types": "./dist/wallets.d.mts",
+      "import": "./dist/wallets.mjs",
+      "require": "./dist/wallets.cjs",
+      "default": "./dist/wallets.mjs"
+    },
+    "./virtual-wallet": {
+      "types": "./dist/virtual-wallet.d.mts",
+      "import": "./dist/virtual-wallet.mjs",
+      "require": "./dist/virtual-wallet.cjs",
+      "default": "./dist/virtual-wallet.mjs"
     }
   },
-  "main": "./dist/core.umd.cjs",
-  "module": "./dist/core.js",
-  "types": "./dist/core.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
-    "test": "vitest"
-  },
-  "dependencies": {
-    "@module-federation/runtime": "^0.1.2",
-    "@starknet-io/types-js": "^0.7.7",
-    "async-mutex": "^0.5.0"
+    "typecheck": "tsc --noEmit",
+    "build": "tsdown",
+    "lint:check": "biome check .",
+    "lint": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
   },
   "devDependencies": {
-    "c8": "^7.12.0",
-    "happy-dom": "^6.0.4",
-    "typescript": "^4.6.4",
-    "vite": "^3.0.0",
-    "vite-plugin-dts": "^1.4.0",
-    "vitest": "^0.19.1"
+    "typescript": "catalog:",
+    "tsdown": "catalog:"
+  },
+  "dependencies": {
+    "@starknet-io/get-starknet-discovery": "workspace:^",
+    "@starknet-io/get-starknet-virtual-wallet": "workspace:^",
+    "@starknet-io/get-starknet-wallet-standard": "workspace:^",
+    "@starknet-io/get-starknet-wallets": "workspace:^"
   }
 }

@@ -1,0 +1,125 @@
+@import "tw-animate-css";
+
+@layer theme, utilities;
+
+@custom-variant dark (&:is(.get-starknet-ui .dark *, .dark *));
+
+/* We only bundle the styles which we use, nothing else! */
+/* https://tailwindcss.com/docs/preflight#disabling-preflight */
+@import "tailwindcss/theme.css" layer(theme) prefix(gs);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(gs);
+
+.get-starknet-ui {
+  --gs-radius: 0.625rem;
+  --gs-background: oklch(1 0 0);
+  --gs-foreground: oklch(0.145 0 0);
+  --gs-card: oklch(1 0 0);
+  --gs-card-foreground: oklch(0.145 0 0);
+  --gs-popover: oklch(1 0 0);
+  --gs-popover-foreground: oklch(0.145 0 0);
+  --gs-primary: oklch(0.205 0 0);
+  --gs-primary-foreground: oklch(0.985 0 0);
+  --gs-secondary: oklch(0.97 0 0);
+  --gs-secondary-foreground: oklch(0.205 0 0);
+  --gs-muted: oklch(0.97 0 0);
+  --gs-muted-foreground: oklch(0.556 0 0);
+  --gs-accent: oklch(0.97 0 0);
+  --gs-accent-foreground: oklch(0.205 0 0);
+  --gs-destructive: oklch(0.577 0.245 27.325);
+  --gs-border: oklch(0.922 0 0);
+  --gs-input: oklch(0.922 0 0);
+  --gs-ring: oklch(0.708 0 0);
+  --gs-chart-1: oklch(0.646 0.222 41.116);
+  --gs-chart-2: oklch(0.6 0.118 184.704);
+  --gs-chart-3: oklch(0.398 0.07 227.392);
+  --gs-chart-4: oklch(0.828 0.189 84.429);
+  --gs-chart-5: oklch(0.769 0.188 70.08);
+  --gs-sidebar: oklch(0.985 0 0);
+  --gs-sidebar-foreground: oklch(0.145 0 0);
+  --gs-sidebar-primary: oklch(0.205 0 0);
+  --gs-sidebar-primary-foreground: oklch(0.985 0 0);
+  --gs-sidebar-accent: oklch(0.97 0 0);
+  --gs-sidebar-accent-foreground: oklch(0.205 0 0);
+  --gs-sidebar-border: oklch(0.922 0 0);
+  --gs-sidebar-ring: oklch(0.708 0 0);
+}
+
+:root[class~="dark"] .get-starknet-ui,
+.get-starknet-ui .dark {
+  --gs-background: oklch(0.145 0 0);
+  --gs-foreground: oklch(0.985 0 0);
+  --gs-card: oklch(0.205 0 0);
+  --gs-card-foreground: oklch(0.985 0 0);
+  --gs-popover: oklch(0.205 0 0);
+  --gs-popover-foreground: oklch(0.985 0 0);
+  --gs-primary: oklch(0.922 0 0);
+  --gs-primary-foreground: oklch(0.205 0 0);
+  --gs-secondary: oklch(0.269 0 0);
+  --gs-secondary-foreground: oklch(0.985 0 0);
+  --gs-muted: oklch(0.269 0 0);
+  --gs-muted-foreground: oklch(0.708 0 0);
+  --gs-accent: oklch(0.269 0 0);
+  --gs-accent-foreground: oklch(0.985 0 0);
+  --gs-destructive: oklch(0.704 0.191 22.216);
+  --gs-border: oklch(1 0 0 / 10%);
+  --gs-input: oklch(1 0 0 / 15%);
+  --gs-ring: oklch(0.556 0 0);
+  --gs-chart-1: oklch(0.488 0.243 264.376);
+  --gs-chart-2: oklch(0.696 0.17 162.48);
+  --gs-chart-3: oklch(0.769 0.188 70.08);
+  --gs-chart-4: oklch(0.627 0.265 303.9);
+  --gs-chart-5: oklch(0.645 0.246 16.439);
+  --gs-sidebar: oklch(0.205 0 0);
+  --gs-sidebar-foreground: oklch(0.985 0 0);
+  --gs-sidebar-primary: oklch(0.488 0.243 264.376);
+  --gs-sidebar-primary-foreground: oklch(0.985 0 0);
+  --gs-sidebar-accent: oklch(0.269 0 0);
+  --gs-sidebar-accent-foreground: oklch(0.985 0 0);
+  --gs-sidebar-border: oklch(1 0 0 / 10%);
+  --gs-sidebar-ring: oklch(0.556 0 0);
+}
+
+@utility styled-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gs-muted-foreground) transparent;
+  scrollbar-gutter: stable;
+}
+
+@theme inline {
+  --color-background: var(--gs-background);
+  --color-foreground: var(--gs-foreground);
+  --color-card: var(--gs-card);
+  --color-card-foreground: var(--gs-card-foreground);
+  --color-popover: var(--gs-popover);
+  --color-popover-foreground: var(--gs-popover-foreground);
+  --color-primary: var(--gs-primary);
+  --color-primary-foreground: var(--gs-primary-foreground);
+  --color-secondary: var(--gs-secondary);
+  --color-secondary-foreground: var(--gs-secondary-foreground);
+  --color-muted: var(--gs-muted);
+  --color-muted-foreground: var(--gs-muted-foreground);
+  --color-accent: var(--gs-accent);
+  --color-accent-foreground: var(--gs-accent-foreground);
+  --color-destructive: var(--gs-destructive);
+  --color-destructive-foreground: var(--gs-destructive-foreground);
+  --color-border: var(--gs-border);
+  --color-input: var(--gs-input);
+  --color-ring: var(--gs-ring);
+  --color-chart-1: var(--gs-chart-1);
+  --color-chart-2: var(--gs-chart-2);
+  --color-chart-3: var(--gs-chart-3);
+  --color-chart-4: var(--gs-chart-4);
+  --color-chart-5: var(--gs-chart-5);
+  --radius-sm: calc(var(--gs-radius) - 4px);
+  --radius-md: calc(var(--gs-radius) - 2px);
+  --radius-lg: var(--gs-radius);
+  --radius-xl: calc(var(--gs-radius) + 4px);
+  --color-sidebar: var(--gs-sidebar);
+  --color-sidebar-foreground: var(--gs-sidebar-foreground);
+  --color-sidebar-primary: var(--gs-sidebar-primary);
+  --color-sidebar-primary-foreground: var(--gs-sidebar-primary-foreground);
+  --color-sidebar-accent: var(--gs-sidebar-accent);
+  --color-sidebar-accent-foreground: var(--gs-sidebar-accent-foreground);
+  --color-sidebar-border: var(--gs-sidebar-border);
+  --color-sidebar-ring: var(--gs-sidebar-ring);
+}

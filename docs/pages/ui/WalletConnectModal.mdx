@@ -1,0 +1,44 @@
+# WalletConnectModal
+
+This component renders a "connect wallet" button that opens a modal for connecting to a wallet.
+
+
+## Usage
+
+```tsx
+import { WalletConnectModal } from "@starknet-io/get-starknet-ui";
+
+export function MyComponent() {
+  return (
+    <div>
+      <WalletConnectModal />
+    </div>
+  );
+}
+```
+
+## Arguments
+
+ * `walletUi?: WalletUiMap` - a map between wallet id and react component to render a custom UI for the specified wallet type.
+ * `buttonClassName?: string` - extra class name for the button.
+ * `dialogContentClassName?: string` - extra class name for the dialog content.
+
+## Custom wallet UI
+
+You can provide a custom component to render the main screen for a specific wallet type.
+
+```tsx
+import { WalletConnectModal } from "@starknet-io/get-starknet-ui";
+
+export function MyComponent() {
+  return (
+    <div>
+      <WalletConnectModal walletUi={{
+        ["my-wallet-id"]: {
+          viewPanel: (wallet) => <MyWalletUi wallet={wallet} />
+        }
+      }} />
+    </div>
+  );
+}
+```

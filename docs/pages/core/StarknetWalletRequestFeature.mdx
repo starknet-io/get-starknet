@@ -1,0 +1,32 @@
+# StarknetWalletRequestFeature
+
+This type represents a feature to interact with the [Starknet wallet API](https://github.com/starkware-libs/starknet-specs/blob/master/wallet-api/wallet_rpc.json).
+
+Usually, you access this by indexing a `WalletWithStarknetFeatures` instance.
+
+## Usage
+
+```ts
+import { WalletWithStarknetFeatures, StarknetWalletApi } from '@get-starknet/core';
+
+async function doSomething(wallet: WalletWithStarknetFeatures) {
+  const starknetWalletApi = wallet.features[StarknetWalletApi];
+  // call the starknet wallet api
+  const response = await StarknetWalletApi.request(/* .. */)
+}
+```
+
+## Definition
+
+```ts
+import type { RequestFn } from "@starknet-io/types-js";
+
+export type StarknetWalletRequestFeature = {
+  readonly [StarknetWalletApi]: {
+    readonly version: StarknetWalletApiVersion;
+    readonly request: RequestFn;
+    readonly walletVersion: string;
+    readonly id: string;
+  };
+};
+```

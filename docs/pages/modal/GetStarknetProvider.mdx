@@ -1,0 +1,25 @@
+# GetStarknetProvider
+
+This is the root provider used to track the available Starknet wallets and manage the connection state.
+
+## Usage
+
+```tsx
+import {
+  GetStarknetProvider
+} from "@starknet-io/get-starknet-modal";
+
+export function MyApp() {
+  return (
+    <GetStarknetProvider>
+      {/* Your app components */}
+    </GetStarknetProvider>
+  );
+}
+```
+
+## Arguments
+
+ * `extraWallets?: WalletWithStarknetFeatures[]` - An array of additional wallets to be included in the provider. These wallets are _added_ to the wallets injected in the browser's window.
+ * `recommendedWallets?: WalletInformation[]` - An array of wallets that are always shown, even if they are not installed.
+ * `store?: Store` - Override the store used by the provider.
