@@ -12,6 +12,39 @@
 - Updated dependencies [97bfc24]
   - @starknet-io/get-starknet-wallet-standard@6.1.0
 
+## 6.0.6
+
+### Patch Changes
+
+- b5e9341: Update @starknet-io/types-js to 0.10.4
+- Updated dependencies [b5e9341]
+  - @starknet-io/get-starknet-wallet-standard@6.0.6
+
+## 6.0.5
+
+### Patch Changes
+
+- 67155d9: Upgrade the Noble and Scure cryptography dependencies to their 2.x
+  releases.
+- Updated dependencies [67155d9]
+  - @starknet-io/get-starknet-wallet-standard@6.0.5
+
+## 6.0.4
+
+### Patch Changes
+
+- ac7e6cc: Update @starknet-io/types-js to 0.10.4-beta.2
+- Updated dependencies [ac7e6cc]
+  - @starknet-io/get-starknet-wallet-standard@6.0.4
+
+## 6.0.3
+
+### Patch Changes
+
+- 6c7d374: Update @starknet-io/types-js to 0.10.4-beta.1
+- Updated dependencies [6c7d374]
+  - @starknet-io/get-starknet-wallet-standard@6.0.3
+
 ## 6.0.2
 
 ### Patch Changes

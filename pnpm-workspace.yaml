@@ -6,7 +6,12 @@ onlyBuiltDependencies:
   - "@tailwindcss/oxide"
   - esbuild
 catalog:
-  "@starknet-io/types-js": "^0.10.3"
+  "@starknet-io/types-js": "0.10.4"
   tsdown: ^0.21.9
   typescript: ^5.9.3
-  vitest: ^3.2.6
+  vitest: ^4.1.12
+# Security fixes that sit outside the parent's semver range (docs site only):
+# katex via mermaid (^0.16), toml via vocs / remark-mdx-frontmatter (^3).
+overrides:
+  katex@<0.18.2: ^0.18.2
+  toml@<4.2.0: ^4.2.0
