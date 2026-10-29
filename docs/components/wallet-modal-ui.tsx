@@ -1,11 +1,13 @@
 "use client";
 
+import "./layer-order.css";
 import {
   GetStarknetProvider,
   StarknetWalletApi,
   useConnect,
   WalletConnectModal,
 } from "@starknet-io/get-starknet-ui";
+import { useEffect } from "react";
 import {
   useWebWallet,
   WebWalletConnectUi,
@@ -13,11 +15,40 @@ import {
 } from "./web-wallet";
 
 export default function WalletModalUiDemo() {
+  useDarkClass();
+
   return (
     <WebWalletProvider>
       <DemoComponent />
     </WebWalletProvider>
   );
+}
+
+// The UI's dark theme keys off a `dark` class on the root element, while vocs
+// only sets `color-scheme` there. Mirror the vocs theme onto the class.
+function useDarkClass() {
+  useEffect(() => {
+    const root = document.documentElement;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const sync = () => {
+      const scheme = root.style.colorScheme;
+      root.classList.toggle(
+        "dark",
+        scheme === "dark" || (scheme !== "light" && media.matches),
+      );
+    };
+
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ["style"] });
+    media.addEventListener("change", sync);
+
+    return () => {
+      observer.disconnect();
+      media.removeEventListener("change", sync);
+      root.classList.remove("dark");
+    };
+  }, []);
 }
 
 function DemoComponent() {

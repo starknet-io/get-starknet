@@ -12,6 +12,7 @@ dist
 dist-ssr
 coverage
 *.local
+.vercel
 
 # Editor directories and files
 .vscode/*
