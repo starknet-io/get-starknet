@@ -1,11 +1,12 @@
-import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vocs";
+import { defineConfig } from "vocs/config";
 
 import { sidebar } from "./sidebar";
 
 export default defineConfig({
   title: "Get Starknet",
   rootDir: ".",
+  srcDir: ".",
+  renderStrategy: "full-static",
   sidebar,
   topNav: [
     {
@@ -25,7 +26,4 @@ export default defineConfig({
       link: "/core",
     },
   ],
-  vite: {
-    plugins: [tailwindcss()],
-  },
 });

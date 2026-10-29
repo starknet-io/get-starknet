@@ -1,4 +1,6 @@
-import type { Sidebar } from "vocs";
+import type { defineConfig } from "vocs/config";
+
+type Sidebar = defineConfig.Options["sidebar"];
 
 export const sidebar = {
   "/": [

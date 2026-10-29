@@ -1,3 +1,5 @@
+"use client";
+
 import { createStore } from "@starknet-io/get-starknet-discovery";
 import type { StarknetWalletAccount } from "@starknet-io/get-starknet-wallet-standard";
 import type { WalletWithStarknetFeatures } from "@starknet-io/get-starknet-wallet-standard/features";

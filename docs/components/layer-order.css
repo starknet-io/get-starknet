@@ -1,0 +1,6 @@
+/*
+ * The get-starknet-ui stylesheet is hoisted above the vocs stylesheet and
+ * declares `utilities` first, which would push the vocs reset (`vocs_base`)
+ * after it. Declare the full layer order up front so the UI's utilities win.
+ */
+@layer properties, vocs_theme, theme, base, vocs_base, vocs_components, components, vocs_utilities, utilities;
