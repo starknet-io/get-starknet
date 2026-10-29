@@ -1,0 +1,69 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      DOCS_BASE_PATH: /get-starknet
+    steps:
+      - name: checkout code repository
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.10.0
+
+      - name: setup node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: install dependencies
+        run: pnpm install
+
+      - name: build packages and docs
+        run: pnpm build
+
+      # GitHub Pages can't rewrite URLs, so serve each page's Markdown copy
+      # (linked from llms.txt) at `<page>.md` directly. vocs also writes the
+      # links in its Markdown outputs without the base path, so add it.
+      - name: fix markdown outputs for github pages
+        working-directory: docs/dist/public
+        run: |
+          cp -R assets/md/. .
+          find . \( -name '*.md' -o -name 'llms*.txt' \) -exec sed -i "s#](/#](${DOCS_BASE_PATH}/#g" {} +
+
+      - name: upload pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/dist/public
+
+  deploy:
+    needs: build
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: deploy to github pages
+        id: deployment
+        uses: actions/deploy-pages@v5

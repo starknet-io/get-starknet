@@ -34,7 +34,7 @@
 
 ## Documentation
 
-The documentation, including demos, is available on [the official website](https://get-starknet.starknet-react.com).
+The documentation, including demos, is available on [the official website](https://starknet-io.github.io/get-starknet).
 
 ## Installation
 
