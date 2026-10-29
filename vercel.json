@@ -1,9 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm build && ls -la && ls -la docs",
-  "outputDirectory": "./docs/dist/public",
-  "rewrites": [
-    { "source": "/:path(.*)\\.md", "destination": "/assets/md/:path.md" }
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "mkdir -p dist && echo 'Moved to https://starknet-io.github.io/get-starknet/' > dist/index.html",
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "destination": "https://starknet-io.github.io/get-starknet/:path",
+      "permanent": true
+    }
   ]
 }
