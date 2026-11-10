@@ -720,7 +720,9 @@ function UnavailableWalletPreview({ wallet }: { wallet: UnavailableWallet }) {
         <div className="gs:grid gs:grid-cols-1 gs:gap-2 gs:w-full">
           {Object.entries(wallet.info.downloads).map(([store, url]) => {
             const entry = downloadEntries[store];
-            if (!entry) {
+            // `recommendedWallets` can come from the app, so never render a
+            // non-https link (e.g. `javascript:`) as a download button.
+            if (!entry || !isHttpsUrl(url)) {
               return <Fragment key={store} />;
             }
             return (
@@ -752,6 +754,14 @@ type DownloadEntry = {
   name: string;
   button: string;
 };
+
+function isHttpsUrl(url: string): boolean {
+  try {
+    return new URL(url).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
 
 const downloadEntries: Record<string, DownloadEntry> = {
   chrome: {

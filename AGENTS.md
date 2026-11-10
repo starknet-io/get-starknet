@@ -100,6 +100,24 @@ pnpm test           # Vitest, single run (sets CI=true)
    missing from the array.
 3. Add a `patch` changeset for `@starknet-io/get-starknet-wallets`.
 
+The list is shown to every dapp user as recommended wallets, and the repo has
+had malicious "wallet" PRs before. `test/wallet-safety.test.ts` rejects icons
+that are not base64 `data:image` URIs, SVG icons that are not plain UTF-8,
+that use any element outside a short allowlist of static shapes (so no
+`<script>`, `<style>`, `<foreignObject>`, `<a>` or animation), or that contain
+event handlers, external references, `style=`, `<!…>` sections or processing
+instructions, download links off the official stores, and duplicate ids or
+names. Those checks are mechanical. Before approving, a reviewer also
+confirms that:
+
+- the store listing exists and its publisher is the wallet's team;
+- the wallet supports Starknet and is not a lookalike of a listed wallet
+  (name, icon, id);
+- the PR changes only the new entry, its array slot and its changeset. Treat
+  any edit to another wallet's links or icon, to the safety test, or to its
+  `vendorStoreHosts` exceptions as a separate, high-scrutiny change;
+- the PR adds no code that runs at import time and no remote code loading.
+
 ### Bump `@starknet-io/types-js`
 
 1. Update the version in the `pnpm-workspace.yaml` catalog and run
