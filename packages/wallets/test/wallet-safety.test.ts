@@ -37,7 +37,8 @@ const iconPrefix =
 // tokens, and no listed icon needs them.
 const forbiddenSvgPatterns: readonly [string, RegExp][] = [
   ["<script>", /<(?:[^\s<>/=:"'!?]+:)?script\b/i],
-  ["event handler attribute", /\s(?:[^\s<>/=:"'!?]+:)?on[a-z]+\s*=/i],
+  // HTML parsers also start an attribute right after a quote or `/`.
+  ["event handler attribute", /[\s"'/](?:[^\s<>/=:"'!?]+:)?on[a-z]+\s*=/i],
   ["<foreignObject>", /<(?:[^\s<>/=:"'!?]+:)?foreignObject\b/i],
   [
     "<iframe>/<embed>/<object>",
@@ -46,7 +47,7 @@ const forbiddenSvgPatterns: readonly [string, RegExp][] = [
   ["<!…> (DOCTYPE, ENTITY, CDATA, comment)", /<!/],
   ["processing instruction other than <?xml …?>", /<\?(?!xml\s)/i],
   ["<style> element", /<(?:[^\s<>/=:"'!?]+:)?style\b/i],
-  ["style attribute", /\s(?:[^\s<>/=:"'!?]+:)?style\s*=/i],
+  ["style attribute", /[\s"'/](?:[^\s<>/=:"'!?]+:)?style\s*=/i],
   ["javascript: URL", /javascript:/i],
   ["CSS @import", /@import/i],
   // href may only be an in-document fragment or an embedded image.
@@ -195,6 +196,9 @@ describe("SVG safety scan", () => {
       '<é:script xmlns:é="http://www.w3.org/2000/svg">alert(1)</é:script>',
     ],
     ["non-ASCII prefixed handler", '<rect é:onload="alert(1)"/>'],
+    ["handler without leading space", '<rect x="1"onload="alert(1)"/>'],
+    ["handler after slash", "<rect/onload=alert(1)>"],
+    ["style without leading space", "<rect x='1'style=\"fill:red\"/>"],
     [
       "<animate> rewriting href",
       '<use href="#a"><animate attributeName="href" to="https://evil.example/s.svg#a"/></use>',
