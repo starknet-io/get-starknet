@@ -1,5 +1,12 @@
 # get-starknet-docs
 
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies [679b8a4]
+  - @starknet-io/get-starknet-ui@6.1.3
+
 ## 0.0.12
 
 ### Patch Changes

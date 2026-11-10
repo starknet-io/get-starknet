@@ -1,5 +1,13 @@
 # @starknet-io/get-starknet-ui
 
+## 6.1.3
+
+### Patch Changes
+
+- 679b8a4: Only render wallet download links that use `https:`, so a
+  `recommendedWallets` entry can't turn a download button into a `javascript:`
+  link.
+
 ## 6.1.0
 
 ### Minor Changes
