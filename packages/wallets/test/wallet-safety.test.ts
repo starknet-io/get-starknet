@@ -27,21 +27,84 @@ const iconPrefix =
 
 // Markup that can run script, load remote content or expand entities when an
 // SVG is rendered inline (it is safe in <img>, but consumers may inline it).
+// Element and attribute names may carry any namespace prefix (`<s:script>`).
 const forbiddenSvgPatterns: readonly [string, RegExp][] = [
-  ["<script>", /<script/i],
-  ["event handler attribute", /\son[a-z]+\s*=/i],
-  ["<foreignObject>", /<foreignObject/i],
-  ["<iframe>/<embed>/<object>", /<(iframe|embed|object)\b/i],
+  ["<script>", /<(?:[\w.-]+:)?script\b/i],
+  ["event handler attribute", /\s(?:[\w.-]+:)?on[a-z]+\s*=/i],
+  ["<foreignObject>", /<(?:[\w.-]+:)?foreignObject\b/i],
+  ["<iframe>/<embed>/<object>", /<(?:[\w.-]+:)?(?:iframe|embed|object)\b/i],
   ["DOCTYPE/ENTITY", /<!(DOCTYPE|ENTITY)/i],
   ["javascript: URL", /javascript:/i],
   ["CSS @import", /@import/i],
-  // href/xlink:href may only be an in-document fragment or an embedded image.
+  // href may only be an in-document fragment or an embedded image.
   [
     "external href",
-    /(?:xlink:)?href\s*=\s*["'](?!#|data:image\/(?:png|jpeg|webp|gif);)/i,
+    /(?:[\w.-]+:)?href\s*=\s*["'](?!\s*(?:#|data:image\/(?:png|jpeg|webp|gif);))/i,
   ],
-  ["external url()", /url\(\s*["']?(?!#|data:image\/)/i],
+  // The whole allowed prefix sits in the lookahead so `url('#id')` and
+  // `url( #id)` are accepted without backtracking past the quote.
+  ["external url()", /url\((?!\s*["']?\s*(?:#|data:image\/))/i],
 ];
+
+// Expand XML character references and predefined entities before scanning,
+// so `u&#114;l(...)` or `&#x3C;script` can't slip past the raw-text checks.
+function decodeXmlReferences(svg: string): string {
+  const named: Record<string, string> = {
+    amp: "&",
+    lt: "<",
+    gt: ">",
+    quot: '"',
+    apos: "'",
+  };
+  return svg.replace(
+    /&(?:#x([0-9a-f]+)|#([0-9]+)|([a-z]+));/gi,
+    (ref, hex: string, dec: string, name: string) => {
+      if (hex) return String.fromCodePoint(Number.parseInt(hex, 16));
+      if (dec) return String.fromCodePoint(Number.parseInt(dec, 10));
+      return named[name.toLowerCase()] ?? ref;
+    },
+  );
+}
+
+function findUnsafeSvgContent(svg: string): string[] {
+  const decoded = decodeXmlReferences(svg);
+  return forbiddenSvgPatterns
+    .filter(([, pattern]) => pattern.test(svg) || pattern.test(decoded))
+    .map(([label]) => label);
+}
+
+describe("SVG safety scan", () => {
+  const wrap = (body: string) =>
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">${body}</svg>`;
+
+  it.each([
+    ["script", "<script>alert(1)</script>"],
+    [
+      "prefixed script",
+      '<s:script xmlns:s="http://www.w3.org/2000/svg">alert(1)</s:script>',
+    ],
+    ["event handler", '<rect onload="alert(1)"/>'],
+    ["prefixed foreignObject", "<svg:foreignObject/>"],
+    ["external href", '<image href="https://evil.example/x.png"/>'],
+    ["external xlink:href", '<use xlink:href="https://evil.example/s.svg#a"/>'],
+    ["external url()", '<rect fill="url(https://evil.example/p.svg#g)"/>'],
+    ["char-ref url()", '<rect fill="u&#114;l(https://evil.example/p.svg#g)"/>'],
+    ["hex char-ref script", "&#x3C;script>alert(1)&#x3C;/script>"],
+    ["javascript: href", '<a href="javascript:alert(1)"/>'],
+  ])("rejects %s", (_, body) => {
+    expect(findUnsafeSvgContent(wrap(body))).not.toEqual([]);
+  });
+
+  it.each([
+    ["quoted fragment url()", "<rect fill=\"url('#gradient')\"/>"],
+    ["spaced fragment url()", '<rect fill="url( #gradient)"/>'],
+    ["fragment href", '<use href="#shape"/>'],
+    ["fragment xlink:href", '<use xlink:href="#shape"/>'],
+    ["embedded png", '<image href="data:image/png;base64,AAAA"/>'],
+  ])("accepts %s", (_, body) => {
+    expect(findUnsafeSvgContent(wrap(body))).toEqual([]);
+  });
+});
 
 describe.each(wallets.map((w) => [w.id, w] as const))("wallet %s", (_, w) => {
   it("has a non-empty id and name", () => {
@@ -57,9 +120,7 @@ describe.each(wallets.map((w) => [w.id, w] as const))("wallet %s", (_, w) => {
       return;
     }
     const svg = atob(w.icon.slice(match[0].length));
-    for (const [label, pattern] of forbiddenSvgPatterns) {
-      expect(pattern.test(svg), `icon contains ${label}`).toBe(false);
-    }
+    expect(findUnsafeSvgContent(svg)).toEqual([]);
   });
 
   it("only links to official extension and app stores", () => {
