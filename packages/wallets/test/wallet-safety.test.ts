@@ -16,10 +16,14 @@ const allowedStoreHosts: Record<string, readonly string[]> = {
   android: ["play.google.com"],
 };
 
-// Reviewed exceptions: wallet-owned deep-link domains for mobile stores.
+// Reviewed exceptions: wallet-owned deep-link domains, per wallet and per
+// store, so a mobile deep link can't be reused for a browser download.
 // Adding a host here needs the same scrutiny as adding a wallet.
-const vendorStoreHosts: Record<string, readonly string[]> = {
-  braavos: ["link.braavos.app"],
+const vendorStoreHosts: Record<
+  string,
+  Partial<Record<string, readonly string[]>>
+> = {
+  braavos: { ios: ["link.braavos.app"], android: ["link.braavos.app"] },
 };
 
 const iconPrefix =
@@ -46,6 +50,11 @@ const forbiddenSvgPatterns: readonly [string, RegExp][] = [
   ["external url()", /url\((?!\s*["']?\s*(?:#|data:image\/))/i],
 ];
 
+// Out-of-range code points decode to U+FFFD instead of throwing.
+function safeCodePoint(code: number): string {
+  return code <= 0x10ffff ? String.fromCodePoint(code) : "\uFFFD";
+}
+
 // Expand XML character references and predefined entities before scanning,
 // so `u&#114;l(...)` or `&#x3C;script` can't slip past the raw-text checks.
 function decodeXmlReferences(svg: string): string {
@@ -59,17 +68,28 @@ function decodeXmlReferences(svg: string): string {
   return svg.replace(
     /&(?:#x([0-9a-f]+)|#([0-9]+)|([a-z]+));/gi,
     (ref, hex: string, dec: string, name: string) => {
-      if (hex) return String.fromCodePoint(Number.parseInt(hex, 16));
-      if (dec) return String.fromCodePoint(Number.parseInt(dec, 10));
+      if (hex) return safeCodePoint(Number.parseInt(hex, 16));
+      if (dec) return safeCodePoint(Number.parseInt(dec, 10));
       return named[name.toLowerCase()] ?? ref;
     },
   );
 }
 
+// Expand CSS escapes (`\\69` or `\\i` for `i`) so `@\\69mport` or
+// `u\\72l(...)` in a style can't slip past the checks either.
+function decodeCssEscapes(text: string): string {
+  return text.replace(
+    /\\(?:([0-9a-f]{1,6})\s?|([^\n0-9a-f]))/gi,
+    (_, hex: string | undefined, char: string | undefined) =>
+      hex ? safeCodePoint(Number.parseInt(hex, 16)) : (char ?? ""),
+  );
+}
+
 function findUnsafeSvgContent(svg: string): string[] {
-  const decoded = decodeXmlReferences(svg);
+  const xmlDecoded = decodeXmlReferences(svg);
+  const variants = [svg, xmlDecoded, decodeCssEscapes(xmlDecoded)];
   return forbiddenSvgPatterns
-    .filter(([, pattern]) => pattern.test(svg) || pattern.test(decoded))
+    .filter(([, pattern]) => variants.some((v) => pattern.test(v)))
     .map(([label]) => label);
 }
 
@@ -91,6 +111,18 @@ describe("SVG safety scan", () => {
     ["char-ref url()", '<rect fill="u&#114;l(https://evil.example/p.svg#g)"/>'],
     ["hex char-ref script", "&#x3C;script>alert(1)&#x3C;/script>"],
     ["javascript: href", '<a href="javascript:alert(1)"/>'],
+    [
+      "CSS-escaped @import",
+      '<style>@\\69mport "https://evil.example/x.css";</style>',
+    ],
+    [
+      "CSS-escaped url()",
+      '<rect style="fill:u\\72l(https://evil.example/p.svg#g)"/>',
+    ],
+    [
+      "CSS-escaped url() with literal escape",
+      '<rect style="fill:u\\rl(https://evil.example/p.svg#g)"/>',
+    ],
   ])("rejects %s", (_, body) => {
     expect(findUnsafeSvgContent(wrap(body))).not.toEqual([]);
   });
@@ -133,9 +165,8 @@ describe.each(wallets.map((w) => [w.id, w] as const))("wallet %s", (_, w) => {
 
       const parsed = new URL(url);
       expect(parsed.protocol).toBe("https:");
-      expect([...hosts, ...(vendorStoreHosts[w.id] ?? [])]).toContain(
-        parsed.hostname,
-      );
+      const vendorHosts = vendorStoreHosts[w.id]?.[store] ?? [];
+      expect([...hosts, ...vendorHosts]).toContain(parsed.hostname);
     }
   });
 });
