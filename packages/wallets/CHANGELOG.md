@@ -1,5 +1,11 @@
 # @starknet-io/get-starknet-wallets
 
+## 6.1.2
+
+### Patch Changes
+
+- aee26d6: Add Outis to the list of discoverable wallets.
+
 ## 6.1.1
 
 ### Patch Changes
