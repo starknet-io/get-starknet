@@ -36,25 +36,62 @@ const iconPrefix =
 // rather than scanned: CDATA, comments and CSS escapes can split or disguise
 // tokens, and no listed icon needs them.
 const forbiddenSvgPatterns: readonly [string, RegExp][] = [
-  ["<script>", /<(?:[\w.-]+:)?script\b/i],
-  ["event handler attribute", /\s(?:[\w.-]+:)?on[a-z]+\s*=/i],
-  ["<foreignObject>", /<(?:[\w.-]+:)?foreignObject\b/i],
-  ["<iframe>/<embed>/<object>", /<(?:[\w.-]+:)?(?:iframe|embed|object)\b/i],
+  ["<script>", /<(?:[^\s<>/=:"'!?]+:)?script\b/i],
+  ["event handler attribute", /\s(?:[^\s<>/=:"'!?]+:)?on[a-z]+\s*=/i],
+  ["<foreignObject>", /<(?:[^\s<>/=:"'!?]+:)?foreignObject\b/i],
+  [
+    "<iframe>/<embed>/<object>",
+    /<(?:[^\s<>/=:"'!?]+:)?(?:iframe|embed|object)\b/i,
+  ],
   ["<!…> (DOCTYPE, ENTITY, CDATA, comment)", /<!/],
   ["processing instruction other than <?xml …?>", /<\?(?!xml\s)/i],
-  ["<style> element", /<(?:[\w.-]+:)?style\b/i],
-  ["style attribute", /\s(?:[\w.-]+:)?style\s*=/i],
+  ["<style> element", /<(?:[^\s<>/=:"'!?]+:)?style\b/i],
+  ["style attribute", /\s(?:[^\s<>/=:"'!?]+:)?style\s*=/i],
   ["javascript: URL", /javascript:/i],
   ["CSS @import", /@import/i],
   // href may only be an in-document fragment or an embedded image.
   [
     "external href",
-    /(?:[\w.-]+:)?href\s*=\s*["'](?!\s*(?:#|data:image\/(?:png|jpeg|webp|gif);))/i,
+    /(?:[^\s<>/=:"'!?]+:)?href\s*=\s*["'](?!\s*(?:#|data:image\/(?:png|jpeg|webp|gif);))/i,
   ],
   // The whole allowed prefix sits in the lookahead so `url('#id')` and
   // `url( #id)` are accepted without backtracking past the quote.
   ["external url()", /url\((?!\s*["']?\s*(?:#|data:image\/))/i],
 ];
+
+// Only these SVG elements may appear (local name, any prefix). Everything else,
+// including <script>, <style>, <foreignObject>, <a> and the animation elements
+// (<animate>, <set>, …) that can rewrite a link at runtime, is rejected.
+// Extend only with static shape, paint or structure elements.
+const allowedSvgElements = new Set([
+  "svg",
+  "g",
+  "defs",
+  "title",
+  "desc",
+  "symbol",
+  "use",
+  "image",
+  "path",
+  "rect",
+  "circle",
+  "ellipse",
+  "line",
+  "polyline",
+  "polygon",
+  "linearGradient",
+  "radialGradient",
+  "stop",
+  "clipPath",
+  "mask",
+]);
+
+function findDisallowedElements(svg: string): string[] {
+  const names = [...svg.matchAll(/<\/?([^\s/>!?]+)/g)].map((m) => m[1]);
+  return names
+    .filter((name) => !allowedSvgElements.has(name.split(":").pop() ?? ""))
+    .map((name) => `element <${name}>`);
+}
 
 // Out-of-range code points decode to U+FFFD instead of throwing.
 function safeCodePoint(code: number): string {
@@ -109,9 +146,13 @@ function decodeSvgIcon(base64: string): string | null {
 function findUnsafeSvgContent(svg: string): string[] {
   const xmlDecoded = decodeXmlReferences(svg);
   const variants = [svg, xmlDecoded, decodeCssEscapes(xmlDecoded)];
-  return forbiddenSvgPatterns
-    .filter(([, pattern]) => variants.some((v) => pattern.test(v)))
-    .map(([label]) => label);
+  const disallowed = new Set(variants.flatMap(findDisallowedElements));
+  return [
+    ...forbiddenSvgPatterns
+      .filter(([, pattern]) => variants.some((v) => pattern.test(v)))
+      .map(([label]) => label),
+    ...disallowed,
+  ];
 }
 
 describe("SVG safety scan", () => {
@@ -149,6 +190,20 @@ describe("SVG safety scan", () => {
       '<style>@im<![CDATA[port]]> "https://evil.example/x.css";</style>',
     ],
     ["comment-split script", "<scr<!-- -->ipt>alert(1)</script>"],
+    [
+      "non-ASCII prefixed script",
+      '<é:script xmlns:é="http://www.w3.org/2000/svg">alert(1)</é:script>',
+    ],
+    ["non-ASCII prefixed handler", '<rect é:onload="alert(1)"/>'],
+    [
+      "<animate> rewriting href",
+      '<use href="#a"><animate attributeName="href" to="https://evil.example/s.svg#a"/></use>',
+    ],
+    [
+      "<set> rewriting href",
+      '<use href="#a"><set attributeName="href" to="https://evil.example/s.svg#a"/></use>',
+    ],
+    ["link element", '<a href="#x"><rect/></a>'],
     [
       "xml-stylesheet instruction",
       '<?xml-stylesheet href="https://evil.example/x.css"?>',
