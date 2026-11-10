@@ -32,12 +32,18 @@ const iconPrefix =
 // Markup that can run script, load remote content or expand entities when an
 // SVG is rendered inline (it is safe in <img>, but consumers may inline it).
 // Element and attribute names may carry any namespace prefix (`<s:script>`).
+// Stylesheets, `<!…>` sections and processing instructions are banned outright
+// rather than scanned: CDATA, comments and CSS escapes can split or disguise
+// tokens, and no listed icon needs them.
 const forbiddenSvgPatterns: readonly [string, RegExp][] = [
   ["<script>", /<(?:[\w.-]+:)?script\b/i],
   ["event handler attribute", /\s(?:[\w.-]+:)?on[a-z]+\s*=/i],
   ["<foreignObject>", /<(?:[\w.-]+:)?foreignObject\b/i],
   ["<iframe>/<embed>/<object>", /<(?:[\w.-]+:)?(?:iframe|embed|object)\b/i],
-  ["DOCTYPE/ENTITY", /<!(DOCTYPE|ENTITY)/i],
+  ["<!…> (DOCTYPE, ENTITY, CDATA, comment)", /<!/],
+  ["processing instruction other than <?xml …?>", /<\?(?!xml\s)/i],
+  ["<style> element", /<(?:[\w.-]+:)?style\b/i],
+  ["style attribute", /\s(?:[\w.-]+:)?style\s*=/i],
   ["javascript: URL", /javascript:/i],
   ["CSS @import", /@import/i],
   // href may only be an in-document fragment or an embedded image.
@@ -85,6 +91,21 @@ function decodeCssEscapes(text: string): string {
   );
 }
 
+// Icons must be plain UTF-8 text starting with `<svg` or `<?xml`: a UTF-16
+// (or otherwise re-encoded) payload would hide every pattern from the scan.
+function decodeSvgIcon(base64: string): string | null {
+  const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+  if (bytes.includes(0) || bytes[0] === 0xfe || bytes[0] === 0xff) {
+    return null;
+  }
+  try {
+    const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    return /^\s*<(?:svg\b|\?xml\s)/.test(text) ? text : null;
+  } catch {
+    return null;
+  }
+}
+
 function findUnsafeSvgContent(svg: string): string[] {
   const xmlDecoded = decodeXmlReferences(svg);
   const variants = [svg, xmlDecoded, decodeCssEscapes(xmlDecoded)];
@@ -123,6 +144,15 @@ describe("SVG safety scan", () => {
       "CSS-escaped url() with literal escape",
       '<rect style="fill:u\\rl(https://evil.example/p.svg#g)"/>',
     ],
+    [
+      "CDATA-split @import",
+      '<style>@im<![CDATA[port]]> "https://evil.example/x.css";</style>',
+    ],
+    ["comment-split script", "<scr<!-- -->ipt>alert(1)</script>"],
+    [
+      "xml-stylesheet instruction",
+      '<?xml-stylesheet href="https://evil.example/x.css"?>',
+    ],
   ])("rejects %s", (_, body) => {
     expect(findUnsafeSvgContent(wrap(body))).not.toEqual([]);
   });
@@ -135,6 +165,24 @@ describe("SVG safety scan", () => {
     ["embedded png", '<image href="data:image/png;base64,AAAA"/>'],
   ])("accepts %s", (_, body) => {
     expect(findUnsafeSvgContent(wrap(body))).toEqual([]);
+  });
+
+  const toBase64 = (bytes: number[]) => btoa(String.fromCharCode(...bytes));
+  const utf16le = (text: string) =>
+    [...text].flatMap((c) => [c.charCodeAt(0) & 0xff, c.charCodeAt(0) >> 8]);
+  const script = "<svg><script>alert(1)</script></svg>";
+
+  it.each([
+    ["UTF-16LE with BOM", toBase64([0xff, 0xfe, ...utf16le(script)])],
+    ["UTF-16LE without BOM", toBase64(utf16le(script))],
+    ["invalid UTF-8", toBase64([0x3c, 0x73, 0x76, 0x67, 0xc3, 0x28])],
+    ["non-SVG text", btoa("<html><script>alert(1)</script></html>")],
+  ])("rejects %s icon bytes", (_, base64) => {
+    expect(decodeSvgIcon(base64)).toBeNull();
+  });
+
+  it("accepts a plain UTF-8 SVG", () => {
+    expect(decodeSvgIcon(btoa(wrap("<rect/>")))).not.toBeNull();
   });
 });
 
@@ -151,8 +199,9 @@ describe.each(wallets.map((w) => [w.id, w] as const))("wallet %s", (_, w) => {
     if (match?.[1] !== "svg+xml") {
       return;
     }
-    const svg = atob(w.icon.slice(match[0].length));
-    expect(findUnsafeSvgContent(svg)).toEqual([]);
+    const svg = decodeSvgIcon(w.icon.slice(match[0].length));
+    expect(svg, "icon must be plain UTF-8 SVG").not.toBeNull();
+    expect(findUnsafeSvgContent(svg ?? "")).toEqual([]);
   });
 
   it("only links to official extension and app stores", () => {

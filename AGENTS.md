@@ -102,9 +102,10 @@ pnpm test           # Vitest, single run (sets CI=true)
 
 The list is shown to every dapp user as recommended wallets, and the repo has
 had malicious "wallet" PRs before. `test/wallet-safety.test.ts` rejects icons
-that are not base64 `data:image` URIs or that carry scripts, event handlers or
-external references, download links off the official stores, and duplicate
-ids or names. Those checks are mechanical. Before approving, a reviewer also
+that are not base64 `data:image` URIs, SVG icons that are not plain UTF-8 or
+that contain scripts, event handlers, external references, stylesheets
+(`<style>`, `style=`), `<!…>` sections or processing instructions, download
+links off the official stores, and duplicate ids or names. Those checks are mechanical. Before approving, a reviewer also
 confirms that:
 
 - the store listing exists and its publisher is the wallet's team;
