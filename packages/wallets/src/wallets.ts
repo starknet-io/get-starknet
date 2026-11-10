@@ -74,6 +74,16 @@ export const bramble: WalletInformation = {
   },
 };
 
+export const outis: WalletInformation = {
+  id: "outis",
+  name: "Outis",
+  icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48dGl0bGU+T3V0aXM8L3RpdGxlPjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iMTE0IiBmaWxsPSIjMjUzODI4Ii8+PHBhdGggZmlsbD0iI0M3RDdCQSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODIgODIpIHNjYWxlKC42OTYpIiBkPSJNNDk5LjIgMjMwSDQwNy43NEMyNzguNzcgMjMwIDI1MCA5OC4zNyAyNTAgOTcuMzdDMjUwIDk4LjM3IDIyMS4yMyAyMzAgOTIuMjYgMjMwSDAuOEEyNTAgMjUwIDAgMCAxIDQ5OS4yIDIzMFpNNDk5LjIgMjcwQTI1MCAyNTAgMCAwIDEgMC44IDI3MEg5Mi4yNkMyMjEuMjMgMjcwIDI1MCA0MDEuNjMgMjUwIDQwMi42M0MyNTAgNDAxLjYzIDI3OC43NyAyNzAgNDA3Ljc0IDI3MFoiLz48L3N2Zz4=",
+  downloads: {
+    chrome:
+      "https://chrome.google.com/webstore/detail/outis/oihdeooalpdlhnlnpbjehjkmdjkjnpab",
+  },
+};
+
 export const wallets = [
   readyWallet,
   braavos,
@@ -81,4 +91,5 @@ export const wallets = [
   okxWallet,
   keplr,
   bramble,
+  outis,
 ];
