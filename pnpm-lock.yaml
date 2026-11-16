@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@starknet-io/types-js':
-      specifier: 0.10.4
-      version: 0.10.4
+      specifier: 0.10.5
+      version: 0.10.5
     tsdown:
       specifier: ^0.21.9
       version: 0.21.9
@@ -95,7 +95,7 @@ importers:
     devDependencies:
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.4
+        version: 0.10.5
       '@types/node':
         specifier: ^24.13.1
         version: 24.19.2
@@ -138,7 +138,7 @@ importers:
         version: link:../wallet-standard
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.4
+        version: 0.10.5
       '@wallet-standard/base':
         specifier: ^1.1.1
         version: 1.1.1
@@ -276,7 +276,7 @@ importers:
         version: link:../wallet-standard
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.4
+        version: 0.10.5
       '@wallet-standard/base':
         specifier: ^1.1.1
         version: 1.1.1
@@ -301,7 +301,7 @@ importers:
     dependencies:
       '@starknet-io/types-js':
         specifier: 'catalog:'
-        version: 0.10.4
+        version: 0.10.5
       '@wallet-standard/base':
         specifier: ^1.1.1
         version: 1.1.1
@@ -2022,8 +2022,8 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@starknet-io/types-js@0.10.4':
-    resolution: {integrity: sha512-uyrgECEHzKpQfUSXgFpM3vPov4qYSoFQzdUNW+UEPHRJtaemzZGWPvIjuerPgjmrxKsh6q8nqzEKdm6BFykRlQ==}
+  '@starknet-io/types-js@0.10.5':
+    resolution: {integrity: sha512-jf1R2RN7qQwahaX7Mx6rlG3BR8kU1WJzJbICMBG3U6H34slsofqPh9o8BD89nN4dLBxHLzSEEURZRHm8X/HL1Q==}
 
   '@stitches/core@1.2.8':
     resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
@@ -7663,7 +7663,7 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@starknet-io/types-js@0.10.4': {}
+  '@starknet-io/types-js@0.10.5': {}
 
   '@stitches/core@1.2.8': {}
 
