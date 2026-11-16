@@ -1,5 +1,14 @@
 # @starknet-io/get-starknet-virtual-wallet
 
+## 6.1.4
+
+### Patch Changes
+
+- 5ed125d: Bump `@starknet-io/types-js` to 0.10.5 (adds the STRK20 `register`
+  action).
+- Updated dependencies [5ed125d]
+  - @starknet-io/get-starknet-wallet-standard@6.1.4
+
 ## 6.1.1
 
 ### Patch Changes
